@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "czproject/git-php": "3.18",
+        "czproject/git-php": "^3.18",
         "illuminate/database": "^8.0",
         "laravel-zero/framework": "^8.4"
     },
