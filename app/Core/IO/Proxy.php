@@ -37,6 +37,11 @@ class Proxy
         $this->output->info($line);
     }
 
+    public function ask(string $question, $default = null, \Closure $validator = null)
+    {
+        return $this->output->ask($question, $default, $validator);
+    }
+
     public function __call($name, $arguments)
     {
         return $this->output->{$name}(...$arguments);

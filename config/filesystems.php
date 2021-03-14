@@ -1,12 +1,10 @@
 <?php
 
 return [
-    'default' => 'local',
+    'default' => 'atlas',
     'disks' => [
-        'local' => [
-            'driver' => 'local',
-            // TODO Refactor
-            'root' => '/home/toby/.atlas-cli/work',
-        ],
-    ],
+        'atlas' => [
+            'driver' => 'atlas'
+        ]
+    ]
 ];
