@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Instance;
+namespace App\Core\Artisan;
 
 class Artisan
 {

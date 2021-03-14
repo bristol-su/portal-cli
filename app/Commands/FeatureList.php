@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use App\Core\Contracts\Instance\MetaInstanceRepository;
 use Illuminate\Console\Scheduling\Schedule;
-use LaravelZero\Framework\Commands\Command;
+use App\Core\Contracts\Command;
 
 class FeatureList extends Command
 {

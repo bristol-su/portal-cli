@@ -17,6 +17,8 @@ class Installer implements \App\Core\Contracts\Instance\Installer
             ]
         );
 
+        // TODO move to COR like setup
+
         /*
          * - Install the composer dependencies
          * - Copy the environment file

@@ -60,6 +60,12 @@ return [
     // TODO Refactor
     'working-directory' => '/home/toby/.atlas-cli/work',
 
-    'cms-url' => 'git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template'
+    'cms-url' => 'git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template',
+
+    'setup' => [
+        'steps' => [
+            \App\Core\Setup\Steps\SetWorkingDirectory::class
+        ]
+    ]
 
 ];

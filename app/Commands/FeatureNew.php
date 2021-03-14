@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Core\Contracts\Instance\InstanceManager;
 use App\Core\Contracts\Instance\MetaInstanceRepository;
 use Illuminate\Support\Str;
-use LaravelZero\Framework\Commands\Command;
+use App\Core\Contracts\Command;
 
 class FeatureNew extends Command
 {
