@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Core\Contracts\Helpers\Port\PortChecker;
+use App\Core\Contracts\Helpers\Terminal\Executor;
 use App\Core\Contracts\Instance\Install\Installer as InstallerContract;
 use App\Core\Contracts\Instance\InstanceRepository as InstanceManagerContract;
 use App\Core\Contracts\Instance\MetaInstanceRepository as InstanceRepositoryContract;
 use App\Core\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
+use App\Core\Helpers\Port\FSockOpenPortChecker;
+use App\Core\Helpers\Terminal\ShellExecutor;
 use App\Core\Instance\Install\CMSInstaller;
 use App\Core\Instance\InstanceRepository;
 use App\Core\Instance\MetaInstanceRepository;
@@ -36,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 new LocalAdapter(
                     $config['root'], LOCK_EX, LocalAdapter::DISALLOW_LINKS, []
                 ),
-                count($config) > 0 ? $config : null
+                $config
             );
         });
     }
@@ -52,5 +56,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(InstanceManagerContract::class, InstanceRepository::class);
         $this->app->bind(InstallerContract::class, CMSInstaller::class);
         $this->app->bind(SettingRepositoryContract::class, SettingRepository::class);
+        $this->app->bind(PortChecker::class, FSockOpenPortChecker::class);
+        $this->app->bind(Executor::class, ShellExecutor::class);
     }
 }

@@ -6,9 +6,8 @@ use App\Core\Contracts\Instance\Install\Task;
 use App\Core\Helpers\Env\EnvRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\IO\Proxy;
-use App\Core\Helpers\Port\PortChecker;
+use App\Core\Helpers\Port\Port;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Support\Facades\Storage;
 
 class ValidatePortEntries extends Task
 {
@@ -37,6 +36,7 @@ class ValidatePortEntries extends Task
 
     public function execute()
     {
+        $preenv = clone $this->env;
         foreach($this->config->get('app.install.cms.ports') as $portName => $envName) {
             $port = $this->env->getVariable($envName, null);
 
@@ -47,12 +47,13 @@ class ValidatePortEntries extends Task
             $this->savePort($envName, $port);
         }
         IO::info('Ports determined');
+        dd($preenv, $this->env);
     }
 
     private function isPortTaken(int $port): bool
     {
         return in_array($port, $this->usedPorts)
-            || PortChecker::isTaken($port);
+            || Port::isTaken($port);
     }
 
     private function promptPortChange(string $portName, int $port): int
@@ -67,6 +68,7 @@ class ValidatePortEntries extends Task
     private function savePort(string $envName, int $port)
     {
         $this->usedPorts[] = $port;
+        $this->env->setVariable($envName, $port);
     }
 
     private function initialiseEnv(string $instanceId)
