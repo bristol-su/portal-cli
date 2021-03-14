@@ -2,7 +2,7 @@
 
 namespace App\Core\Instance;
 
-use App\Core\Contracts\Instance\Installer;
+use App\Core\Contracts\Instance\Install\Installer;
 use Cz\Git\GitRepository;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,11 +14,9 @@ class InstanceManager implements \App\Core\Contracts\Instance\InstanceManager
         return Storage::exists($instanceId);
     }
 
-    public function install(string $instanceId): void
+    public function create(string $instanceId): void
     {
-        $path = Storage::path($instanceId);
-
-        app(Installer::class)->install($path);
+        app(Installer::class)->install($instanceId);
     }
 
     public function remove(string $instanceId): void

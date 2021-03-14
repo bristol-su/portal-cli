@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Core\Instance;
+namespace App\Core\Instance\Install;
 
 use Cz\Git\GitRepository;
+use Illuminate\Contracts\Config\Repository;
 
-class Installer implements \App\Core\Contracts\Instance\Installer
+class CMSInstaller extends Installer
 {
 
-    public function install(string $path)
+    /**
+     * @var Repository
+     */
+    private Repository $config;
+
+    public function __construct(Repository $config)
     {
-        GitRepository::cloneRepository(
-            config('app.cms-url'),
-            $path,
-            [
-                '--branch' => 'develop'
-            ]
-        );
+        parent::__construct();
+        $this->config = $config;
+    }
 
-        // TODO move to COR like setup
-
+    protected function getTasks(): array
+    {
         /*
          * - Install the composer dependencies
          * - Copy the environment file
@@ -30,6 +32,6 @@ class Installer implements \App\Core\Contracts\Instance\Installer
          * - Run yarm
          * - Generate keys for 3 envs, migrate the db, seed the core module.
          */
+        return $this->config->get('app.install.cms.tasks', []);
     }
-
 }

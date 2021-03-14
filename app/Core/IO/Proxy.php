@@ -42,9 +42,19 @@ class Proxy
         return $this->output->ask($question, $default, $validator);
     }
 
-    public function __call($name, $arguments)
+    public function progressStart(int $count)
     {
-        return $this->output->{$name}(...$arguments);
+        $this->output->progressStart($count);
+    }
+
+    public function progressStep(int $step = 1)
+    {
+        $this->output->progressAdvance($step);
+    }
+
+    public function progressFinish()
+    {
+        $this->output->progressFinish();
     }
 
 }

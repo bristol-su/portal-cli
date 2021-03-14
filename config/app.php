@@ -66,6 +66,16 @@ return [
             \App\Core\Setup\Steps\MigrateDatabase::class,
             \App\Core\Setup\Steps\SetProjectDirectory::class
         ]
+    ],
+
+    'install' => [
+        'cms' => [
+            'tasks' => [
+                \App\Core\Instance\Install\Tasks\CMS\CloneGitRepository::class,
+                \App\Core\Instance\Install\Tasks\CMS\InstallComposerDependencies::class,
+                \App\Core\Instance\Install\Tasks\CMS\CreateMainEnvironmentFile::class
+            ]
+        ]
     ]
 
 ];

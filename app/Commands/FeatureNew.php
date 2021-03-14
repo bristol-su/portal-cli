@@ -48,7 +48,7 @@ class FeatureNew extends Command
 
         $this->info('Installing new instance');
 
-        $instanceManager->install($this->getInstanceId());
+        $instanceManager->create($this->getInstanceId());
 
         $metaInstance = $metaInstanceRepository->create(
             $this->getInstanceId(),

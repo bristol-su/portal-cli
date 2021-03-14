@@ -28,4 +28,13 @@ class MetaInstanceRepository implements \App\Core\Contracts\Instance\MetaInstanc
     {
         return MetaInstance::where('instance_id', $instanceId)->count() > 0;
     }
+
+    public function delete(string $instanceId) {
+        MetaInstance::where('instance_id', $instanceId)->delete();
+    }
+
+    public function missing()
+    {
+        return MetaInstance::all()->filter(fn($metaInstance) => $metaInstance->status === 'missing');
+    }
 }
