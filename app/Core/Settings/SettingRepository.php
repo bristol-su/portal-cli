@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class SettingRepository implements \App\Core\Contracts\Settings\SettingRepository
 {
 
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
         SettingModel::updateOrCreate(
             ['key' => $key],
@@ -22,6 +22,11 @@ class SettingRepository implements \App\Core\Contracts\Settings\SettingRepositor
         } catch (ModelNotFoundException $e) {
             return $default;
         }
+    }
+
+    public function has(string $key): bool
+    {
+        return SettingModel::where('key', $key)->count() > 0;
     }
 
 }

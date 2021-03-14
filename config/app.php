@@ -61,7 +61,10 @@ return [
 
     'setup' => [
         'steps' => [
-            \App\Core\Setup\Steps\SetWorkingDirectory::class
+            \App\Core\Setup\Steps\CreateWorkingDirectory::class,
+            \App\Core\Setup\Steps\CreateDatabase::class,
+            \App\Core\Setup\Steps\MigrateDatabase::class,
+            \App\Core\Setup\Steps\SetProjectDirectory::class
         ]
     ]
 

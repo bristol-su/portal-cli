@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $this->app['filesystem']->extend('atlas', function($app, $config) {
-            $config['root'] = Settings::get('working-directory', '/tmp');
+            $config['root'] = Settings::get('project-directory', '/tmp');
 
             return new Flysystem(
                 new LocalAdapter(
