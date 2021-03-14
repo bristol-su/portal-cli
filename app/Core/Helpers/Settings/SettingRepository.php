@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Core\Settings;
+namespace App\Core\Helpers\Settings;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class SettingRepository implements \App\Core\Contracts\Settings\SettingRepository
+class SettingRepository implements \App\Core\Contracts\Helpers\Settings\SettingRepository
 {
 
     public function set(string $key, $value): void

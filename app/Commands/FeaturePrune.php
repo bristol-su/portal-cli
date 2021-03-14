@@ -3,7 +3,7 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Instance\MetaInstanceRepository;
-use App\Core\IO\IO;
+use App\Core\Helpers\IO\IO;
 use App\Core\Contracts\Command;
 
 class FeaturePrune extends Command

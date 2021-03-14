@@ -2,7 +2,7 @@
 
 namespace App\Core\Contracts\Instance\Install;
 
-use App\Core\IO\Proxy;
+use App\Core\Helpers\IO\Proxy;
 
 abstract class Task
 {

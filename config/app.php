@@ -74,6 +74,15 @@ return [
                 \App\Core\Instance\Install\Tasks\CMS\CloneGitRepository::class,
                 \App\Core\Instance\Install\Tasks\CMS\InstallComposerDependencies::class,
                 \App\Core\Instance\Install\Tasks\CMS\CreateMainEnvironmentFile::class
+            ],
+            'ports' => [
+                'HTTP' => 'APP_PORT',
+                'database' => 'FORWARD_DB_PORT',
+                'mail' => 'FORWARD_MAILHOG_PORT',
+                'mail dashboard' => 'FORWARD_MAILHOG_DASHBOARD_PORT',
+                'redis' => 'FORWARD_REDIS_PORT',
+                'selenium' => 'FORWARD_SELENIUM_PORT',
+                'test database' => 'FORWARD_DB_TESTING_PORT',
             ]
         ]
     ]

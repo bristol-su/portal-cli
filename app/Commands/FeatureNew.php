@@ -2,8 +2,9 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Instance\InstanceManager;
+use App\Core\Contracts\Instance\InstanceRepository;
 use App\Core\Contracts\Instance\MetaInstanceRepository;
+use App\Core\Helpers\Env\EnvRepository;
 use Illuminate\Support\Str;
 use App\Core\Contracts\Command;
 
@@ -25,7 +26,7 @@ class FeatureNew extends Command
     protected $description = 'Create a new instance of Atlas.';
 
     /**
-     * @var InstanceManager
+     * @var InstanceRepository
      */
     protected $instanceManager;
 
@@ -41,7 +42,7 @@ class FeatureNew extends Command
      *
      * @return mixed
      */
-    public function handle(InstanceManager $instanceManager, MetaInstanceRepository $metaInstanceRepository)
+    public function handle(InstanceRepository $instanceManager, MetaInstanceRepository $metaInstanceRepository)
     {
         $this->instanceManager = $instanceManager;
         $this->metaInstanceRepository = $metaInstanceRepository;

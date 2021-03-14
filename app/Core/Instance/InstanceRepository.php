@@ -3,10 +3,9 @@
 namespace App\Core\Instance;
 
 use App\Core\Contracts\Instance\Install\Installer;
-use Cz\Git\GitRepository;
 use Illuminate\Support\Facades\Storage;
 
-class InstanceManager implements \App\Core\Contracts\Instance\InstanceManager
+class InstanceRepository implements \App\Core\Contracts\Instance\InstanceRepository
 {
 
     public function exists(string $instanceId): bool

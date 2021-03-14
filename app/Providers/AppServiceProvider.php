@@ -3,14 +3,14 @@
 namespace App\Providers;
 
 use App\Core\Contracts\Instance\Install\Installer as InstallerContract;
-use App\Core\Contracts\Instance\InstanceManager as InstanceManagerContract;
+use App\Core\Contracts\Instance\InstanceRepository as InstanceManagerContract;
 use App\Core\Contracts\Instance\MetaInstanceRepository as InstanceRepositoryContract;
-use App\Core\Contracts\Settings\SettingRepository as SettingRepositoryContract;
+use App\Core\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
 use App\Core\Instance\Install\CMSInstaller;
-use App\Core\Instance\InstanceManager;
+use App\Core\Instance\InstanceRepository;
 use App\Core\Instance\MetaInstanceRepository;
-use App\Core\Settings\SettingRepository;
-use App\Core\Settings\Settings;
+use App\Core\Helpers\Settings\SettingRepository;
+use App\Core\Helpers\Settings\Settings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(InstanceRepositoryContract::class, MetaInstanceRepository::class);
-        $this->app->bind(InstanceManagerContract::class, InstanceManager::class);
+        $this->app->bind(InstanceManagerContract::class, InstanceRepository::class);
         $this->app->bind(InstallerContract::class, CMSInstaller::class);
         $this->app->bind(SettingRepositoryContract::class, SettingRepository::class);
     }

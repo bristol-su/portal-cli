@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Composer;
+namespace App\Core\Helpers\Composer;
 
 use Illuminate\Support\Facades\Storage;
 

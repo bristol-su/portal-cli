@@ -3,7 +3,7 @@
 namespace App\Core\Instance\Install\Tasks\CMS;
 
 use App\Core\Contracts\Instance\Install\Task;
-use App\Core\IO\IO;
+use App\Core\Helpers\IO\IO;
 use Cz\Git\GitRepository;
 use Illuminate\Support\Facades\Storage;
 

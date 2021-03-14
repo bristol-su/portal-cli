@@ -2,7 +2,7 @@
 
 namespace App\Core\Contracts;
 
-use App\Core\IO\Proxy;
+use App\Core\Helpers\IO\Proxy;
 use Illuminate\Console\OutputStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

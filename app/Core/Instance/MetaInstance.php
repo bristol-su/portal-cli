@@ -23,7 +23,7 @@ class MetaInstance extends Model
 
     public function getStatusAttribute(): string
     {
-        if(!app(\App\Core\Contracts\Instance\InstanceManager::class)->exists($this->instance_id)) {
+        if(!app(\App\Core\Contracts\Instance\InstanceRepository::class)->exists($this->instance_id)) {
             return 'missing';
         }
         return 'found';

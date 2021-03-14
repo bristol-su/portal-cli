@@ -2,9 +2,9 @@
 
 namespace App\Core\Setup\Steps;
 
-use App\Core\Contracts\Settings\SettingRepository;
+use \App\Core\Contracts\Helpers\Settings\SettingRepository;
 use App\Core\Contracts\Setup\SetupStep;
-use App\Core\IO\Proxy;
+use App\Core\Helpers\IO\Proxy;
 use Illuminate\Support\Str;
 
 class SetProjectDirectory extends SetupStep

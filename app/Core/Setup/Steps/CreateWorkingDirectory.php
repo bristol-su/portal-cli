@@ -2,7 +2,7 @@
 
 namespace App\Core\Setup\Steps;
 
-use App\Core\Contracts\Settings\SettingRepository;
+use \App\Core\Contracts\Helpers\Settings\SettingRepository;
 use App\Core\Contracts\Setup\SetupStep;
 
 class CreateWorkingDirectory extends SetupStep

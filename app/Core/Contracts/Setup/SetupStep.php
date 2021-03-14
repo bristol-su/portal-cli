@@ -4,7 +4,7 @@
 namespace App\Core\Contracts\Setup;
 
 
-use App\Core\IO\Proxy;
+use App\Core\Helpers\IO\Proxy;
 
 abstract class SetupStep
 {

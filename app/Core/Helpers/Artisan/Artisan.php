@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Artisan;
+namespace App\Core\Helpers\Artisan;
 
 class Artisan
 {

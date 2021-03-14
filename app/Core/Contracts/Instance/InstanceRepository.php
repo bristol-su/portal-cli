@@ -2,7 +2,7 @@
 
 namespace App\Core\Contracts\Instance;
 
-interface InstanceManager
+interface InstanceRepository
 {
 
     public function exists(string $instanceId): bool;

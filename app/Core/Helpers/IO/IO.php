@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\IO;
+namespace App\Core\Helpers\IO;
 
 use Illuminate\Support\Facades\Facade;
 

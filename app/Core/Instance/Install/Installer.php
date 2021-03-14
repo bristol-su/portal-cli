@@ -2,7 +2,7 @@
 
 namespace App\Core\Instance\Install;
 
-use App\Core\IO\IO;
+use App\Core\Helpers\IO\IO;
 
 abstract class Installer implements \App\Core\Contracts\Instance\Install\Installer
 {
