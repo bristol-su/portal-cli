@@ -9,24 +9,24 @@ class MetaInstance extends Model
 
     protected $table = 'instances';
 
-    protected $appends = ['status'];
-
     public function getInstanceId(): string
     {
         return $this->instance_id;
     }
 
-    public function getInstanceName(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getStatusAttribute(): string
+    public function getDescription(): string
     {
-        if(!app(\App\Core\Contracts\Instance\InstanceRepository::class)->exists($this->instance_id)) {
-            return 'missing';
-        }
-        return 'found';
+        return $this->description;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
     }
 
 }

@@ -2,23 +2,26 @@
 
 namespace App\Core\Setup\Steps;
 
-use \App\Core\Contracts\Helpers\Settings\SettingRepository;
 use App\Core\Contracts\Setup\SetupStep;
+use App\Core\Helpers\Storage\Filesystem;
 
-class CreateWorkingDirectory extends SetupStep
+class CreateDatabaseDirectory extends SetupStep
 {
 
     public function run()
     {
-        $directory = $this->getDirectory();
+        $directory = Filesystem::database();
 
         if(! is_dir($directory) && !mkdir($directory, 0777, true)) {
             throw new \Exception(sprintf('Could not create directory %s.', $directory));
         }
     }
 
-    private function getDirectory(): string
+    public function isSetup(): bool
     {
-        return $_SERVER['HOME'] . '/.atlas-cli';
+        return Filesystem::create()
+            ->exists(
+                Filesystem::database()
+            );
     }
 }

@@ -3,59 +3,59 @@
 namespace App\Core\Helpers\Composer;
 
 use App\Core\Helpers\Terminal\Executor;
-use Illuminate\Support\Facades\Storage;
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use App\Core\Instance\Instance;
 
 class Composer
 {
 
-    protected string $instanceId;
+    private WorkingDirectory $workingDirectory;
 
-    public function __construct(string $instanceId)
+    public function __construct(WorkingDirectory $workingDirectory)
     {
-        $this->instanceId = $instanceId;
+        $this->workingDirectory = $workingDirectory;
     }
 
     public function update()
     {
-        $path = Storage::path($this->instanceId);
-
-//        $this->exec('
-//            docker run --rm \
-//                -v ' . $path . ':/opt \
-//                -v $SSH_AUTH_SOCK:/ssh-auth.sock \
-//                -e SSH_AUTH_SOCK=/ssh-auth.sock \
-//                -w /opt \
-//                laravelsail/php74-composer:latest \
-//                ssh-keyscan github.com >> ~/.ssh/known_hosts && composer update --working-dir ' . $path . ' --no-cache --quiet --no-interaction --ansi
-//        ');
+        $this->composer(
+            sprintf(
+                'update --working-dir %s --no-cache --quiet --no-interaction --ansi',
+                $this->workingDirectory->path()
+            )
+        );
     }
 
     public function install()
     {
-        $path = Storage::path($this->instanceId);
-
-        Executor::execute('
-            docker run --rm \
-                -v ' . $path . ':/opt \
-                -v $SSH_AUTH_SOCK:/ssh-auth.sock \
-                -e SSH_AUTH_SOCK=/ssh-auth.sock \
-                -w /opt \
-                laravelsail/php74-composer:latest \
-                ssh-keyscan github.com >> ~/.ssh/known_hosts && composer install --working-dir ' . $path . ' --no-cache --quiet --no-interaction --ansi
-        ');
+        $this->composer(
+            sprintf(
+                'install --working-dir %s --no-cache --quiet --no-interaction --ansi',
+                $this->workingDirectory->path()
+            )
+        );
     }
 
-    public function composer(string $command, string $directory)
+    public function composer(string $command)
     {
         $docker = new Docker();
-        $docker->addVolume($directory, '/opt');
-        $composer[] = sprintf('-v %s:/opt', $directory);
-        $composer[] = [
-            '-v $SSH_AUTH_SOCK:/ssh-auth.sock',
-            '-e SSH_AUTH_SOCK=/ssh-auth.sock \
-        ]
-        return Executor::cd($directory)
-            ->execute($command);
+        $docker->addVolume($this->workingDirectory->path(), '/opt');
+
+        $docker->addVolume('$SSH_AUTH_SOCK', '/ssh-auth.sock');
+        $docker->setEnvironmentVariable('SSH_AUTH_SOCK', '/ssh-auth.sock');
+
+        $docker->setEnvironmentVariable('GITHUB_KEYSCAN', '"$(ssh-keyscan github.com 2> /dev/null)"');
+
+        $docker->setWorkingDirectory('/opt');
+
+        $docker->image('laravelsail/php74-composer:latest');
+
+        $docker->run(
+            sprintf('echo $GITHUB_KEYSCAN >> ~/.ssh/known_hosts && composer %s', $command)
+        );
+
+        return Executor::cd($this->workingDirectory)
+            ->execute($docker);
     }
 
 }

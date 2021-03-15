@@ -12,12 +12,15 @@ class MetaInstanceRepository implements \App\Core\Contracts\Instance\MetaInstanc
        return MetaInstance::all();
     }
 
-    public function create(string $id, string $name): MetaInstance
+    public function create(string $id, string $name, string $description, string $type, string $installer): MetaInstance
     {
         $metaInstance = new MetaInstance();
 
         $metaInstance->instance_id = $id;
         $metaInstance->name = $name;
+        $metaInstance->description = $description;
+        $metaInstance->type = $type;
+        $metaInstance->installer = $installer;
 
         $metaInstance->save();
 
@@ -27,6 +30,16 @@ class MetaInstanceRepository implements \App\Core\Contracts\Instance\MetaInstanc
     public function exists(string $instanceId): bool
     {
         return MetaInstance::where('instance_id', $instanceId)->count() > 0;
+    }
+
+    public function count(): int
+    {
+        return MetaInstance::count();
+    }
+
+    public function getById(string $instanceId): MetaInstance
+    {
+        return MetaInstance::where('instance_id', $instanceId)->firstOrFail();
     }
 
     public function delete(string $instanceId) {

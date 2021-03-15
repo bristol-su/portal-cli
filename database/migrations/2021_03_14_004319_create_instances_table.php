@@ -17,6 +17,9 @@ class CreateInstancesTable extends Migration
             $table->id();
             $table->string('instance_id');
             $table->string('name');
+            $table->string('description');
+            $table->string('type');
+            $table->string('installer');
             $table->timestamps();
         });
     }

@@ -57,4 +57,9 @@ class SetProjectDirectory extends SetupStep
 
         return $directory;
     }
+
+    public function isSetup(): bool
+    {
+        return $this->settingRepository->has('project-directory');
+    }
 }

@@ -39,7 +39,7 @@ class Env
 
     public function hasVariable(string $name): bool
     {
-        return in_array($name, $this->variables);
+        return array_key_exists($name, $this->variables);
     }
 
     public function getVariables(): array

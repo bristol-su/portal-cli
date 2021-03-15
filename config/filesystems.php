@@ -1,11 +1,9 @@
 <?php
 
 return [
-    'default' => 'atlas',
+    'default' => 'config',
+    // TODO Move to the symfony component
     'disks' => [
-        'atlas' => [
-            'driver' => 'atlas'
-        ],
         'config' => [
             'driver' => 'local',
             'root' => $_SERVER['HOME'] . '/.atlas-cli'

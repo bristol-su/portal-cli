@@ -2,7 +2,10 @@
 
 namespace App\Core\Helpers\Env;
 
-use Illuminate\Support\Facades\Storage;
+use App\Core\Helpers\Storage\Filesystem;
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use App\Core\Instance\Instance;
+use Illuminate\Support\Str;
 
 class EnvRepository
 {
@@ -13,24 +16,38 @@ class EnvRepository
 
     const DUSK = '.env.dusk.local';
 
-    public function getForInstance(string $instanceId, string $type = null): Env
+    /**
+     * @var WorkingDirectory
+     */
+    private WorkingDirectory $workingDirectory;
+
+    public function __construct(WorkingDirectory $workingDirectory)
     {
-        $envRetriever = new EnvRetriever(Storage::path($instanceId));
+        $this->workingDirectory = $workingDirectory;
+    }
+
+    public function get(string $type = null)
+    {
+        $envRetriever = new EnvRetriever($this->workingDirectory->path());
         $env = $envRetriever->get($type ?? static::ROOT);
 
         return EnvFactory::fromDotEnv($env);
     }
 
-    public function updateForInstance(string $instanceId, Env $env, $type = null): void
+    public function update(Env $env, $type = null): void
     {
+        $path = Filesystem::append($this->workingDirectory->path(), $type ?? static::ROOT);
+
         $envFile = '';
         foreach($env->getVariables() as $name => $value) {
-            $envFile .= sprintf('%s="%s"', $name, $value) . PHP_EOL;
+            $pattern = '%s=%s';
+            if(Str::contains($value, ' ')) {
+                $pattern = '%s="%s"';
+            }
+            $envFile .= sprintf($pattern, $name, $value) . PHP_EOL;
         }
-        Storage::put(
-            sprintf('%s/%s', $instanceId, $type ?? static::ROOT),
-            $envFile
-        );
+        Filesystem::create()->remove($path);
+        Filesystem::create()->appendToFile($path, $envFile);
     }
 
 }

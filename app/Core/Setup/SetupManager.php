@@ -22,7 +22,9 @@ class SetupManager
     {
         foreach($this->config->get('app.setup.steps') as $step) {
             $class = app($step);
-            $class->run();
+            if(!$class->isSetup()) {
+                $class->run();
+            }
         }
     }
 

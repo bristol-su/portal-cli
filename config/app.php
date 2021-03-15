@@ -62,7 +62,7 @@ return [
 
     'setup' => [
         'steps' => [
-            \App\Core\Setup\Steps\CreateWorkingDirectory::class,
+            \App\Core\Setup\Steps\CreateDatabaseDirectory::class,
             \App\Core\Setup\Steps\CreateDatabase::class,
             \App\Core\Setup\Steps\MigrateDatabase::class,
             \App\Core\Setup\Steps\SetProjectDirectory::class
@@ -72,9 +72,17 @@ return [
     'install' => [
         'cms' => [
             'tasks' => [
-                \App\Core\Instance\Install\Tasks\CMS\CloneGitRepository::class,
-                \App\Core\Instance\Install\Tasks\CMS\InstallComposerDependencies::class,
-                \App\Core\Instance\Install\Tasks\CMS\CreateMainEnvironmentFile::class
+                \App\Core\Install\Tasks\CMS\CloneGitRepository::class,
+                \App\Core\Install\Tasks\CMS\InstallComposerDependencies::class,
+                \App\Core\Install\Tasks\CMS\CreateMainEnvironmentFile::class,
+                \App\Core\Install\Tasks\CMS\ValidatePortEntries::class,
+                \App\Core\Install\Tasks\CMS\CreateTestingEnvironment::class,
+                \App\Core\Install\Tasks\CMS\CreateDuskEnvironment::class,
+                \App\Core\Install\Tasks\CMS\BringEnvironmentUp::class,
+//                \App\Core\Install\Tasks\CMS\InstallYarnDependencies::class,
+                \App\Core\Install\Tasks\CMS\GenerateApplicationKeys::class,
+                \App\Core\Install\Tasks\CMS\MigrateDatabase::class,
+                \App\Core\Install\Tasks\CMS\SeedDatabase::class
             ],
             'ports' => [
                 'HTTP' => 'APP_PORT',
@@ -84,6 +92,13 @@ return [
                 'redis' => 'FORWARD_REDIS_PORT',
                 'selenium' => 'FORWARD_SELENIUM_PORT',
                 'test database' => 'FORWARD_DB_TESTING_PORT',
+            ]
+        ],
+        'frontend' => [
+            'tasks' => [
+                \App\Core\Install\Tasks\Frontend\NotReadyError::class
+            ],
+            'ports' => [
             ]
         ]
     ]

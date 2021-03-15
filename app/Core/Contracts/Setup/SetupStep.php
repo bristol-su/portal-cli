@@ -21,4 +21,6 @@ abstract class SetupStep
 
     abstract public function run();
 
+    abstract public function isSetup(): bool;
+
 }

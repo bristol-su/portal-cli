@@ -2,11 +2,13 @@
 
 namespace App\Core\Contracts\Helpers\Terminal;
 
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+
 interface Executor
 {
 
-    public function execute(string $command): string;
+    public function execute(string $command): ?string;
 
-    public function cd(string $directory): Executor;
+    public function cd(WorkingDirectory $workingDirectory): Executor;
 
 }

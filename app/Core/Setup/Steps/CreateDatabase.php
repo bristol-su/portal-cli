@@ -3,16 +3,24 @@
 namespace App\Core\Setup\Steps;
 
 use App\Core\Contracts\Setup\SetupStep;
-use Illuminate\Support\Facades\Storage;
+use App\Core\Helpers\Storage\Filesystem;
 
 class CreateDatabase extends SetupStep
 {
 
     public function run()
     {
-        if(!Storage::disk('config')->exists('atlas-cli.sqlite')) {
-            $this->io->info('Creating database');
-            Storage::disk('config')->put('atlas-cli.sqlite', '');
-        }
+        Filesystem::create()->touch($this->path());
+    }
+
+    private function path(): string
+    {
+        return Filesystem::database('atlas-cli.sqlite');
+    }
+
+    public function isSetup(): bool
+    {
+        return Filesystem::create()
+            ->exists($this->path());
     }
 }

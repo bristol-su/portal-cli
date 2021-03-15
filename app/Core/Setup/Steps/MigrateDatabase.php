@@ -13,4 +13,9 @@ class MigrateDatabase extends SetupStep
     {
         Artisan::call(MigrateCommand::class, ['--force' => true]);
     }
+
+    public function isSetup(): bool
+    {
+        return false;
+    }
 }
