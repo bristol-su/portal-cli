@@ -1,27 +1,24 @@
 <?php
 
-namespace App\Core\Install\Tasks\CMS;
+namespace App\Core\Pipeline\Tasks;
 
-use App\Core\Contracts\Install\Task;
-use App\Core\Helpers\IO\IO;
-use App\Core\Helpers\Storage\Filesystem;
+use App\Core\Contracts\Pipeline\Task;
 use App\Core\Helpers\Terminal\Executor;
-use Cz\Git\GitRepository;
 
 class InstallYarnDependencies extends Task
 {
 
-    public function up(): void
+    public function up(\App\Core\Helpers\WorkingDirectory\WorkingDirectory $workingDirectory): void
     {
-        Executor::cd($this->workingDirectory)->execute(
+        Executor::cd($workingDirectory)->execute(
             './vendor/bin/sail yarn --cwd /var/www/html/vendor/elbowspaceuk/core-module install --non-interactive --no-progress',
         );
-        Executor::cd($this->workingDirectory)->execute(
+        Executor::cd($workingDirectory)->execute(
             './vendor/bin/sail yarn --cwd /var/www/html/vendor/elbowspaceuk/core-module run dev --non-interactive --no-progress',
         );
     }
 
-    public function down(): void
+    public function down(\App\Core\Helpers\WorkingDirectory\WorkingDirectory $workingDirectory): void
     {
         // No down tasks
     }

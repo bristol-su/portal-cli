@@ -32,6 +32,10 @@ class InstanceFactory implements InstanceFactoryContract
             StatusCalculator::calculate($instanceId)
         );
 
+        $instance->setUrl(
+            UrlCalculator::calculate($instanceId)
+        );
+
         return $instance;
     }
 

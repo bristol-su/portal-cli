@@ -2,9 +2,11 @@
 
 namespace App\Commands;
 
+use App\Core\Contracts\Instance\InstanceFactory;
 use App\Core\Contracts\Instance\MetaInstanceRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Contracts\Command;
+use App\Core\Instance\Instance;
 
 class FeaturePrune extends Command
 {
@@ -27,13 +29,16 @@ class FeaturePrune extends Command
      *
      * @return mixed
      */
-    public function handle(MetaInstanceRepository $metaInstanceRepository)
+    public function handle(MetaInstanceRepository $metaInstanceRepository, InstanceFactory $instanceFactory)
     {
-        $metaInstances = $metaInstanceRepository->missing();
+        $metaInstances = $metaInstanceRepository->all();
         if(count($metaInstances) > 0) {
             foreach($metaInstances as $metaInstance) {
-                $metaInstanceRepository->delete($metaInstance->instance_id);
-                IO::info(sprintf('Cleared feature %s', $metaInstance->name));
+                $instance = $instanceFactory->createInstanceFromId($metaInstance->getInstanceId());
+                if($instance->getStatus() === Instance::STATUS_MISSING) {
+                    $metaInstanceRepository->delete($metaInstance->instance_id);
+                    IO::info(sprintf('Cleared feature %s', $metaInstance->name));
+                }
             }
         } else {
             IO::info('No features need pruning.');

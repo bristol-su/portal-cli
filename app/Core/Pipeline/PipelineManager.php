@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Core\Install;
+namespace App\Core\Pipeline;
 
 use Illuminate\Support\Manager;
 
-class InstallManager extends Manager
+class PipelineManager extends Manager
 {
 
     public function getDefaultDriver()

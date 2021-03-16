@@ -2,7 +2,7 @@
 
 namespace App\Core\Instance;
 
-use App\Core\Contracts\Install\Installer;
+use App\Core\Contracts\Pipeline\Pipeline;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 
@@ -25,7 +25,7 @@ class InstanceRepository implements \App\Core\Contracts\Instance\InstanceReposit
 
     public function create(string $instanceId): Instance
     {
-        app(Installer::class)->install($instanceId);
+        app(Pipeline::class)->install($instanceId);
 
         return $this->instanceFactory->createInstanceFromId($instanceId);
     }

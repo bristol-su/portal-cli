@@ -37,7 +37,6 @@ class FeatureList extends Command
             fn(MetaInstance $metaInstance) => $instanceFactory->createInstanceFromId($metaInstance->getInstanceId())
         );
 
-        // TODO Add in the URL
         $this->table(
             ['ID', 'Name', 'Description', 'Type', 'Status', 'URL'],
             $instances->map(function(Instance $instance) {
@@ -46,7 +45,8 @@ class FeatureList extends Command
                     $instance->getMetaInstance()->getName(),
                     $instance->getMetaInstance()->getDescription(),
                     $instance->getMetaInstance()->getType(),
-                    $instance->getStatus()
+                    $instance->getStatus(),
+                    $instance->getUrl()
                 ];
             })
         );

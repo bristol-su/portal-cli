@@ -7,7 +7,7 @@ use App\Core\Contracts\Instance\InstanceRepository;
 use App\Core\Contracts\Instance\MetaInstanceRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
-use App\Core\Install\InstallManager;
+use App\Core\Pipeline\PipelineManager;
 
 class FeatureDelete extends Command
 {
@@ -31,7 +31,7 @@ class FeatureDelete extends Command
      *
      * @return mixed
      */
-    public function handle(InstallManager $installManager, MetaInstanceRepository $metaInstanceRepository, InstanceRepository $instanceRepository)
+    public function handle(PipelineManager $installManager, MetaInstanceRepository $metaInstanceRepository, InstanceRepository $instanceRepository)
     {
         if(($instanceId = $this->argument('instance')) === null) {
             if($metaInstanceRepository->count() === 0) {

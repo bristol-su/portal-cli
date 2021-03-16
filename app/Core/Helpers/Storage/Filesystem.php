@@ -10,6 +10,8 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 class Filesystem
 {
 
+    // TODO Decorator around filesystem to append on the working directory, so we can just work in the working directory.
+
     public static function create(): SymfonyFilesystem
     {
         return new SymfonyFilesystem();
@@ -41,6 +43,11 @@ class Filesystem
                 ? $root . $path
                 : $root . DIRECTORY_SEPARATOR . $path
         );
+    }
+
+    public static function read(string $path)
+    {
+        return file_get_contents($path);
     }
 
 }

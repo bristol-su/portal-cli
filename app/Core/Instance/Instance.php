@@ -45,6 +45,13 @@ class Instance
     private string $status;
 
     /**
+     * The URL of the instance
+     *
+     * @var string
+     */
+    private string $url;
+
+    /**
      * @return MetaInstance
      */
     public function getMetaInstance(): MetaInstance
@@ -131,6 +138,22 @@ class Instance
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 
 }

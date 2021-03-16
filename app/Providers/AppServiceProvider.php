@@ -10,19 +10,16 @@ use App\Core\Contracts\Instance\MetaInstanceRepository as InstanceRepositoryCont
 use App\Core\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
 use App\Core\Helpers\Port\FSockOpenPortChecker;
 use App\Core\Helpers\Terminal\ShellExecutor;
-use App\Core\Install\CMSInstaller;
-use App\Core\Install\FrontendInstaller;
-use App\Core\Install\InstallManager;
+use App\Core\Pipeline\PipelineManager;
 use App\Core\Instance\InstanceFactory;
 use App\Core\Instance\InstanceRepository;
 use App\Core\Instance\MetaInstanceRepository;
 use App\Core\Helpers\Settings\SettingRepository;
-use App\Core\Helpers\Settings\Settings;
+use App\Pipelines\CMSInstaller;
+use App\Pipelines\FrontendInstaller;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Adapter\Local as LocalAdapter;
-use League\Flysystem\Filesystem as Flysystem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,10 +30,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Repository $config)
     {
-        app(InstallManager::class)->extend('cms', function(Container $container) {
+        app(PipelineManager::class)->extend('cms', function(Container $container) {
             return $container->make(CMSInstaller::class);
         });
-        app(InstallManager::class)->extend('frontend', function(Container $container) {
+        app(PipelineManager::class)->extend('frontend', function(Container $container) {
             return $container->make(FrontendInstaller::class);
         });
     }
@@ -54,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PortChecker::class, FSockOpenPortChecker::class);
         $this->app->bind(Executor::class, ShellExecutor::class);
 
-        $this->app->singleton(InstallManager::class);
+        $this->app->singleton(PipelineManager::class);
         $this->app->bind(InstanceFactoryContract::class, InstanceFactory::class);
 
 //        $this->app->singleton(InstanceResolverContract::class, InstanceResolver::class);

@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Core\Contracts\Instance\MetaInstanceRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
-use App\Core\Install\InstallManager;
+use App\Core\Pipeline\PipelineManager;
 use Illuminate\Support\Str;
 use App\Core\Contracts\Command;
 
@@ -42,7 +42,7 @@ class FeatureNew extends Command
      *
      * @return mixed
      */
-    public function handle(InstallManager $installManager, MetaInstanceRepository $metaInstanceRepository)
+    public function handle(PipelineManager $installManager, MetaInstanceRepository $metaInstanceRepository)
     {
         $this->metaInstanceRepository = $metaInstanceRepository;
         $this->info('Creating a new feature');
@@ -66,6 +66,9 @@ class FeatureNew extends Command
                 $this->option('repository')
             );
         } catch (\Exception $e) {
+            if($this->output->isVerbose()) {
+                throw $e;
+            }
             IO::error('Install failed: ' . $e->getMessage());
             return;
         }
@@ -120,7 +123,7 @@ class FeatureNew extends Command
         ];
 
         return $this->getOrAskForOption(
-            'name',
+            'type',
             fn() => array_search(
                 $this->choice('What kind of change is this?', array_values($allowedTypes)),
                 $allowedTypes

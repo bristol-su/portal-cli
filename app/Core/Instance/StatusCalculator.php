@@ -23,10 +23,14 @@ class StatusCalculator
 
     public static function sailIsUp(string $instanceId): bool
     {
-        $output = Executor::cd(
-            WorkingDirectory::fromInstanceId($instanceId)
-        )->execute('docker-compose ps -q');
-
-        return (bool) $output;
+        // TODO Make parallel to calculate?
+        try {
+            Executor::cd(
+                WorkingDirectory::fromInstanceId($instanceId)
+            )->execute('./vendor/bin/sail artisan help');
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 }

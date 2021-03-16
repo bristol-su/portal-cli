@@ -46,8 +46,4 @@ class MetaInstanceRepository implements \App\Core\Contracts\Instance\MetaInstanc
         MetaInstance::where('instance_id', $instanceId)->delete();
     }
 
-    public function missing()
-    {
-        return MetaInstance::all()->filter(fn($metaInstance) => $metaInstance->status === 'missing');
-    }
 }
