@@ -3,6 +3,9 @@
 namespace App\Pipelines;
 
 use App\Core\Pipeline\Pipeline;
+use App\Core\Pipeline\Tasks\InstallYarnDependencies;
+use App\Core\Pipeline\Tasks\RunYarnScript;
+use App\Core\Pipeline\Tasks\WaitForDocker;
 
 class CMSInstaller extends Pipeline
 {
@@ -13,7 +16,7 @@ class CMSInstaller extends Pipeline
             \App\Core\Pipeline\Tasks\CloneGitRepository::provision(config('app.cms-url'), 'remove-module-installer')
                 ->withName('Downloading the CMS'),
 
-            \App\Core\Pipeline\Tasks\InstallComposerDependencies::provision(),
+            \App\Core\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
 
             \App\Core\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.sail.example', '.env.local')
                 ->withName('Set up local environment file'),
@@ -35,9 +38,15 @@ class CMSInstaller extends Pipeline
 
             \App\Core\Pipeline\Tasks\BringEnvironmentUp::provision(true),
 
-//                \App\Core\Install\Tasks\InstallYarnDependencies::provision(),
+            WaitForDocker::provision()
+                ->withName('Waiting for Docker'),
 
-            \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('local')
+            InstallYarnDependencies::provision('/var/www/html/vendor/elbowspaceuk/core-module'),
+
+//            RunYarnScript::provision('dev', '/var/www/html/vendor/elbowspaceuk/core-module')
+//                ->withName('Compile frontend assets'),
+
+        \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('local')
                 ->withName('Create local application key'),
 
             \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('testing')

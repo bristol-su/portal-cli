@@ -57,6 +57,11 @@ class Proxy
         $this->output->success($lines);
     }
 
+    public function writeln(string $line)
+    {
+        $this->output->writeln($line);
+    }
+
     public function task(string $title, \Closure $task = null, $loadingText = 'loading...')
     {
         $this->output->write("$title: <comment>{$loadingText}</comment>");

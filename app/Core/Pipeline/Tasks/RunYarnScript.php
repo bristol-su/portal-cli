@@ -6,13 +6,14 @@ use App\Core\Contracts\Pipeline\Task;
 use App\Core\Helpers\Terminal\Executor;
 use App\Core\Pipeline\ProvisionedTask;
 
-class InstallYarnDependencies extends Task
+class RunYarnScript extends Task
 {
 
-    public static function provision(string $cwd = ''): \App\Core\Pipeline\ProvisionedTask
+    public static function provision(string $script, string $cwd = ''): \App\Core\Pipeline\ProvisionedTask
     {
         return ProvisionedTask::provision(static::class)
             ->dependencies([
+                'script' => $script,
                 'cwd' => $cwd
             ]);
     }
@@ -25,7 +26,7 @@ class InstallYarnDependencies extends Task
             $command .= sprintf(' --cwd %s', $this->config->get('cwd'));
         }
 
-        $command .= ' install --non-interactive --no-progress';
+        $command .= sprintf(' run %s --non-interactive --no-progress', $this->config->get('script'));
 
         Executor::cd($workingDirectory)->execute($command);
     }
@@ -34,6 +35,5 @@ class InstallYarnDependencies extends Task
     {
         // No down tasks
     }
-
 
 }

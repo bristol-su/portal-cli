@@ -7,7 +7,7 @@ use App\Core\Pipeline\ProvisionedTask;
 use App\Core\Pipeline\TaskConfig;
 
 /**
- * @method static Task provision() Provision the task to be used in a pipeline
+ * @method static ProvisionedTask provision() Provision the task to be used in a pipeline
  */
 abstract class Task
 {
