@@ -3,8 +3,10 @@
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
 
-class ComposerSchema
+class ComposerSchema implements Arrayable
 {
 
     /**
@@ -13,9 +15,9 @@ class ComposerSchema
     private string $name;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $description;
+    private ?string $description;
 
     /**
      * @var string|null
@@ -50,7 +52,7 @@ class ComposerSchema
     /**
      * @var string|array|null
      */
-    private $licence;
+    private $license;
 
     /**
      * @var array|AuthorSchema[]
@@ -159,6 +161,109 @@ class ComposerSchema
     private array $nonFeatureBranches;
 
     /**
+     * ComposerSchema constructor.
+     * @param string $name
+     * @param string|null $description
+     * @param string|null $version
+     * @param string $type
+     * @param array|string[] $keywords
+     * @param string|null $homepage
+     * @param string|null $readme
+     * @param Carbon|null $time
+     * @param array|string|null $license
+     * @param AuthorSchema[]|array $authors
+     * @param SupportSchema|null $support
+     * @param FundingSchema[]|array $funding
+     * @param PackageSchema[]|array $require
+     * @param PackageSchema[]|array $requireDev
+     * @param PackageSchema[]|array $conflict
+     * @param PackageSchema[]|array $replace
+     * @param PackageSchema[]|array $provide
+     * @param SuggestedPackageSchema[]|array $suggest
+     * @param AutoloadSchema|null $autoload
+     * @param AutoloadSchema|null $autoloadDev
+     * @param array $includePath
+     * @param string|null $targetDir
+     * @param string|null $minimumStability
+     * @param bool $preferStable
+     * @param RepositorySchema[]|array $repositories
+     * @param array $config
+     * @param ScriptSchema[]|array $scripts
+     * @param array $extra
+     * @param array|string[] $bin
+     * @param string|null $archive
+     * @param bool|string|null $abandoned
+     * @param array $nonFeatureBranches
+     */
+    public function __construct(string $name,
+                                ?string $description = null,
+                                ?string $version = null,
+                                string $type = 'library',
+                                array $keywords = [],
+                                ?string $homepage = null,
+                                ?string $readme = null,
+                                ?Carbon $time = null,
+                                $license = null,
+                                array $authors = [],
+                                ?SupportSchema $support = null,
+                                array $funding = [],
+                                array $require = [],
+                                array $requireDev = [],
+                                array $conflict = [],
+                                array $replace = [],
+                                array $provide = [],
+                                array $suggest = [],
+                                ?AutoloadSchema $autoload = null,
+                                ?AutoloadSchema $autoloadDev = null,
+                                array $includePath = [],
+                                ?string $targetDir = null,
+                                ?string $minimumStability = null,
+                                bool $preferStable = false,
+                                array $repositories = [],
+                                array $config = [],
+                                array $scripts = [],
+                                array $extra = [],
+                                array $bin = [],
+                                ?string $archive = null,
+                                $abandoned = false,
+                                array $nonFeatureBranches = [])
+    {
+        $this->name = $name;
+        $this->description = $description;
+        $this->version = $version;
+        $this->type = $type;
+        $this->keywords = $keywords;
+        $this->homepage = $homepage;
+        $this->readme = $readme;
+        $this->time = $time;
+        $this->license = $license;
+        $this->authors = $authors;
+        $this->support = $support;
+        $this->funding = $funding;
+        $this->require = $require;
+        $this->requireDev = $requireDev;
+        $this->conflict = $conflict;
+        $this->replace = $replace;
+        $this->provide = $provide;
+        $this->suggest = $suggest;
+        $this->autoload = $autoload;
+        $this->autoloadDev = $autoloadDev;
+        $this->includePath = $includePath;
+        $this->targetDir = $targetDir;
+        $this->minimumStability = $minimumStability;
+        $this->preferStable = $preferStable;
+        $this->repositories = $repositories;
+        $this->config = $config;
+        $this->scripts = $scripts;
+        $this->extra = $extra;
+        $this->bin = $bin;
+        $this->archive = $archive;
+        $this->abandoned = $abandoned;
+        $this->nonFeatureBranches = $nonFeatureBranches;
+    }
+
+
+    /**
      * @return string
      */
     public function getName(): string
@@ -175,17 +280,17 @@ class ComposerSchema
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @param string $description
+     * @param string|null $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -289,17 +394,17 @@ class ComposerSchema
     /**
      * @return array|string|null
      */
-    public function getLicence()
+    public function getLicense()
     {
-        return $this->licence;
+        return $this->license;
     }
 
     /**
-     * @param array|string|null $licence
+     * @param array|string|null $license
      */
-    public function setLicence($licence): void
+    public function setLicense($license): void
     {
-        $this->licence = $licence;
+        $this->license = $license;
     }
 
     /**
@@ -670,6 +775,42 @@ class ComposerSchema
         $this->nonFeatureBranches = $nonFeatureBranches;
     }
 
-
+    public function toArray()
+    {
+        return collect([
+            'name' => $this->name,
+            'description' => $this->description,
+            'version' => $this->version,
+            'type' => $this->type,
+            'keywords' => $this->keywords,
+            'homepage' => $this->homepage,
+            'readme' => $this->readme,
+            'time' => $this->time ? $this->time->format('Y-m-d H:i:s') : null,
+            'license' => $this->license,
+            'authors' => collect($this->authors),
+            'support' => $this->support->toArray(),
+            'funding' => collect($this->funding),
+            'require' => collect($this->require)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'require-dev' => collect($this->requireDev)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'conflict' => collect($this->conflict)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'replace' => collect($this->replace)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'provide' => collect($this->provide)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'suggest' => collect($this->suggest)->mapWithKeys(fn(PackageSchema $package) => [$package->getName() => $package->getVersion()]),
+            'autoload' => $this->autoload,
+            'autoload-dev' => $this->autoloadDev,
+            'include-path' => $this->includePath,
+            'target-dir' => $this->targetDir,
+            'minimum-stability' => $this->minimumStability,
+            'prefer-stable' => $this->preferStable,
+            'repositories' => collect($this->repositories),
+            'config' => $this->config,
+            'scripts' => collect($this->scripts),
+            'extra' => $this->extra,
+            'bin' => $this->bin,
+            'archive' => $this->archive,
+            'abandoned' => $this->abandoned,
+            'non-feature-branches' => $this->nonFeatureBranches
+        ])->filter(fn($val) => $val !== [] && $val !== null && ($val instanceof Collection ? $val->count() > 0 : true))->toArray();
+    }
 
 }

@@ -4,7 +4,9 @@
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
 
-class AuthorSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class AuthorSchema implements Arrayable
 {
 
     /**
@@ -26,6 +28,25 @@ class AuthorSchema
      * @var string|null
      */
     private ?string $role;
+
+    /**
+     * AuthorSchema constructor.
+     * @param string|null $name
+     * @param string|null $email
+     * @param string|null $homepage
+     * @param string|null $role
+     */
+    public function __construct(?string $name = null,
+                                ?string $email = null,
+                                ?string $homepage = null,
+                                ?string $role = null)
+    {
+        $this->name = $name;
+        $this->email = $email;
+        $this->homepage = $homepage;
+        $this->role = $role;
+    }
+
 
     /**
      * @return string|null
@@ -91,4 +112,13 @@ class AuthorSchema
         $this->role = $role;
     }
 
+    public function toArray()
+    {
+        return collect([
+            'name' => $this->name,
+            'email' => $this->email,
+            'homepage' => $this->homepage,
+            'role' => $this->role
+        ])->filter(fn($val) => $val !== [] && $val !== null && ($val instanceof Collection ? $val->count() > 0 : true))->toArray();
+    }
 }

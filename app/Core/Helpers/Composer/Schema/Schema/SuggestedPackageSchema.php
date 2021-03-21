@@ -2,12 +2,25 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class SuggestedPackageSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class SuggestedPackageSchema implements Arrayable
 {
 
     private string $name;
 
     private string $description;
+
+    /**
+     * SuggestedPackageSchema constructor.
+     * @param string $name
+     * @param string $description
+     */
+    public function __construct(string $name, string $description)
+    {
+        $this->name = $name;
+        $this->description = $description;
+    }
 
     /**
      * @return string
@@ -41,4 +54,11 @@ class SuggestedPackageSchema
         $this->description = $description;
     }
 
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description
+        ];
+    }
 }

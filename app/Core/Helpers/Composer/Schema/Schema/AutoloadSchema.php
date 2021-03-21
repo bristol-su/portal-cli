@@ -2,11 +2,19 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class AutoloadSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class AutoloadSchema implements Arrayable
 {
 
+    /**
+     * @var array|NamespaceAutoloadSchema[]
+     */
     private array $psr4;
 
+    /**
+     * @var array|NamespaceAutoloadSchema[]
+     */
     private array $psr0;
 
     /**
@@ -23,6 +31,27 @@ class AutoloadSchema
      * @var array|string[]
      */
     private array $excludeFromClassmap;
+
+    /**
+     * AutoloadSchema constructor.
+     * @param array|NamespaceAutoloadSchema[] $psr4
+     * @param array|NamespaceAutoloadSchema[] $psr0
+     * @param array|string[] $classmap
+     * @param array|string[] $files
+     * @param array|string[] $excludeFromClassmap
+     */
+    public function __construct(array $psr4 = [],
+                                array $psr0 = [],
+                                array $classmap = [],
+                                array $files = [],
+                                array $excludeFromClassmap = [])
+    {
+        $this->psr4 = $psr4;
+        $this->psr0 = $psr0;
+        $this->classmap = $classmap;
+        $this->files = $files;
+        $this->excludeFromClassmap = $excludeFromClassmap;
+    }
 
     /**
      * @return array
@@ -104,4 +133,14 @@ class AutoloadSchema
         $this->excludeFromClassmap = $excludeFromClassmap;
     }
 
+    public function toArray()
+    {
+        return collect([
+            'psr-4' => collect($this->psr4)->mapWithKeys(fn(NamespaceAutoloadSchema $namespaceSchema) => [$namespaceSchema->getNamespace() => $namespaceSchema->getPaths()])->toArray(),
+            'psr-0' => collect($this->psr0)->mapWithKeys(fn(NamespaceAutoloadSchema $namespaceSchema) => [$namespaceSchema->getNamespace() => $namespaceSchema->getPaths()])->toArray(),
+            'classmap' => $this->classmap,
+            'files' => $this->files,
+            'exclude-from-classmap' => $this->excludeFromClassmap,
+        ])->filter(fn($val) => $val !== [] && $val !== null && ($val instanceof Collection ? $val->count() > 0 : true))->toArray();
+    }
 }

@@ -2,12 +2,26 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class PackageRepositoryDistSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class PackageRepositoryDistSchema implements Arrayable
 {
 
     private string $url;
 
     private string $type;
+
+    /**
+     * PackageRepositoryDistSchema constructor.
+     * @param string $url
+     * @param string $type
+     */
+    public function __construct(string $url, string $type)
+    {
+        $this->url = $url;
+        $this->type = $type;
+    }
+
 
     /**
      * @return string
@@ -41,4 +55,11 @@ class PackageRepositoryDistSchema
         $this->type = $type;
     }
 
+    public function toArray()
+    {
+        return [
+            'url' => $this->url,
+            'type' => $this->type
+        ];
+    }
 }

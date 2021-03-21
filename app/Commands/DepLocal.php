@@ -3,7 +3,9 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
-use App\Core\Helpers\Composer\ComposerRetriever;
+use App\Core\Helpers\Composer\ComposerFilesystem;
+use App\Core\Helpers\Composer\ComposerRepository;
+use App\Core\Helpers\Composer\ComposerSchemaFactory;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Instance\MetaInstanceRepository;
@@ -29,7 +31,7 @@ class DepLocal extends Command
      *
      * @return mixed
      */
-    public function handle(MetaInstanceRepository $metaInstanceRepository, ComposerRetriever $retriever)
+    public function handle(MetaInstanceRepository $metaInstanceRepository, ComposerRepository $composerRepository)
     {
         if($metaInstanceRepository->count() === 0) {
             IO::error('No instances are installed.');
@@ -43,9 +45,9 @@ class DepLocal extends Command
         // TODO Get the working directory of the currently installed instance, or a dependency
         $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
 
-        $file = $retriever->retrieve($workingDirectory);
+        $composerSchema = $composerRepository->get($workingDirectory);
 
-        dd($file);
+        $composerRepository->save($workingDirectory, $composerSchema, 'test/composer.json');
 
     }
 

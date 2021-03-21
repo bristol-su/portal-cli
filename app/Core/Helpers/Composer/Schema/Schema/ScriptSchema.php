@@ -4,7 +4,9 @@
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
 
-class ScriptSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class ScriptSchema implements Arrayable
 {
 
     private string $name;
@@ -13,6 +15,17 @@ class ScriptSchema
      * @var array|string
      */
     private $commands;
+
+    /**
+     * ScriptSchema constructor.
+     * @param string $name
+     * @param array|string $commands
+     */
+    public function __construct(string $name, $commands)
+    {
+        $this->name = $name;
+        $this->commands = $commands;
+    }
 
     /**
      * @return string
@@ -46,5 +59,12 @@ class ScriptSchema
         $this->commands = $commands;
     }
 
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'commands' => $this->commands
+        ];
+    }
 
 }

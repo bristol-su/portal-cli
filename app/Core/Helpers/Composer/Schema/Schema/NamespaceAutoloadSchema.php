@@ -2,8 +2,6 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-use Illuminate\Support\Arr;
-
 class NamespaceAutoloadSchema
 {
 
@@ -16,6 +14,17 @@ class NamespaceAutoloadSchema
      * @var array|string
      */
     private $paths;
+
+    /**
+     * NamespaceAutoloadSchema constructor.
+     * @param string $namespace
+     * @param array|string $paths
+     */
+    public function __construct(string $namespace, $paths)
+    {
+        $this->namespace = $namespace;
+        $this->paths = $paths;
+    }
 
     /**
      * @return string
@@ -48,5 +57,4 @@ class NamespaceAutoloadSchema
     {
         $this->paths = $paths;
     }
-
 }

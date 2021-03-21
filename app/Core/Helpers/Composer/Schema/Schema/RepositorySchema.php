@@ -4,7 +4,9 @@
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
 
-class RepositorySchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class RepositorySchema implements Arrayable
 {
 
     private string $type;
@@ -14,6 +16,21 @@ class RepositorySchema
     private array $options;
 
     private ?PackageRepositorySchema $package;
+
+    /**
+     * RepositorySchema constructor.
+     * @param string $type
+     * @param string $url
+     * @param array $options
+     * @param PackageRepositorySchema|null $package
+     */
+    public function __construct(string $type, string $url, array $options = [], ?PackageRepositorySchema $package = null)
+    {
+        $this->type = $type;
+        $this->url = $url;
+        $this->options = $options;
+        $this->package = $package;
+    }
 
     /**
      * @return PackageRepositorySchema|null
@@ -78,6 +95,16 @@ class RepositorySchema
     {
         throw new \Exception('Don\'t forget that this schema may also be loaded with a key rather than an array. A builder must take that into account');
         $this->options = $options;
+    }
+
+    public function toArray()
+    {
+        return collect([
+            'type' => $this->type,
+            'url' => $this->url,
+            'options' => $this->options,
+            'package' => $this->package
+        ])->filter(fn($val) => $val !== [] && $val !== null && ($val instanceof Collection ? $val->count() > 0 : true))->toArray();
     }
 
 

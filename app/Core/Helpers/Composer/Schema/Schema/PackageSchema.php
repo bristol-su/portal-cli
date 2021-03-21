@@ -2,12 +2,25 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class PackageSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class PackageSchema implements Arrayable
 {
 
     private string $name;
 
     private string $version;
+
+    /**
+     * PackageSchema constructor.
+     * @param string $name
+     * @param string $version
+     */
+    public function __construct(string $name, string $version)
+    {
+        $this->name = $name;
+        $this->version = $version;
+    }
 
     /**
      * @return string
@@ -41,4 +54,11 @@ class PackageSchema
         $this->version = $version;
     }
 
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'version' => $this->version
+        ];
+    }
 }

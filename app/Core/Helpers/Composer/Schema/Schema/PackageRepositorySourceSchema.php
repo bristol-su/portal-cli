@@ -2,7 +2,9 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class PackageRepositorySourceSchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class PackageRepositorySourceSchema implements Arrayable
 {
 
     private string $url;
@@ -10,6 +12,20 @@ class PackageRepositorySourceSchema
     private string $type;
 
     private string $reference;
+
+    /**
+     * PackageRepositorySourceSchema constructor.
+     * @param string $url
+     * @param string $type
+     * @param string $reference
+     */
+    public function __construct(string $url, string $type, string $reference)
+    {
+        $this->url = $url;
+        $this->type = $type;
+        $this->reference = $reference;
+    }
+
 
     /**
      * @return string
@@ -59,4 +75,12 @@ class PackageRepositorySourceSchema
         $this->reference = $reference;
     }
 
+    public function toArray()
+    {
+        return [
+            'url' => $this->url,
+            'type' => $this->type,
+            'reference' => $this->reference
+        ];
+    }
 }

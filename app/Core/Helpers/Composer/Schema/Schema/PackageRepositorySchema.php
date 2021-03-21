@@ -2,7 +2,9 @@
 
 namespace App\Core\Helpers\Composer\Schema\Schema;
 
-class PackageRepositorySchema
+use Illuminate\Contracts\Support\Arrayable;
+
+class PackageRepositorySchema implements Arrayable
 {
 
     private string $name;
@@ -12,6 +14,22 @@ class PackageRepositorySchema
     private PackageRepositoryDistSchema $dist;
 
     private PackageRepositorySourceSchema $source;
+
+    /**
+     * PackageRepositorySchema constructor.
+     * @param string $name
+     * @param string $version
+     * @param PackageRepositoryDistSchema $dist
+     * @param PackageRepositorySourceSchema $source
+     */
+    public function __construct(string $name, string $version, PackageRepositoryDistSchema $dist, PackageRepositorySourceSchema $source)
+    {
+        $this->name = $name;
+        $this->version = $version;
+        $this->dist = $dist;
+        $this->source = $source;
+    }
+
 
     /**
      * @return string
@@ -77,4 +95,13 @@ class PackageRepositorySchema
         $this->source = $source;
     }
 
+    public function toArray()
+    {
+        return [
+            'name' => $this->name,
+            'version' => $this->version,
+            'dist' => $this->dist,
+            'source' => $this->source
+        ];
+    }
 }
