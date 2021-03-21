@@ -6,6 +6,8 @@ use App\Core\Contracts\Command;
 use App\Core\Helpers\Composer\ComposerFilesystem;
 use App\Core\Helpers\Composer\ComposerRepository;
 use App\Core\Helpers\Composer\ComposerSchemaFactory;
+use App\Core\Helpers\Composer\Operations\AddRepository;
+use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Instance\MetaInstanceRepository;
@@ -46,6 +48,9 @@ class DepLocal extends Command
         $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
 
         $composerSchema = $composerRepository->get($workingDirectory);
+
+        $operator = new AddRepository('path', './Modules/Core');
+        $composerSchema = $operator->perform($composerSchema);
 
         $composerRepository->save($workingDirectory, $composerSchema, 'test/composer.json');
 
