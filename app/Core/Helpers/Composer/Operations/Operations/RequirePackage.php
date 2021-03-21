@@ -12,9 +12,9 @@ class RequirePackage implements Operation
 {
 
     private string $name;
-    private ?string $version;
+    private string $version;
 
-    public function __construct(string $name, ?string $version = null)
+    public function __construct(string $name, string $version)
     {
         $this->name = $name;
         $this->version = $version;

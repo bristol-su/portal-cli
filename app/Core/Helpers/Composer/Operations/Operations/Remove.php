@@ -6,6 +6,7 @@ namespace App\Core\Helpers\Composer\Operations\Operations;
 
 use App\Core\Contracts\Helpers\Composer\Operation;
 use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;
+use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
 
 class Remove implements Operation
 {
@@ -19,24 +20,34 @@ class Remove implements Operation
 
     public function perform(ComposerSchema $composerSchema): ComposerSchema
     {
-        $require = $composerSchema->getRequire();
-        $updatedRequire = [];
-        $found = false;
-        foreach($require as $package) {
+        $composerSchema->setRequire(
+            $this->performOn(
+                $composerSchema->getRequire()
+            )
+        );
+
+        $composerSchema->setRequireDev(
+            $this->performOn(
+                $composerSchema->getRequireDev()
+            )
+        );
+
+        return $composerSchema;
+    }
+
+    /**
+     * @param array|PackageSchema[] $packages
+     * @return array
+     */
+    private function performOn(array $packages)
+    {
+        $updated = [];
+        foreach($packages as $package) {
             if($package->getName() === $this->name) {
-                $found = true;
                 continue;
             }
-            $updatedRequire[] = $package;
+            $updated[] = $package;
         }
-
-        if($found === false) {
-            throw new \Exception(
-                sprintf('Package %s was not required as a  dependency', $this->name)
-            );
-        }
-
-        $composerSchema->setRequire($updatedRequire);
-        return $composerSchema;
+        return $updated;
     }
 }

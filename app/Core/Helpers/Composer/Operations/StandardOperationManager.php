@@ -13,20 +13,36 @@ use Illuminate\Support\Facades\Validator;
 class StandardOperationManager extends OperationManager
 {
 
-    public function validateParameters(array $parameters, array $rules, array $messages = []): array
+    public function validateParameters(array $parameters, array $required, array $optional): void
     {
-        return Validator::make($parameters, $rules, $messages)
-            ->validate();
+        $keys = array_keys($parameters);
+
+        foreach($required as $key) {
+            if(in_array($key, $keys)) {
+                unset($keys[array_search($key, $keys)]);
+            } else {
+                throw new \Exception(
+                    sprintf('Key %s is required but was not given', $key)
+                );
+            }
+        }
+
+        foreach($optional as $key) {
+            if(in_array($key, $keys)) {
+                unset($keys[array_search($key, $keys)]);
+            }
+        }
+
+        if(count($keys) > 0) {
+            throw new \Exception(
+                sprintf('Keys [%s] are not supported', implode(', ', $keys))
+            );
+        }
     }
 
     public function createAddRepositoryOperation(array $parameters): AddRepository
     {
-        $parameters = $this->validateParameters($parameters, [
-            'type' => 'required',
-            'url' => 'required',
-            'options' => 'sometimes|nullable',
-            'package' => 'sometimes|nullable'
-        ]);
+        $this->validateParameters($parameters, ['type', 'url'], ['options', 'package']);
         return new AddRepository(
             $parameters['type'],
             $parameters['url'],
@@ -37,12 +53,7 @@ class StandardOperationManager extends OperationManager
 
     public function createRemoveRepositoryOperation(array $parameters): RemoveRepository
     {
-        $parameters = $this->validateParameters($parameters, [
-            'type' => 'required',
-            'url' => 'required',
-            'options' => 'sometimes|nullable',
-            'package' => 'sometimes|nullable'
-        ]);
+        $this->validateParameters($parameters, ['type', 'url'], ['options', 'package']);
         return new RemoveRepository(
             $parameters['type'],
             $parameters['url'],
@@ -53,10 +64,7 @@ class StandardOperationManager extends OperationManager
 
     public function createChangeDependencyVersionOperation(array $parameters): ChangeDependencyVersion
     {
-        $parameters = $this->validateParameters($parameters, [
-            'name' => 'required',
-            'version' => 'required'
-        ]);
+        $this->validateParameters($parameters, ['name', 'version'], []);
         return new ChangeDependencyVersion(
             $parameters['name'],
             $parameters['version']
@@ -65,9 +73,7 @@ class StandardOperationManager extends OperationManager
 
     public function createRemoveOperation(array $parameters): Remove
     {
-        $parameters = $this->validateParameters($parameters, [
-            'name' => 'required'
-        ]);
+        $this->validateParameters($parameters, ['name'], []);
         return new Remove(
             $parameters['name'],
         );
@@ -75,25 +81,19 @@ class StandardOperationManager extends OperationManager
 
     public function createRequireDevOperation(array $parameters): RequireDev
     {
-        $parameters = $this->validateParameters($parameters, [
-            'name' => 'required',
-            'version' => 'sometimes|nullable'
-        ]);
+        $this->validateParameters($parameters, ['name', 'version'], []);
         return new RequireDev(
             $parameters['name'],
-            data_get($parameters, 'version')
+            $parameters['version']
         );
     }
 
     public function createRequireOperation(array $parameters): RequirePackage
     {
-        $parameters = $this->validateParameters($parameters, [
-            'name' => 'required',
-            'version' => 'sometimes|nullable'
-        ]);
+        $this->validateParameters($parameters, ['name', 'version'], []);
         return new RequirePackage(
             $parameters['name'],
-            data_get($parameters, 'version')
+            $parameters['version']
         );
     }
 

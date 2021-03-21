@@ -4,6 +4,7 @@ namespace App\Core\Helpers\Composer\Operations\Operations;
 
 use App\Core\Contracts\Helpers\Composer\Operation;
 use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;
+use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
 
 class ChangeDependencyVersion implements Operation
 {
@@ -19,16 +20,35 @@ class ChangeDependencyVersion implements Operation
 
     public function perform(ComposerSchema $composerSchema): ComposerSchema
     {
-        $require = $composerSchema->getRequire();
-        $updatedRequire = [];
-        foreach($require as $package) {
+        $composerSchema->setRequire(
+            $this->performOn(
+                $composerSchema->getRequire()
+            )
+        );
+
+        $composerSchema->setRequireDev(
+            $this->performOn(
+                $composerSchema->getRequireDev()
+            )
+        );
+
+        return $composerSchema;
+    }
+
+    /**
+     * @param array|PackageSchema[] $packages
+     * @return array
+     */
+    public function performOn(array $packages)
+    {
+        $updated = [];
+        foreach($packages as $package) {
             if($package->getName() === $this->name) {
                 $package->setVersion($this->version);
             }
-            $updatedRequire[] = $package;
+            $updated[] = $package;
         }
-        $composerSchema->setRequire($updatedRequire);
-        return $composerSchema;
+        return $updated;
     }
 
 }

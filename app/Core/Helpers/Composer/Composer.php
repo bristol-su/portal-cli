@@ -1,61 +1,124 @@
 <?php
 
+
 namespace App\Core\Helpers\Composer;
 
-use App\Core\Helpers\Terminal\Executor;
+
+use App\Core\Contracts\Helpers\Composer\OperationManager as OperationManagerContract;
+use App\Core\Helpers\Composer\Schema\ComposerRepository;
+use App\Core\Helpers\Composer\Schema\Schema\PackageRepositorySchema;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
-use App\Core\Instance\Instance;
 
 class Composer
 {
 
+    private array $operations = [];
+
+    /**
+     * @var OperationManagerContract
+     */
+    private OperationManagerContract $operationManager;
+    /**
+     * @var WorkingDirectory
+     */
     private WorkingDirectory $workingDirectory;
+    private string $filename;
+    /**
+     * @var ComposerRepository
+     */
+    private ComposerRepository $composerRepository;
 
-    public function __construct(WorkingDirectory $workingDirectory)
+
+    public function __construct(WorkingDirectory $workingDirectory, OperationManagerContract $operationManager, ComposerRepository $composerRepository, string $filename = 'composer.json')
     {
+        $this->operationManager = $operationManager;
         $this->workingDirectory = $workingDirectory;
+        $this->filename = $filename;
+        $this->composerRepository = $composerRepository;
     }
 
-    public function update()
+    public static function for(WorkingDirectory $workingDirectory, string $filename = 'composer.json'): Composer
     {
-        $this->composer(
-            sprintf(
-                'update --working-dir %s --no-cache --quiet --no-interaction --ansi',
-                $this->workingDirectory->path()
-            )
-        );
+        return app(Composer::class, [
+            'workingDirectory' => $workingDirectory,
+            'filename' => $filename
+        ]);
     }
 
-    public function install()
+    public function addOperation(string $operation, array $arguments): Composer
     {
-        $this->composer(
-            sprintf(
-                'install --working-dir %s --no-cache --quiet --no-interaction --ansi',
-                $this->workingDirectory->path()
-            )
-        );
+        $this->operations[] = [
+            'operation' => $operation,
+            'arguments' => $arguments
+        ];
+
+        return $this;
     }
 
-    public function composer(string $command)
+    public function transform(): void
     {
-        $docker = new Docker();
-        $docker->addVolume($this->workingDirectory->path(), '/opt');
+        $composerSchema = $this->composerRepository->get($this->workingDirectory, $this->filename);
 
-        $docker->addVolume('$SSH_AUTH_SOCK', '/ssh-auth.sock');
-        $docker->setEnvironmentVariable('SSH_AUTH_SOCK', '/ssh-auth.sock');
+        foreach($this->operations as $operationDetails) {
+            $operation = $operationDetails['operation'];
+            $arguments = $operationDetails['arguments'];
 
-        $docker->setEnvironmentVariable('GITHUB_KEYSCAN', '"$(ssh-keyscan github.com 2> /dev/null)"');
+            $composerSchema = $this->operationManager->operation($operation, $arguments)
+                ->perform($composerSchema);
+        }
 
-        $docker->setWorkingDirectory('/opt');
+        $this->operations = [];
 
-        $docker->image('laravelsail/php74-composer:latest');
+        $this->composerRepository->save($this->workingDirectory, $composerSchema, $this->filename);
+    }
 
-        $docker->run(
-            sprintf('echo $GITHUB_KEYSCAN >> ~/.ssh/known_hosts && composer %s', $command)
-        );
+    public function require(string $name, string $version): Composer
+    {
+        return $this->addOperation('require', [
+            'name' => $name, 'version' => $version
+        ]);
+    }
 
-        return Executor::cd($this->workingDirectory)
-            ->execute($docker);
+    public function addRepository(string $type, string $url, array $options = [], ?PackageRepositorySchema $packageRepositorySchema = null): Composer
+    {
+        return $this->addOperation('add-repository', [
+            'type' => $type, 'url' => $url, 'options' => $options, 'package' => $packageRepositorySchema
+        ]);
+    }
+
+    public function removeRepository(string $type, string $url, array $options = [], ?PackageRepositorySchema $packageRepositorySchema = null): Composer
+    {
+        return $this->addOperation('remove-repository', [
+            'type' => $type, 'url' => $url, 'options' => $options, 'package' => $packageRepositorySchema
+        ]);
+    }
+
+    public function changeDependencyVersion(string $name, string $version): Composer
+    {
+        return $this->addOperation('change-dependency-version', [
+            'name' => $name, 'version' => $version
+        ]);
+    }
+
+    public function remove(string $name): Composer
+    {
+        return $this->addOperation('remove', [
+            'name' => $name
+        ]);
+    }
+
+    public function requireDev(string $name, ?string $version = null): Composer
+    {
+        return $this->addOperation('require-dev', [
+            'name' => $name, 'version' => $version
+        ]);
+    }
+
+    public function __destruct()
+    {
+        if(count($this->operations) > 0) {
+            $this->transform();
+        }
     }
 
 }

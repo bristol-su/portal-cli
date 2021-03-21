@@ -3,7 +3,7 @@
 namespace App\Core\Pipeline\Tasks;
 
 use App\Core\Contracts\Pipeline\Task;
-use App\Core\Helpers\Composer\Composer;
+use App\Core\Helpers\Composer\ComposerUpdater;
 use App\Core\Helpers\Storage\Filesystem;
 
 class InstallComposerDependencies extends Task
@@ -11,7 +11,7 @@ class InstallComposerDependencies extends Task
 
     public function up(\App\Core\Helpers\WorkingDirectory\WorkingDirectory $workingDirectory): void
     {
-        $composer = new Composer($workingDirectory);
+        $composer = new ComposerUpdater($workingDirectory);
         $composer->install();
     }
 

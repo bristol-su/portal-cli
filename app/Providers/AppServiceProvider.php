@@ -22,6 +22,7 @@ use App\Pipelines\FrontendInstaller;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\ValidationServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -47,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->register(ValidationServiceProvider::class);
         $this->app->bind(InstanceRepositoryContract::class, MetaInstanceRepository::class);
         $this->app->bind(InstanceManagerContract::class, InstanceRepository::class);
         $this->app->bind(SettingRepositoryContract::class, SettingRepository::class);
