@@ -18,9 +18,9 @@ class ComposerSchema
     private string $description;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $version;
+    private ?string $version;
 
     /**
      * @var string
@@ -33,22 +33,22 @@ class ComposerSchema
     private array $keywords;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $homepage;
+    private ?string $homepage;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $readme;
+    private ?string $readme;
 
     /**
-     * @var Carbon
+     * @var Carbon|null
      */
-    private Carbon $time;
+    private ?Carbon $time;
 
     /**
-     * @var string|array
+     * @var string|array|null
      */
     private $licence;
 
@@ -58,9 +58,9 @@ class ComposerSchema
     private array $authors;
 
     /**
-     * @var
+     * @var SupportSchema|null
      */
-    private SupportSchema $support;
+    private ?SupportSchema $support;
 
     /**
      * @var array|FundingSchema[]
@@ -98,23 +98,29 @@ class ComposerSchema
     private array $suggest;
 
     /**
-     * @var AutoloadSchema
+     * @var AutoloadSchema|null
      */
-    private AutoloadSchema $autoload;
+    private ?AutoloadSchema $autoload;
 
     /**
-     * @var AutoloadSchema
+     * @var AutoloadSchema|null
      */
-    private AutoloadSchema $autoloadDev;
+    private ?AutoloadSchema $autoloadDev;
 
     /**
      * @var array
      */
     private array $includePath;
 
-    private string $targetDir;
+    /**
+     * @var string|null
+     */
+    private ?string $targetDir;
 
-    private string $minimumStability;
+    /**
+     * @var string|null
+     */
+    private ?string $minimumStability;
 
     private bool $preferStable;
 
@@ -141,14 +147,14 @@ class ComposerSchema
     private array $bin;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $archive;
+    private ?string $archive;
 
     /**
-     * @var bool|string
+     * @var bool|string|null
      */
-    private $abandomed;
+    private $abandoned;
 
     private array $nonFeatureBranches;
 
@@ -185,17 +191,17 @@ class ComposerSchema
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }
 
     /**
-     * @param string $version
+     * @param string|null $version
      */
-    public function setVersion(string $version): void
+    public function setVersion(?string $version): void
     {
         $this->version = $version;
     }
@@ -233,55 +239,55 @@ class ComposerSchema
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getHomepage(): string
+    public function getHomepage(): ?string
     {
         return $this->homepage;
     }
 
     /**
-     * @param string $homepage
+     * @param string|null $homepage
      */
-    public function setHomepage(string $homepage): void
+    public function setHomepage(?string $homepage): void
     {
         $this->homepage = $homepage;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getReadme(): string
+    public function getReadme(): ?string
     {
         return $this->readme;
     }
 
     /**
-     * @param string $readme
+     * @param string|null $readme
      */
-    public function setReadme(string $readme): void
+    public function setReadme(?string $readme): void
     {
         $this->readme = $readme;
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null
      */
-    public function getTime(): Carbon
+    public function getTime(): ?Carbon
     {
         return $this->time;
     }
 
     /**
-     * @param Carbon $time
+     * @param Carbon|null $time
      */
-    public function setTime(Carbon $time): void
+    public function setTime(?Carbon $time): void
     {
         $this->time = $time;
     }
 
     /**
-     * @return array|string
+     * @return array|string|null
      */
     public function getLicence()
     {
@@ -289,7 +295,7 @@ class ComposerSchema
     }
 
     /**
-     * @param array|string $licence
+     * @param array|string|null $licence
      */
     public function setLicence($licence): void
     {
@@ -313,17 +319,17 @@ class ComposerSchema
     }
 
     /**
-     * @return mixed
+     * @return SupportSchema|null
      */
-    public function getSupport(): SupportSchema
+    public function getSupport(): ?SupportSchema
     {
         return $this->support;
     }
 
     /**
-     * @param mixed $support
+     * @param SupportSchema|null $support
      */
-    public function setSupport(SupportSchema $support): void
+    public function setSupport(?SupportSchema $support): void
     {
         $this->support = $support;
     }
@@ -441,33 +447,33 @@ class ComposerSchema
     }
 
     /**
-     * @return AutoloadSchema
+     * @return AutoloadSchema|null
      */
-    public function getAutoload(): AutoloadSchema
+    public function getAutoload(): ?AutoloadSchema
     {
         return $this->autoload;
     }
 
     /**
-     * @param AutoloadSchema $autoload
+     * @param AutoloadSchema|null $autoload
      */
-    public function setAutoload(AutoloadSchema $autoload): void
+    public function setAutoload(?AutoloadSchema $autoload): void
     {
         $this->autoload = $autoload;
     }
 
     /**
-     * @return AutoloadSchema
+     * @return AutoloadSchema|null
      */
-    public function getAutoloadDev(): AutoloadSchema
+    public function getAutoloadDev(): ?AutoloadSchema
     {
         return $this->autoloadDev;
     }
 
     /**
-     * @param AutoloadSchema $autoloadDev
+     * @param AutoloadSchema|null $autoloadDev
      */
-    public function setAutoloadDev(AutoloadSchema $autoloadDev): void
+    public function setAutoloadDev(?AutoloadSchema $autoloadDev): void
     {
         $this->autoloadDev = $autoloadDev;
     }
@@ -489,33 +495,33 @@ class ComposerSchema
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTargetDir(): string
+    public function getTargetDir(): ?string
     {
         return $this->targetDir;
     }
 
     /**
-     * @param string $targetDir
+     * @param string|null $targetDir
      */
-    public function setTargetDir(string $targetDir): void
+    public function setTargetDir(?string $targetDir): void
     {
         $this->targetDir = $targetDir;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMinimumStability(): string
+    public function getMinimumStability(): ?string
     {
         return $this->minimumStability;
     }
 
     /**
-     * @param string $minimumStability
+     * @param string|null $minimumStability
      */
-    public function setMinimumStability(string $minimumStability): void
+    public function setMinimumStability(?string $minimumStability): void
     {
         $this->minimumStability = $minimumStability;
     }
@@ -617,35 +623,35 @@ class ComposerSchema
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getArchive(): string
+    public function getArchive(): ?string
     {
         return $this->archive;
     }
 
     /**
-     * @param string $archive
+     * @param string|null $archive
      */
-    public function setArchive(string $archive): void
+    public function setArchive(?string $archive): void
     {
         $this->archive = $archive;
     }
 
     /**
-     * @return bool|string
+     * @return bool|string|null
      */
-    public function getAbandomed()
+    public function getAbandoned()
     {
-        return $this->abandomed;
+        return $this->abandoned;
     }
 
     /**
-     * @param bool|string $abandomed
+     * @param bool|string|null $abandoned
      */
-    public function setAbandomed($abandomed): void
+    public function setAbandoned($abandoned): void
     {
-        $this->abandomed = $abandomed;
+        $this->abandoned = $abandoned;
     }
 
     /**
@@ -663,5 +669,7 @@ class ComposerSchema
     {
         $this->nonFeatureBranches = $nonFeatureBranches;
     }
+
+
 
 }

@@ -6,193 +6,48 @@ class SupportSchema
 {
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $email;
+    private ?string $email;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $issues;
+    private ?string $issues;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $forum;
+    private ?string $forum;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $wiki;
+    private ?string $wiki;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $irc;
+    private ?string $irc;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $source;
+    private ?string $source;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $docs;
+    private ?string $docs;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $rss;
+    private ?string $rss;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $chat;
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIssues(): string
-    {
-        return $this->issues;
-    }
-
-    /**
-     * @param string $issues
-     */
-    public function setIssues(string $issues): void
-    {
-        $this->issues = $issues;
-    }
-
-    /**
-     * @return string
-     */
-    public function getForum(): string
-    {
-        return $this->forum;
-    }
-
-    /**
-     * @param string $forum
-     */
-    public function setForum(string $forum): void
-    {
-        $this->forum = $forum;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWiki(): string
-    {
-        return $this->wiki;
-    }
-
-    /**
-     * @param string $wiki
-     */
-    public function setWiki(string $wiki): void
-    {
-        $this->wiki = $wiki;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIrc(): string
-    {
-        return $this->irc;
-    }
-
-    /**
-     * @param string $irc
-     */
-    public function setIrc(string $irc): void
-    {
-        $this->irc = $irc;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSource(): string
-    {
-        return $this->source;
-    }
-
-    /**
-     * @param string $source
-     */
-    public function setSource(string $source): void
-    {
-        $this->source = $source;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDocs(): string
-    {
-        return $this->docs;
-    }
-
-    /**
-     * @param string $docs
-     */
-    public function setDocs(string $docs): void
-    {
-        $this->docs = $docs;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRss(): string
-    {
-        return $this->rss;
-    }
-
-    /**
-     * @param string $rss
-     */
-    public function setRss(string $rss): void
-    {
-        $this->rss = $rss;
-    }
-
-    /**
-     * @return string
-     */
-    public function getChat(): string
-    {
-        return $this->chat;
-    }
-
-    /**
-     * @param string $chat
-     */
-    public function setChat(string $chat): void
-    {
-        $this->chat = $chat;
-    }
-
+    private ?string $chat;
 
 }

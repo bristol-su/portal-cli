@@ -13,20 +13,20 @@ class RepositorySchema
 
     private array $options;
 
-    private PackageRepositorySchema $package;
+    private ?PackageRepositorySchema $package;
 
     /**
-     * @return PackageRepositorySchema
+     * @return PackageRepositorySchema|null
      */
-    public function getPackage(): PackageRepositorySchema
+    public function getPackage(): ?PackageRepositorySchema
     {
         return $this->package;
     }
 
     /**
-     * @param PackageRepositorySchema $package
+     * @param PackageRepositorySchema|null $package
      */
-    public function setPackage(PackageRepositorySchema $package): void
+    public function setPackage(?PackageRepositorySchema $package): void
     {
         $this->package = $package;
     }
