@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Helpers\Composer;
+namespace App\Core\Helpers\Composer\Schema;
 
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;

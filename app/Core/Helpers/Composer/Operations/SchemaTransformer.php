@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Helpers\Composer;
+namespace App\Core\Helpers\Composer\Operations;
 
 
 use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;

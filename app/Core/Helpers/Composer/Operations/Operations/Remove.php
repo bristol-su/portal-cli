@@ -1,40 +1,41 @@
 <?php
 
 
-namespace App\Core\Helpers\Composer\Operations;
+namespace App\Core\Helpers\Composer\Operations\Operations;
 
 
 use App\Core\Contracts\Helpers\Composer\Operation;
 use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;
-use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
 
-class RequirePackage implements Operation
+class Remove implements Operation
 {
 
     private string $name;
-    private ?string $version;
 
-    public function __construct(string $name, ?string $version = null)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->version = $version;
     }
 
     public function perform(ComposerSchema $composerSchema): ComposerSchema
     {
         $require = $composerSchema->getRequire();
         $updatedRequire = [];
+        $found = false;
         foreach($require as $package) {
             if($package->getName() === $this->name) {
-                throw new \Exception(
-                    sprintf('Package %s is already required as version %s', $package->getName(), $package->getVersion())
-                );
+                $found = true;
+                continue;
             }
             $updatedRequire[] = $package;
         }
-        $updatedRequire[] = new PackageSchema(
-            $this->name, $this->version
-        );
+
+        if($found === false) {
+            throw new \Exception(
+                sprintf('Package %s was not required as a  dependency', $this->name)
+            );
+        }
+
         $composerSchema->setRequire($updatedRequire);
         return $composerSchema;
     }

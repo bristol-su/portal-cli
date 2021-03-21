@@ -3,10 +3,10 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
-use App\Core\Helpers\Composer\ComposerFilesystem;
-use App\Core\Helpers\Composer\ComposerRepository;
-use App\Core\Helpers\Composer\ComposerSchemaFactory;
-use App\Core\Helpers\Composer\Operations\AddRepository;
+use App\Core\Helpers\Composer\Schema\ComposerFilesystem;
+use App\Core\Helpers\Composer\Schema\ComposerRepository;
+use App\Core\Helpers\Composer\Schema\ComposerSchemaFactory;
+use App\Core\Helpers\Composer\Operations\Operations\AddRepository;
 use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;

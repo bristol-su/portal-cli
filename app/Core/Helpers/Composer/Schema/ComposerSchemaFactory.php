@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Helpers\Composer;
+namespace App\Core\Helpers\Composer\Schema;
 
 use App\Core\Helpers\Composer\Schema\Schema\AuthorSchema;
 use App\Core\Helpers\Composer\Schema\Schema\AutoloadSchema;
@@ -22,7 +22,7 @@ class ComposerSchemaFactory
     {
         $this->schema = $schema;
 
-        $composerSchema = new ComposerSchema(
+        return new ComposerSchema(
             $this->get('name'),
             $this->get('description', null),
             $this->get('version', null),
@@ -56,8 +56,6 @@ class ComposerSchemaFactory
             $this->get('abandoned', false),
             $this->get('non-feature-branches', []),
         );
-
-        return $composerSchema;
     }
 
     private function get(string $key, $default = self::NO_DEFAULT)

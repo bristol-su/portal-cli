@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Core\Contracts\Helpers\Composer\OperationManager as OperationManagerContract;
 use App\Core\Contracts\Helpers\Port\PortChecker;
 use App\Core\Contracts\Helpers\Terminal\Executor;
 use App\Core\Contracts\Instance\InstanceFactory as InstanceFactoryContract;
 use App\Core\Contracts\Instance\InstanceRepository as InstanceManagerContract;
 use App\Core\Contracts\Instance\MetaInstanceRepository as InstanceRepositoryContract;
 use App\Core\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
+use App\Core\Helpers\Composer\Operations\StandardOperationManager;
 use App\Core\Helpers\Port\FSockOpenPortChecker;
 use App\Core\Helpers\Terminal\ShellExecutor;
 use App\Core\Pipeline\PipelineManager;
@@ -53,6 +55,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(PipelineManager::class);
         $this->app->bind(InstanceFactoryContract::class, InstanceFactory::class);
+
+        $this->app->bind(OperationManagerContract::class, StandardOperationManager::class);
 
 //        $this->app->singleton(InstanceResolverContract::class, InstanceResolver::class);
     }

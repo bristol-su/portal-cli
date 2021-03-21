@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Core\Helpers\Composer\Operations;
+namespace App\Core\Helpers\Composer\Operations\Operations;
 
 
 use App\Core\Contracts\Helpers\Composer\Operation;
