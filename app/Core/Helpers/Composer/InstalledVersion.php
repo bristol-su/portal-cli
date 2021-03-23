@@ -1,11 +1,14 @@
 <?php
 
+
 namespace App\Core\Helpers\Composer;
+
 
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use Illuminate\Support\Facades\Facade;
 
-class GetCurrentVersion
+class InstalledVersion
 {
 
     /**
@@ -18,13 +21,8 @@ class GetCurrentVersion
         $this->workingDirectory = $workingDirectory;
     }
 
-    public function for(string $package)
+    private function getSchema(): array
     {
-        $pattern = sprintf(
-            '/"name": "%s",' . PHP_EOL . '"version": "(.*?)",/',
-            $package
-        );
-dd($pattern);
         $composerLock = Filesystem::read(
             Filesystem::append(
                 $this->workingDirectory->path(),
@@ -32,9 +30,17 @@ dd($pattern);
             )
         );
 
-        preg_match($pattern, $composerLock, $matches);
+        return json_decode($composerLock,true);
+    }
 
-        dd($matches);
+    public function isInstalled(string $package): bool
+    {
+        dd($this->getSchema());
+    }
+
+    public function getInstalledVersion(string $package): string
+    {
+        // TODO: Implement getInstalledVersion() method.
     }
 
 }

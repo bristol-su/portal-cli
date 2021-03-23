@@ -5,7 +5,7 @@ namespace App\Commands;
 use App\Core\Contracts\Command;
 use App\Core\Helpers\Composer\Composer;
 use App\Core\Helpers\Composer\ComposerUpdater;
-use App\Core\Helpers\Composer\GetCurrentVersion;
+use App\Core\Helpers\Composer\ComposerLockInstalledVersion;
 use App\Core\Helpers\Composer\Schema\ComposerFilesystem;
 use App\Core\Helpers\Composer\Schema\ComposerRepository;
 use App\Core\Helpers\Composer\Schema\ComposerSchemaFactory;
@@ -88,7 +88,7 @@ class DepLocal extends Command
 
 //        Composer::for($workingDirectory)->require($package, '^v1.0.4');
 
-        dd((new GetCurrentVersion($workingDirectory))->for('elbowspaceuk/blog-module'));
+        dd((new ComposerLockInstalledVersion($workingDirectory))->for('elbowspaceuk/blog-module'));
 
         // If in lock - search for
             // Add to composer.json as a dev dependency
