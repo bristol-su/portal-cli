@@ -3,9 +3,10 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
-use App\Core\Helpers\Composer\Composer;
-use App\Core\Helpers\Composer\ComposerUpdater;
+use App\Core\Helpers\Composer\ComposerModifier;
+use App\Core\Helpers\Composer\ComposerRunner;
 use App\Core\Helpers\Composer\ComposerLockInstalledVersion;
+use App\Core\Helpers\Composer\ComposerReader;
 use App\Core\Helpers\Composer\Schema\ComposerFilesystem;
 use App\Core\Helpers\Composer\Schema\ComposerRepository;
 use App\Core\Helpers\Composer\Schema\ComposerSchemaFactory;
@@ -27,6 +28,7 @@ class DepLocal extends Command
      * @var string
      */
     protected $signature = 'dep:local
+                            {--I|instance= : The id of the feature}
                             {--P|package= : The composer package name}
                             {--R|repository-url= : The URL of the repository}';
 
@@ -49,10 +51,22 @@ class DepLocal extends Command
             return;
         }
 
-        $instanceId = $this->choice(
-            'Which instance would you like to use?',
-            $metaInstanceRepository->all()->map(fn($metaInstance) => $metaInstance->getInstanceId())->toArray()
+        $instanceId = $this->getOrAskForOption(
+            'instance',
+            fn() => $this->choice(
+                'Which instance would you like to use?',
+                $metaInstanceRepository->all()->map(fn($metaInstance) => $metaInstance->getInstanceId())->toArray()
+            ),
+            fn($newInstanceId) => $metaInstanceRepository->exists($newInstanceId)
         );
+
+        $branchPrefix = 'feature';
+        $type = $metaInstanceRepository->getById($instanceId)->getType();
+        if($type === 'fixed') {
+            $branchPrefix = 'bug';
+        }
+        $branchName = sprintf('%s/%s', $branchPrefix, $instanceId);
+
 
         // TODO Get the working directory of the currently installed instance, or a dependency
         $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
@@ -69,34 +83,59 @@ class DepLocal extends Command
             fn($value) => $value && is_string($value) && strlen($value) > 3
         );
 
-        $relativeInstallPath = sprintf('repos/%s', Arr::last(explode('/', $package), null, $package));
+        $relativeInstallPath = sprintf('repos/%s', $package);
         $installPath = Filesystem::append(
             $workingDirectory->path(),
             $relativeInstallPath
         );
 
-        $this->info('Cloning');
-        GitRepository::cloneRepository($repositoryUrl, $installPath);
 
-        $this->info('checkout');
-        $git = new GitRepository($installPath);
-        try {
-            $git->checkout($instanceId);
-        } catch (GitException $e) {
-            $git->createBranch($instanceId, true);
+        if(Filesystem::create()->exists($installPath)) {
+            $this->info('Module already cloned.');
+        } else {
+            $this->info('Cloning');
+            GitRepository::cloneRepository($repositoryUrl, $installPath);
         }
 
-//        Composer::for($workingDirectory)->require($package, '^v1.0.4');
+        $this->info(sprintf('Checkout branch %s', $branchName));
+        $git = new GitRepository($installPath);
+        try {
+            $git->checkout($branchName);
+        } catch (GitException $e) {
+            $git->createBranch($branchName, true);
+        }
 
-        dd((new ComposerLockInstalledVersion($workingDirectory))->for('elbowspaceuk/blog-module'));
 
-        // If in lock - search for
+        $this->info('Changing composer schema');
+        $reader = ComposerReader::for($workingDirectory);
+        if($reader->isDependency($package, true)) {
+            $this->info('In root composer');
+            $currentlyInstalled = ComposerReader::for($workingDirectory)->getInstalledVersion($package);
+            $newVersion = sprintf('dev-%s as %s', $branchName, $currentlyInstalled);
+            $this->info(sprintf('Changing %s to version %s', $package, $newVersion));
+            ComposerModifier::for($workingDirectory)
+                ->changeDependencyVersion(
+                    $package,
+                    $newVersion
+                );
+            // Change version to `dev-branch as currently-installed-version`
+        } elseif($reader->isInstalled($package)) {
+            $this->info('Installed but not directly required');
+            $currentlyInstalled = ComposerReader::for($workingDirectory)->getInstalledVersion($package);
+            $newVersion = sprintf('dev-%s as %s', $branchName, $currentlyInstalled);
+            ComposerModifier::for($workingDirectory)->requireDev($package, $newVersion);
+            $this->info(sprintf('Requiring %s@%s as a dev dependency', $package, $newVersion));
             // Add to composer.json as a dev dependency
             // Change version to `dev-branch as currently-installed-version`
-        // If in root composer
-            // Change version to `dev-branch as currently-installed-version`
+        }
 
-        Composer::for($workingDirectory)->addRepository('path', sprintf('./%s', $relativeInstallPath));
+
+        $this->info('Adding local repository');
+        ComposerModifier::for($workingDirectory)
+            ->addRepository(
+                'path',
+                sprintf('./%s', $relativeInstallPath)
+            );
 
 //         Delete vendor
 //        Filesystem::create()->remove(

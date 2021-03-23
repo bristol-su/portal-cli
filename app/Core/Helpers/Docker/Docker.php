@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Helpers\Composer;
+namespace App\Core\Helpers\Docker;
 
 use Illuminate\Support\Arr;
 

@@ -2,11 +2,12 @@
 
 namespace App\Core\Helpers\Composer;
 
+use App\Core\Helpers\Docker\Docker;
 use App\Core\Helpers\Terminal\Executor;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Instance\Instance;
 
-class ComposerUpdater
+class ComposerRunner
 {
 
     private WorkingDirectory $workingDirectory;

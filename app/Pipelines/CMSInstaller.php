@@ -20,7 +20,7 @@ class CMSInstaller extends Pipeline
 
             \App\Core\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.sail.example', '.env.local')
                 ->withName('Set up local environment file'),
-
+// TODO Be able to retrun something from the pipeline, and run functions to return values to get info live.
             \App\Core\Pipeline\Tasks\ValidatePortEntries::provision(
                 '.env.local',
                 ['APP_PORT', 'FORWARD_DB_PORT', 'FORWARD_MAILHOG_PORT', 'FORWARD_MAILHOG_DASHBOARD_PORT', 'FORWARD_REDIS_PORT', 'FORWARD_SELENIUM_PORT', 'FORWARD_DB_TESTING_PORT'],
