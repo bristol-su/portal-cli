@@ -2,10 +2,15 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Instance\MetaInstanceRepository;
+use App\Core\Contracts\Feature\FeatureRepository;
+use App\Core\Contracts\Feature\FeatureResolver;
+use App\Core\Contracts\Site\SiteRepository;
+use App\Core\Feature\Feature;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Pipeline\PipelineManager;
+use Cz\Git\GitException;
+use Cz\Git\GitRepository;
 use Illuminate\Support\Str;
 use App\Core\Contracts\Command;
 
@@ -18,9 +23,9 @@ class FeatureNew extends Command
      */
     protected $signature = 'feature:new
                             {--N|name= : The name of the feature}
-                            {--R|repository=cms : Takes values of `cms` or `frontend`}
                             {--D|description= : A description for the feature}
-                            {--T|type= : The type of change}';
+                            {--T|type= : The type of change}
+                            {--S|site= : The ID of the site}';
 
     /**
      * The description of the command.
@@ -31,9 +36,9 @@ class FeatureNew extends Command
 
 
     /**
-     * @var MetaInstanceRepository
+     * @var SiteRepository
      */
-    protected $metaInstanceRepository;
+    protected $siteRepository;
 
     protected $instanceId = null;
 
@@ -42,58 +47,29 @@ class FeatureNew extends Command
      *
      * @return mixed
      */
-    public function handle(PipelineManager $installManager, MetaInstanceRepository $metaInstanceRepository)
+    public function handle(FeatureRepository $featureRepository, FeatureResolver $featureResolver)
     {
-        $this->metaInstanceRepository = $metaInstanceRepository;
         $this->info('Creating a new feature');
 
-        $name = trim($this->getInstanceName());
-        $instanceId = trim($this->getInstanceId($name));
-        $description = trim($this->getInstanceDescription());
-        $type = trim($this->getInstanceChangeType());
+        $site = $this->getSite('Which site would you like to create the feature on?');
+        $featureName = trim($this->getFeatureName());
+        $featureDescription = trim($this->getFeatureDescription());
+        $featureType = trim($this->getFeatureChangeType());
 
-        $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
+        $feature = $featureRepository->create(
+            $site->getId(),
+            $featureName,
+            $featureDescription,
+            $featureType
+        );
+        $this->task('Creating the feature', fn() => $feature);
+        $this->task('Checking out feature branch', fn() => $this->checkoutBranch($feature->branchName(), WorkingDirectory::fromSite($site)));
+        $this->task('Using feature by default', fn() => $featureResolver->setFeature($feature));
 
-        try {
-            $installManager->driver(
-                $this->option('repository')
-            )->install($workingDirectory);
-            $metaInstance = $metaInstanceRepository->create(
-                $instanceId,
-                $name,
-                $description,
-                $type,
-                $this->option('repository')
-            );
-        } catch (\Exception $e) {
-            if($this->output->isVerbose()) {
-                throw $e;
-            }
-            IO::error('Install failed: ' . $e->getMessage());
-            return;
-        }
-
-        $this->getOutput()->success(sprintf('Installed a new Atlas instance.'));
+        $this->getOutput()->success(sprintf('Created feature [%s].', $featureName));
     }
 
-    private function getInstanceId(string $name): string
-    {
-        if($this->instanceId === null) {
-            $id = Str::kebab($name);
-            $prefix = '';
-            while($this->metaInstanceRepository->exists($id . $prefix) === true) {
-                if($prefix === '') {
-                    $prefix = 1;
-                } else {
-                    $prefix++;
-                }
-            }
-            $this->instanceId = $id . $prefix;
-        }
-        return $this->instanceId;
-    }
-
-    private function getInstanceName(): string
+    private function getFeatureName(): string
     {
         return $this->getOrAskForOption(
             'name',
@@ -102,7 +78,7 @@ class FeatureNew extends Command
         );
     }
 
-    private function getInstanceDescription(): string
+    private function getFeatureDescription(): string
     {
         return $this->getOrAskForOption(
             'name',
@@ -111,7 +87,7 @@ class FeatureNew extends Command
         );
     }
 
-    private function getInstanceChangeType()
+    private function getFeatureChangeType()
     {
         $allowedTypes = [
             'added' => 'Added (for new features)',
@@ -130,6 +106,17 @@ class FeatureNew extends Command
             ),
             fn($value) => $value && in_array($value, array_keys($allowedTypes))
         );
+    }
+
+    private function checkoutBranch(string $branchName, WorkingDirectory $path)
+    {
+        $git = new GitRepository($path->path());
+        try {
+            $git->checkout($branchName);
+        } catch (GitException $e) {
+            $git->createBranch($branchName, true);
+        }
+        return true;
     }
 
 }

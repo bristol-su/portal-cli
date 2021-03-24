@@ -2,10 +2,12 @@
 
 namespace App\Commands;
 
+use App\Core\Contracts\Feature\FeatureRepository;
 use App\Core\Contracts\Instance\InstanceFactory;
-use App\Core\Contracts\Instance\MetaInstanceRepository;
+use App\Core\Contracts\Site\SiteRepository;
+use App\Core\Feature\Feature;
 use App\Core\Instance\Instance;
-use App\Core\Instance\MetaInstance;
+use App\Core\Site\Site;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Core\Contracts\Command;
 
@@ -30,23 +32,19 @@ class FeatureList extends Command
      *
      * @return mixed
      */
-    public function handle(MetaInstanceRepository $metaInstanceRepository, InstanceFactory $instanceFactory)
+    public function handle(FeatureRepository $featureRepository)
     {
-        $metaInstances = $metaInstanceRepository->all();
-        $instances = $metaInstances->map(
-            fn(MetaInstance $metaInstance) => $instanceFactory->createInstanceFromId($metaInstance->getInstanceId())
-        );
+        $features = $featureRepository->all();
 
         $this->table(
-            ['ID', 'Name', 'Description', 'Type', 'Status', 'URL'],
-            $instances->map(function(Instance $instance) {
+            ['ID', 'Name', 'Description', 'Type', 'Site'],
+            $features->map(function(Feature $feature) {
                 return [
-                    $instance->getInstanceId(),
-                    $instance->getMetaInstance()->getName(),
-                    $instance->getMetaInstance()->getDescription(),
-                    $instance->getMetaInstance()->getType(),
-                    $instance->getStatus(),
-                    $instance->getUrl()
+                    $feature->getId(),
+                    $feature->getName(),
+                    $feature->getDescription(),
+                    $feature->getType(),
+                    $feature->getSite()->getName()
                 ];
             })
         );

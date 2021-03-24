@@ -3,13 +3,14 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
-use App\Core\Contracts\Instance\MetaInstanceRepository;
+use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Helpers\Composer\ComposerModifier;
 use App\Core\Helpers\Composer\ComposerRunner;
 use App\Core\Helpers\Composer\ComposerReader;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use App\Core\Site\Site;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
@@ -21,7 +22,7 @@ class DepLocal extends Command
      * @var string
      */
     protected $signature = 'dep:local
-                            {--I|instance= : The id of the feature}
+                            {--I|site= : The id of the feature}
                             {--P|package= : The composer package name}
                             {--R|repository-url= : The URL of the repository}';
 
@@ -37,11 +38,13 @@ class DepLocal extends Command
      *
      * @return mixed
      */
-    public function handle(MetaInstanceRepository $metaInstanceRepository)
+    public function handle(SiteRepository $siteRepository)
     {
+        $feature = $this->getFeature('Which feature should this be done against?');
+        $site = $feature->getSite();
 
-        $instanceId = $this->getInstanceId($metaInstanceRepository);
-        $branchName = $this->getBranchName($metaInstanceRepository, $instanceId);
+        $instanceId = $site->getInstanceId();
+        $branchName = $this->getBranchName($siteRepository, $instanceId);
         // TODO Get the working directory of the currently used site/feature
         $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
 
@@ -64,7 +67,7 @@ class DepLocal extends Command
         );
 
         IO::info(sprintf('Converting %s into a local package.', $package));
-        
+
         $this->task('Clone the repository', fn() => $this->cloneRepository($installPath, $repositoryUrl));
         $this->task(sprintf('Checkout branch %s', $branchName), fn() => $this->checkoutBranch($branchName, $installPath));
         $this->task('Modify composer.json', fn() => $this->composerRequireLocal($workingDirectory, $package, $branchName));
@@ -75,26 +78,11 @@ class DepLocal extends Command
         IO::success(sprintf('Module %s can be found in %s', $package, $relativeInstallPath));
     }
 
-    private function getInstanceId(MetaInstanceRepository $metaInstanceRepository): string
-    {
-        if($metaInstanceRepository->count() === 0) {
-            throw new \Exception('No instances are available');
-        }
-
-        return $this->getOrAskForOption(
-            'instance',
-            fn() => $this->choice(
-                'Which instance would you like to use?',
-                $metaInstanceRepository->all()->map(fn($metaInstance) => $metaInstance->getInstanceId())->toArray()
-            ),
-            fn($newInstanceId) => $metaInstanceRepository->exists($newInstanceId)
-        );
-    }
-
-    private function getBranchName(MetaInstanceRepository $metaInstanceRepository, string $instanceId): string
+    private function getBranchName(SiteRepository $siteRepository, string $instanceId): string
     {
         $branchPrefix = 'feature';
-        $type = $metaInstanceRepository->getById($instanceId)->getType();
+        // TODO Get type from current feature
+        $type = 'added';//$siteRepository->getByInstanceId($instanceId)->getType();
         if($type === 'fixed') {
             $branchPrefix = 'bug';
         }

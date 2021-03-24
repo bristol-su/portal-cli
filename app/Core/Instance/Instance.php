@@ -17,13 +17,6 @@ class Instance
     const STATUS_DOWN = 'down';
 
     /**
-     * The meta data associated with the instance
-     *
-     * @var MetaInstance
-     */
-    private MetaInstance $metaInstance;
-
-    /**
      * The working directory of the instance
      *
      * @var WorkingDirectory
@@ -50,22 +43,6 @@ class Instance
      * @var string
      */
     private string $url;
-
-    /**
-     * @return MetaInstance
-     */
-    public function getMetaInstance(): MetaInstance
-    {
-        return $this->metaInstance;
-    }
-
-    /**
-     * @param MetaInstance $metaInstance
-     */
-    public function setMetaInstance(MetaInstance $metaInstance): void
-    {
-        $this->metaInstance = $metaInstance;
-    }
 
     /**
      * @throws \Exception If an instance is not registered

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInstancesTable extends Migration
+class CreateFeaturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateInstancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('instances', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->string('instance_id');
+            $table->string('site_id');
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('type');
-            $table->string('installer');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateInstancesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('instances');
+        Schema::dropIfExists('features');
     }
 }

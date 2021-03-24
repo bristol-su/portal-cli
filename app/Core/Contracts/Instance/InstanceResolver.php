@@ -2,7 +2,7 @@
 
 namespace App\Core\Contracts\Instance;
 
-use App\Core\Instance\Instance;
+use App\Core\Site\Site\Instance;
 
 /**
  * @todo

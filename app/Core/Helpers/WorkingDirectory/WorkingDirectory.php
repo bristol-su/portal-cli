@@ -2,9 +2,7 @@
 
 namespace App\Core\Helpers\WorkingDirectory;
 
-use App\Core\Contracts\Helpers\Settings\SettingRepository;
-use App\Core\Instance\Instance;
-use Illuminate\Support\Str;
+use App\Core\Site\Site;
 
 class WorkingDirectory
 {
@@ -30,6 +28,11 @@ class WorkingDirectory
         return new WorkingDirectory(
             InstanceDirectoryLocator::fromInstanceId($instanceId)
         );
+    }
+
+    public static function fromSite(Site $site): WorkingDirectory
+    {
+        return static::fromInstanceId($site->getInstanceId());
     }
 
 }

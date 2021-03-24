@@ -8,11 +8,11 @@ use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 class InstanceFactory implements InstanceFactoryContract
 {
 
-    private \App\Core\Contracts\Instance\MetaInstanceRepository $metaInstanceRepository;
+    private \App\Core\Contracts\Site\SiteRepository $siteRepository;
 
-    public function __construct(\App\Core\Contracts\Instance\MetaInstanceRepository $metaInstanceRepository)
+    public function __construct(\App\Core\Contracts\Site\SiteRepository $siteRepository)
     {
-        $this->metaInstanceRepository = $metaInstanceRepository;
+        $this->siteRepository = $siteRepository;
     }
 
     public function createInstanceFromId(string $instanceId): Instance
@@ -21,9 +21,6 @@ class InstanceFactory implements InstanceFactoryContract
 
         $instance->setInstanceId($instanceId);
 
-        $instance->setMetaInstance(
-            $this->metaInstanceRepository->getById($instanceId)
-        );
         $instance->setWorkingDirectory(
             WorkingDirectory::fromInstanceId($instanceId)
         );

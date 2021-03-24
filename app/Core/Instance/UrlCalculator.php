@@ -3,7 +3,6 @@
 namespace App\Core\Instance;
 
 use App\Core\Helpers\Env\EnvRepository;
-use App\Core\Helpers\Terminal\Executor;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 
 class UrlCalculator
