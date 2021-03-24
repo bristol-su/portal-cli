@@ -17,11 +17,16 @@ class ComposerRunner
         $this->workingDirectory = $workingDirectory;
     }
 
+    public static function for(WorkingDirectory $workingDirectory): ComposerRunner
+    {
+        return new static($workingDirectory);
+    }
+
     public function update()
     {
         $this->composer(
             sprintf(
-                'update --working-dir %s --no-cache --quiet --no-interaction --ansi',
+                'update --working-dir %s --quiet --no-interaction --ansi',
                 $this->workingDirectory->path()
             )
         );
@@ -31,7 +36,7 @@ class ComposerRunner
     {
         $this->composer(
             sprintf(
-                'install --working-dir %s --no-cache --quiet --no-interaction --ansi',
+                'install --working-dir %s --quiet --no-interaction --ansi',
                 $this->workingDirectory->path()
             )
         );

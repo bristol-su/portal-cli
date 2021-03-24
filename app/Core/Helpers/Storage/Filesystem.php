@@ -36,13 +36,20 @@ class Filesystem
         );
     }
 
-    public static function append(string $root, string $path)
+    public static function append(...$paths)
     {
-        return (
-            Str::startsWith($path, DIRECTORY_SEPARATOR)
-                ? $root . $path
-                : $root . DIRECTORY_SEPARATOR . $path
-        );
+        if(count($paths) === 0) {
+            throw new \Exception('No paths given');
+        }
+        $finalPath = array_shift($paths);
+        $finalPath = Str::endsWith($finalPath, DIRECTORY_SEPARATOR) ? Str::substr($finalPath, 0, -1) : $finalPath;
+        foreach($paths as $path) {
+            $path = Str::endsWith($path, DIRECTORY_SEPARATOR) ? Str::substr($path, 0, -1) : $path;
+            $finalPath .= Str::startsWith($path, DIRECTORY_SEPARATOR)
+                ? $path
+                : DIRECTORY_SEPARATOR . $path;
+        }
+        return $finalPath;
     }
 
     public static function read(string $path)
