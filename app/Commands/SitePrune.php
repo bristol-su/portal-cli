@@ -2,11 +2,10 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Instance\InstanceFactory;
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Contracts\Command;
-use App\Core\Instance\Instance;
+use App\Core\Site\Site;
 
 class SitePrune extends Command
 {
@@ -34,8 +33,8 @@ class SitePrune extends Command
         $sites = $siteRepository->all();
         if(count($sites) > 0) {
             foreach($sites as $site) {
-                if($site->instance()->getStatus() === Instance::STATUS_MISSING) {
-                    $siteRepository->delete($site->instance_id);
+                if($site->getStatus() === Site::STATUS_MISSING) {
+                    $siteRepository->delete($site->getInstanceId());
                     IO::info(sprintf('Cleared site %s', $site->name));
                 }
             }

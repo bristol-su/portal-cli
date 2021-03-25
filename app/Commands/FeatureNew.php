@@ -25,6 +25,7 @@ class FeatureNew extends Command
                             {--N|name= : The name of the feature}
                             {--D|description= : A description for the feature}
                             {--T|type= : The type of change}
+                            {--B|branch= : The name of the branch to use}
                             {--S|site= : The ID of the site}';
 
     /**
@@ -32,7 +33,7 @@ class FeatureNew extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new instance of Atlas.';
+    protected $description = 'Create a new feature in a site.';
 
 
     /**
@@ -56,15 +57,23 @@ class FeatureNew extends Command
         $featureDescription = trim($this->getFeatureDescription());
         $featureType = trim($this->getFeatureChangeType());
 
+        $branchName = $this->getOrAskForOption(
+            'branch',
+            fn() => $this->ask('What should we name the branch?', Feature::getDefaultBranchName($featureType, $featureName)),
+            fn($value) => $value && strlen($value) > 0
+        );
+
         $feature = $featureRepository->create(
             $site->getId(),
             $featureName,
             $featureDescription,
-            $featureType
+            $featureType,
+            $branchName
         );
-        $this->task('Creating the feature', fn() => $feature);
-        $this->task('Checking out feature branch', fn() => $this->checkoutBranch($feature->branchName(), WorkingDirectory::fromSite($site)));
-        $this->task('Using feature by default', fn() => $featureResolver->setFeature($feature));
+
+        $this->info('Setting up new feature');
+
+        $this->call(FeatureUse::class, ['--feature' => $feature->getId()]);
 
         $this->getOutput()->success(sprintf('Created feature [%s].', $featureName));
     }

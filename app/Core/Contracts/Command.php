@@ -81,6 +81,7 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
     public function getFeature(string $message = 'Which feature would you like to perform the action against?', \Closure $featureFilter = null, bool $withoutDefault = false): Feature
     {
         $featureRepository = app(FeatureRepository::class);
+
         if($featureRepository->count() === 0) {
             throw new \Exception('No features are available');
         }

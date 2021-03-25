@@ -7,6 +7,7 @@ use App\Core\Contracts\Site\SiteResolver;
 
 class SettingsSiteResolver implements SiteResolver
 {
+    public const SETTING_KEY = 'current-site';
 
     /**
      * @var SettingRepository
@@ -20,14 +21,14 @@ class SettingsSiteResolver implements SiteResolver
 
     public function setSite(Site $site): void
     {
-        $this->settingRepository->set('current-site', $site->getId());
+        $this->settingRepository->set(static::SETTING_KEY, $site->getId());
     }
 
     public function getSite(): Site
     {
         if($this->hasSite()) {
             return Site::findOrFail(
-                $this->settingRepository->get('current-site')
+                $this->settingRepository->get(static::SETTING_KEY)
             );
         }
         throw new \Exception('No site is set');
@@ -35,7 +36,11 @@ class SettingsSiteResolver implements SiteResolver
 
     public function hasSite(): bool
     {
-        return $this->settingRepository->has('current-site');
+        return $this->settingRepository->has(static::SETTING_KEY);
     }
 
+    public function clearSite(): void
+    {
+        $this->settingRepository->forget(static::SETTING_KEY);
+    }
 }

@@ -2,7 +2,11 @@
 
 namespace App\Core\Feature;
 
+use App\Core\Contracts\Feature\FeatureResolver;
+use App\Core\Contracts\Site\SiteResolver;
+use App\Core\Packages\LocalPackage;
 use App\Core\Site\Site;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -14,7 +18,7 @@ class Feature extends Model
     protected $table = 'features';
 
     protected $fillable = [
-        'name', 'description', 'type', 'site_id'
+        'name', 'description', 'type', 'site_id', 'branch'
     ];
 
     public function site()
@@ -47,12 +51,35 @@ class Feature extends Model
         return $this->site;
     }
 
-    public function branchName(): string
+    public function getLocalPackages(): Collection
+    {
+        return $this->localPackages;
+    }
+
+    public function localPackages()
+    {
+        return $this->hasMany(LocalPackage::class);
+    }
+
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    public static function getDefaultBranchName(string $type, string $name): string
     {
         $branchPrefix = 'feature';
-        if($this->getType() === 'fixed') {
+        if($type === 'fixed') {
             $branchPrefix = 'bug';
         }
-        return sprintf('%s/%s', $branchPrefix, Str::kebab($this->getName()));
+        return sprintf('%s/%s', $branchPrefix, Str::kebab($name));
+    }
+
+    public static function current(): ?Feature
+    {
+        if(app(FeatureResolver::class)->hasFeature()) {
+            return app(FeatureResolver::class)->getFeature();
+        }
+        return null;
     }
 }

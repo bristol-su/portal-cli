@@ -19,6 +19,7 @@ class CreateSitesTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('installer');
+            $table->unsignedBigInteger('current_feature_id')->nullable();
             $table->timestamps();
         });
     }

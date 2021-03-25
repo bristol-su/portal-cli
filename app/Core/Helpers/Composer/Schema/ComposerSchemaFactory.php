@@ -7,7 +7,11 @@ use App\Core\Helpers\Composer\Schema\Schema\AutoloadSchema;
 use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;
 use App\Core\Helpers\Composer\Schema\Schema\FundingSchema;
 use App\Core\Helpers\Composer\Schema\Schema\NamespaceAutoloadSchema;
+use App\Core\Helpers\Composer\Schema\Schema\PackageRepositoryDistSchema;
+use App\Core\Helpers\Composer\Schema\Schema\PackageRepositorySchema;
+use App\Core\Helpers\Composer\Schema\Schema\PackageRepositorySourceSchema;
 use App\Core\Helpers\Composer\Schema\Schema\PackageSchema;
+use App\Core\Helpers\Composer\Schema\Schema\RepositorySchema;
 use App\Core\Helpers\Composer\Schema\Schema\SuggestedPackageSchema;
 use App\Core\Helpers\Composer\Schema\Schema\SupportSchema;
 use Carbon\Carbon;
@@ -47,7 +51,7 @@ class ComposerSchemaFactory
             $this->get('target-dir', null),
             $this->get('minimum-stability', null),
             $this->get('prefer-stable', false),
-            $this->get('repositories', []),
+            $this->getRepositories($this->get('repositories', [])),
             $this->get('config', []),
             $this->get('scripts', []),
             $this->get('extra', []),
@@ -179,6 +183,37 @@ class ComposerSchemaFactory
             );
         }
         return $namespaces;
+    }
+
+    private function getRepositories(array $repositories)
+    {
+        $repositoryObjects = [];
+        foreach($repositories as $repository) {
+            $repositoryObjects[] = new RepositorySchema(
+                data_get($repository, 'type'),
+                data_get($repository, 'url'),
+                data_get($repository, 'options', []),
+                array_key_exists('package', $repository) ? $this->getPackageRepository($repository['package']) : null
+            );
+        }
+        return $repositoryObjects;
+    }
+
+    public function getPackageRepository(array $packageRepository): PackageRepositorySchema
+    {
+        return new PackageRepositorySchema(
+            data_get($packageRepository, 'name'),
+            data_get($packageRepository, 'version'),
+            new PackageRepositoryDistSchema(
+                data_get($packageRepository, 'dist.url'),
+                data_get($packageRepository, 'dist.type')
+            ),
+            new PackageRepositorySourceSchema(
+                data_get($packageRepository, 'source.url'),
+                data_get($packageRepository, 'source.type'),
+                data_get($packageRepository, 'source.reference')
+            )
+        );
     }
 
 }

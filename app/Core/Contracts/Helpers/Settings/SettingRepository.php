@@ -11,4 +11,6 @@ interface SettingRepository
 
     public function has(string $key): bool;
 
+    public function forget(string $key): void;
+
 }

@@ -22,6 +22,7 @@ You should always run `atlas setup` after any updates to the atlas command.
 - See all sites: `atlas site:list`
 - Prune sites (if you've deleted one in the filesystem): `atlas site:prune`
 - Set a site as the default site: `atlas site:use`
+- Clear the current site, so always prompt for the site to use: `atlas site:clear`
 
 ### Features
 

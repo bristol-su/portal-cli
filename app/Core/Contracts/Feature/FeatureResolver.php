@@ -13,4 +13,6 @@ interface FeatureResolver
 
     public function hasFeature(): bool;
 
+    public function clearFeature(): void;
+
 }

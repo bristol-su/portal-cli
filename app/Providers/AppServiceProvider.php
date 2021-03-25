@@ -7,18 +7,16 @@ use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Contracts\Helpers\Composer\OperationManager as OperationManagerContract;
 use App\Core\Contracts\Helpers\Port\PortChecker;
 use App\Core\Contracts\Helpers\Terminal\Executor;
-use App\Core\Contracts\Instance\InstanceFactory as InstanceFactoryContract;
 use App\Core\Contracts\Instance\InstanceRepository as InstanceManagerContract;
 use App\Core\Contracts\Site\SiteRepository as SiteRepositoryContract;
 use App\Core\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Feature\FeatureRepository;
-use App\Core\Feature\SettingsFeatureResolver;
+use App\Core\Feature\SiteFeatureResolver;
 use App\Core\Helpers\Composer\Operations\StandardOperationManager;
 use App\Core\Helpers\Port\FSockOpenPortChecker;
 use App\Core\Helpers\Terminal\ShellExecutor;
 use App\Core\Pipeline\PipelineManager;
-use App\Core\Instance\InstanceFactory;
 use App\Core\Instance\InstanceRepository;
 use App\Core\Helpers\Settings\SettingRepository;
 use App\Core\Site\FeatureSiteResolver;
@@ -63,16 +61,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Executor::class, ShellExecutor::class);
 
         $this->app->singleton(PipelineManager::class);
-        $this->app->bind(InstanceFactoryContract::class, InstanceFactory::class);
 
         $this->app->bind(OperationManagerContract::class, StandardOperationManager::class);
         $this->app->bind(FeatureRepositoryContract::class, FeatureRepository::class);
 
-        $this->app->bind(FeatureResolver::class, SettingsFeatureResolver::class);
+        $this->app->bind(FeatureResolver::class, SiteFeatureResolver::class);
         $this->app->bind(SiteResolver::class, SettingsSiteResolver::class);
-        $this->app->extend(SiteResolver::class, function($service) {
-            return app(FeatureSiteResolver::class, ['siteResolver' => $service]);
-        });
-//        $this->app->singleton(InstanceResolverContract::class, InstanceResolver::class);
     }
 }

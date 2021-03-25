@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Core\Contracts\Command;
 use App\Core\Contracts\Site\SiteRepository;
+use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Pipeline\PipelineManager;
 use Illuminate\Support\Str;
@@ -101,9 +102,9 @@ class SiteNew extends Command
     private function getInstanceDescription(): string
     {
         return $this->getOrAskForOption(
-            'name',
-            fn() => $this->ask('Information to help you identify this site.'),
-            fn($value) => $value && is_string($value) && strlen($value) < 250
+            'description',
+            fn() => $this->ask('Information to help you identify this site (optional).', ''),
+            fn($value) => $value === '' || ($value && is_string($value) && strlen($value) < 250)
         );
     }
 

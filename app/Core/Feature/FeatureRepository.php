@@ -14,7 +14,7 @@ class FeatureRepository implements FeatureRepositoryContract
         return Feature::all();
     }
 
-    public function create(int $siteId, string $name, string $description, string $type): Feature
+    public function create(int $siteId, string $name, string $description, string $type, string $branch): Feature
     {
         $feature = new Feature();
 
@@ -22,6 +22,7 @@ class FeatureRepository implements FeatureRepositoryContract
         $feature->name = $name;
         $feature->description = $description;
         $feature->type = $type;
+        $feature->branch = $branch;
 
         $feature->save();
 

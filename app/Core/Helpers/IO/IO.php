@@ -5,8 +5,6 @@ namespace App\Core\Helpers\IO;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see Proxy
- *
  * @method static void error(string $line) Write a line of output indicating an error
  * @method static void errors(array $lines) Write lines of output indicating an error
  * @method static void info(string $line) Write a line of output for information
@@ -20,7 +18,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static void ask(string $question, $default = null, \Closure $validator = null) Asks the user a question until the validator returns true given the answer
  * @method static void progressStart(int $count) Starts a progress bar with the given number of steps
  * @method static void progressStep(int $count) Progresses the progress bar the given number of steps
- * @method static void progressFinish(int $count) Finishes the progress bar
+ * @method static void progressFinish() Finishes the progress bar
+ *
+ * @see Proxy
  */
 class IO extends Facade
 {

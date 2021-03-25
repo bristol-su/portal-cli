@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Instance;
+namespace App\Core\Site;
 
 use App\Core\Helpers\Env\EnvRepository;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
@@ -8,12 +8,12 @@ use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 class UrlCalculator
 {
 
-    public static function calculate(string $instanceId): string
+    public static function calculate(string $instanceId, string $envFile = '.env'): string
     {
         $directory = WorkingDirectory::fromInstanceId($instanceId);
 
         $envRepository = new EnvRepository($directory);
-        $env = $envRepository->get(EnvRepository::ROOT); // TODO Abstract
+        $env = $envRepository->get($envFile);
 
         $url = $env->getVariable('APP_URL');
         $port = $env->getVariable('APP_PORT');

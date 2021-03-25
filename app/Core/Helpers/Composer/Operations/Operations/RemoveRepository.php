@@ -34,10 +34,12 @@ class RemoveRepository implements Operation
 
         $repositories = $composerSchema->getRepositories();
         foreach($repositories as $repository) {
-            if($repository->getType() === $this->type
-            && $repository->getUrl() === $this->url
-            && $repository->getOptions === $this->options
-            && $repository->getPackage()->toArray() === $this->package->toArray()) {
+            if(
+                $repository->getType() === $this->type
+                && $repository->getUrl() === $this->url
+                && $repository->getOptions() === $this->options
+                && ($repository->getPackage() ? $repository->getPackage()->toArray() === $this->package->toArray() : true)
+            ){
                 $found = true;
                 continue;
             }

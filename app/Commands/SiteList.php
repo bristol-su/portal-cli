@@ -2,11 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Instance\InstanceFactory;
 use App\Core\Contracts\Site\SiteRepository;
-use App\Core\Instance\Instance;
 use App\Core\Site\Site;
-use Illuminate\Console\Scheduling\Schedule;
 use App\Core\Contracts\Command;
 
 class SiteList extends Command
@@ -33,16 +30,18 @@ class SiteList extends Command
     public function handle(SiteRepository $siteRepository)
     {
         $sites = $siteRepository->all();
+        $currentSite = Site::current();
 
         $this->table(
-            ['ID', 'Name', 'Description', 'Status', 'URL'],
-            $sites->map(function(Site $site) {
+            ['', 'ID', 'Name', 'Description', 'Status', 'URL'],
+            $sites->map(function(Site $site) use ($currentSite){
                 return [
+                    ($currentSite !== null && $currentSite->is($site) ? '*' : ''),
                     $site->getId(),
                     $site->getName(),
                     $site->getDescription(),
-                    $site->instance()->getStatus(),
-                    $site->instance()->getUrl()
+                    $site->getStatus(),
+                    $site->getUrl()
                 ];
             })
         );

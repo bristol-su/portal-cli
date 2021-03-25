@@ -13,4 +13,6 @@ interface SiteResolver
 
     public function hasSite(): bool;
 
+    public function clearSite(): void;
+
 }

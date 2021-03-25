@@ -35,4 +35,9 @@ class WorkingDirectory
         return static::fromInstanceId($site->getInstanceId());
     }
 
+    public static function fromPath(string $path): WorkingDirectory
+    {
+        return new WorkingDirectory($path);
+    }
+
 }

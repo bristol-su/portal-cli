@@ -29,4 +29,10 @@ class SettingRepository implements \App\Core\Contracts\Helpers\Settings\SettingR
         return SettingModel::where('key', $key)->count() > 0;
     }
 
+    public function forget(string $key): void
+    {
+        if($this->has($key)) {
+            SettingModel::where('key', $key)->delete();
+        }
+    }
 }

@@ -22,10 +22,10 @@ class CloneGitRepository extends Task
     public function up(\App\Core\Helpers\WorkingDirectory\WorkingDirectory $workingDirectory): void
     {
         GitRepository::cloneRepository(
-            config('app.cms-url'),
+            $this->config->get('repository'),
             $workingDirectory->path(),
             [
-                '--branch' => 'remove-module-installer'
+                '--branch' => $this->config->get('branch')
             ]
         );
     }

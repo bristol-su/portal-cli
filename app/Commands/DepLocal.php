@@ -4,12 +4,16 @@ namespace App\Commands;
 
 use App\Core\Contracts\Command;
 use App\Core\Contracts\Site\SiteRepository;
+use App\Core\Feature\Feature;
 use App\Core\Helpers\Composer\ComposerModifier;
 use App\Core\Helpers\Composer\ComposerRunner;
 use App\Core\Helpers\Composer\ComposerReader;
+use App\Core\Helpers\Composer\Schema\ComposerRepository;
+use App\Core\Helpers\Composer\Schema\Schema\ComposerSchema;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use App\Core\Packages\LocalPackage;
 use App\Core\Site\Site;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
@@ -22,8 +26,9 @@ class DepLocal extends Command
      * @var string
      */
     protected $signature = 'dep:local
-                            {--I|site= : The id of the feature}
+                            {--F|feature= : The id of the feature}
                             {--P|package= : The composer package name}
+                            {--B|branch= : A name for the branch to use}
                             {--R|repository-url= : The URL of the repository}';
 
     /**
@@ -43,21 +48,24 @@ class DepLocal extends Command
         $feature = $this->getFeature('Which feature should this be done against?');
         $site = $feature->getSite();
 
-        $instanceId = $site->getInstanceId();
-        $branchName = $this->getBranchName($siteRepository, $instanceId);
-        // TODO Get the working directory of the currently used site/feature
-        $workingDirectory = WorkingDirectory::fromInstanceId($instanceId);
+        $workingDirectory = WorkingDirectory::fromSite($site);
 
         $package = $this->getOrAskForOption(
             'package',
             fn() => $this->ask('What package would you like to develop on locally?'),
-            fn($value) => $value && is_string($value) && strlen($value) > 3
+            fn($value) => $value && is_string($value) && strlen($value) > 3 && LocalPackage::where(['name' => $value, 'feature_id' => $feature->getId()])->count() === 0
         );
 
         $repositoryUrl = $this->getOrAskForOption(
             'repository-url',
             fn() => $this->ask('What is the git URL of the package repository?', sprintf('git@github.com:%s', $package)),
             fn($value) => $value && is_string($value) && strlen($value) > 3
+        );
+
+        $branchName = $this->getOrAskForOption(
+            'branch',
+            fn() => $this->ask('What should we name the branch?', $feature->getBranch()),
+            fn($value) => $value && strlen($value) > 0
         );
 
         $relativeInstallPath = sprintf('repos/%s', $package);
@@ -68,6 +76,14 @@ class DepLocal extends Command
 
         IO::info(sprintf('Converting %s into a local package.', $package));
 
+        $this->task('Storing project state', fn() => LocalPackage::create([
+            'name' => $package,
+            'url' => $repositoryUrl,
+            'type' => $this->getDependencyType($workingDirectory, $package),
+            'original_version' => $this->getCurrentVersionConstraint($workingDirectory, $package),
+            'feature_id' => $feature->getId(),
+            'branch' => $branchName
+        ]));
         $this->task('Clone the repository', fn() => $this->cloneRepository($installPath, $repositoryUrl));
         $this->task(sprintf('Checkout branch %s', $branchName), fn() => $this->checkoutBranch($branchName, $installPath));
         $this->task('Modify composer.json', fn() => $this->composerRequireLocal($workingDirectory, $package, $branchName));
@@ -76,17 +92,6 @@ class DepLocal extends Command
         $this->task('Updating composer', fn() => $this->updateComposer($workingDirectory));
 
         IO::success(sprintf('Module %s can be found in %s', $package, $relativeInstallPath));
-    }
-
-    private function getBranchName(SiteRepository $siteRepository, string $instanceId): string
-    {
-        $branchPrefix = 'feature';
-        // TODO Get type from current feature
-        $type = 'added';//$siteRepository->getByInstanceId($instanceId)->getType();
-        if($type === 'fixed') {
-            $branchPrefix = 'bug';
-        }
-        return sprintf('%s/%s', $branchPrefix, $instanceId);
     }
 
     private function cloneRepository(string $installPath, string $repositoryUrl)
@@ -111,7 +116,11 @@ class DepLocal extends Command
     private function composerRequireLocal(WorkingDirectory $workingDirectory, string $package, string $branchName)
     {
         $reader = ComposerReader::for($workingDirectory);
-        $currentlyInstalled = ComposerReader::for($workingDirectory)->getInstalledVersion($package);
+        try {
+            $currentlyInstalled = ComposerReader::for($workingDirectory)->getInstalledVersion($package);
+        } catch (\Exception $e) {
+            return true;
+        }
         $newVersion = sprintf('dev-%s as %s', $branchName, $currentlyInstalled);
 
         if($reader->isDependency($package, true)) {
@@ -145,6 +154,34 @@ class DepLocal extends Command
     {
         ComposerRunner::for($workingDirectory)->update();
         return true;
+    }
+
+    private function getDependencyType(WorkingDirectory $workingDirectory, string $package): string
+    {
+        $reader = ComposerReader::for($workingDirectory);
+        if($reader->isDependency($package, true)) {
+            return 'direct';
+        } elseif($reader->isInstalled($package)) {
+            return 'indirect';
+        }
+        return 'none';
+    }
+
+    private function getCurrentVersionConstraint(WorkingDirectory $workingDirectory, string $package, string $filename = 'composer.json'): ?string
+    {
+        /** @var ComposerSchema $composer */
+        $composer = app(ComposerRepository::class)->get($workingDirectory, $filename);
+        foreach($composer->getRequire() as $packageSchema) {
+            if($packageSchema->getName() === $package) {
+                return $packageSchema->getVersion();
+            }
+        }
+        foreach($composer->getRequireDev() as $packageSchema) {
+            if($packageSchema->getName() === $package) {
+                return $packageSchema->getVersion();
+            }
+        }
+        return null;
     }
 
 }

@@ -6,22 +6,21 @@ use App\Core\Contracts\Command;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Helpers\IO\IO;
 
-class SiteUse extends Command
+class SiteClear extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'site:use
-                            {--S|site= : The id of the site}';
+    protected $signature = 'site:clear';
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Use the given site by default.';
+    protected $description = 'Do not use any site by default.';
 
     /**
      * Execute the console command.
@@ -30,12 +29,11 @@ class SiteUse extends Command
      */
     public function handle(SiteResolver $siteResolver)
     {
-        $site = $this->getSite('Which site would you like to use by default?', null, true);
+        IO::info('Clearing default site.');
 
-        IO::info('Switching default site to ' . $site->getName() . '.');
-
-        $siteResolver->setSite($site);
-
+        if($siteResolver->hasSite()) {
+            $siteResolver->clearSite();
+        }
     }
 
 }

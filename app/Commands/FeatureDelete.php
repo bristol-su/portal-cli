@@ -3,11 +3,7 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
-use App\Core\Contracts\Instance\InstanceRepository;
-use App\Core\Contracts\Site\SiteRepository;
-use App\Core\Helpers\IO\IO;
-use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
-use App\Core\Pipeline\PipelineManager;
+use App\Core\Contracts\Feature\FeatureRepository;
 
 class FeatureDelete extends Command
 {
@@ -31,38 +27,15 @@ class FeatureDelete extends Command
      *
      * @return mixed
      */
-    public function handle(PipelineManager $installManager, SiteRepository $siteRepository, InstanceRepository $instanceRepository)
+    public function handle(FeatureRepository $featureRepository)
     {
-        // Get the feature and site to delete
-        // Check there are no changes
-        // Make all remote branches local
-        // Checkout develop
-        $this->error('Not yet implemented');
+        $feature = $this->getFeature('Which feature would you like to delete?', null, true);
 
-//        if(($instanceId = $this->argument('instance')) === null) {
-//            if($siteRepository->count() === 0) {
-//                IO::error('No instances are installed.');
-//                return;
-//            }
-//            $instanceId = $this->choice(
-//                'Which instance would you like to delete?',
-//                $siteRepository->all()->map(fn($site) => $site->getInstanceId())->toArray()
-//            );
-//        }
-//
-//        if(!$instanceRepository->exists($instanceId)) {
-//            IO::warning('The instance was not found on the filesystem');
-//        } else {
-//            $installManager->driver('cms')->uninstall(
-//                WorkingDirectory::fromInstanceId($instanceId)
-//            );
-//            IO::success('Removed the project from your filesystem');
-//        }
-//
-//        if($siteRepository->exists()) {
-//            $siteRepository->delete($instanceId);
-//            IO::success('Pruned remaining feature data.');
-//        }
+        if($feature->getSite()->getCurrentFeature()->is($feature)) {
+            $this->call(SiteReset::class, ['--site' => $feature->getSite()->getId()]);
+        }
+
+        $featureRepository->delete($feature->getId());
     }
 
 }
