@@ -2,17 +2,13 @@
 
 ## Installation
 
-Once we publish releases it'll be a static URL to download the phar file. For now, we should
-- Clone this repository `git clone git@github.com:ElbowSpaceUK/atlas-cli`.
-- cd into the cloned repository and run `composer install`
-- You can now run commands using `php atlas`
+Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
+
+Save it in your path. This is one of the folders listed when you run `echo $PATH`.
+
+You can now run commands using `atlas`
 
 ## Usage
-
-You can run the atlas command by running `php /path/to/atlas-cli/atlas` (or just `php atlas` if you're in the cli directory).
-
-You can add an alias for `atlas="php /path/to/atlas-cli/atlas"` so atlas can be referenced with just `atlas`. Future references to the cli will be referenced as `atlas`, so replace
-this with `php /path/to/atlas-cli/atlas` if you don't set up aliases.
 
 You should always run `atlas setup` after any updates to the atlas command. The first time you run this, you need to give a project directory where all the code will be saved.
 
