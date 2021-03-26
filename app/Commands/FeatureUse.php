@@ -55,7 +55,6 @@ class FeatureUse extends Command
             /** @var LocalPackage[] $packages */
             $packages = $feature->getLocalPackages();
 
-            IO::progressStart(count($packages));
             foreach($packages as $package) {
                 $this->call(DepLocal::class, [
                     '--feature' => $feature->getId(),
@@ -63,16 +62,13 @@ class FeatureUse extends Command
                     '--branch' => $package->getBranch(),
                     '--repository-url' => $package->getUrl(),
                 ]);
-                IO::progressStep(1);
             }
-            IO::progressFinish();
         });
 
         $this->task('Updating site state', function() use ($feature) {
             /** @var LocalPackage[] $packages */
             $packages = $feature->getLocalPackages();
 
-            IO::progressStart(count($packages));
             foreach($packages as $package) {
                 $this->call(DepLocal::class, [
                     '--feature' => $feature->getId(),
@@ -80,9 +76,7 @@ class FeatureUse extends Command
                     '--branch' => $package->getBranch(),
                     '--repository-url' => $package->getUrl(),
                 ]);
-                IO::progressStep(1);
             }
-            IO::progressFinish();
         });
 
         $this->task(sprintf('Setting the default feature to %s', $feature->getName()), fn() => $featureResolver->setFeature($feature));
