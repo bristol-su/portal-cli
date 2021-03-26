@@ -57,13 +57,14 @@ class Docker
                 ['docker run --rm'],
                 $this->options,
                 [$this->image],
-                [$this->command]
+                [sprintf('/bin/bash -c "%s"', $this->command)]
             )
         );
     }
 
     public function __toString(): string
     {
+dd($this->getCommand());
         return $this->getCommand();
     }
 
