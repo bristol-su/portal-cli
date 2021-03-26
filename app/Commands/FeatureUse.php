@@ -6,7 +6,9 @@ use App\Core\Contracts\Command;
 use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Helpers\IO\IO;
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Packages\LocalPackage;
+use App\Core\Packages\LocalPackageHelper;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
@@ -32,7 +34,7 @@ class FeatureUse extends Command
      *
      * @return mixed
      */
-    public function handle(FeatureResolver $featureResolver, SiteResolver $siteResolver)
+    public function handle(FeatureResolver $featureResolver, SiteResolver $siteResolver, LocalPackageHelper $localPackageHelper)
     {
         $feature = $this->getFeature('Which feature would you like to use by default?', null, true);
 
@@ -40,6 +42,9 @@ class FeatureUse extends Command
 
         $this->task('Resetting the site',
             fn() => $this->call(SiteReset::class, ['--site' => $feature->getSite()->getId()]));
+
+        $workingDirectory = WorkingDirectory::fromSite($feature->getSite());
+
 
         // TODO Base branch stored in site definition
         $this->task('Checkout the base branch', function() use ($feature) {
@@ -51,31 +56,12 @@ class FeatureUse extends Command
             }
         });
 
-        $this->task('Install local packages', function() use ($feature) {
+        $this->task('Install local packages', function() use ($feature, $localPackageHelper, $workingDirectory) {
             /** @var LocalPackage[] $packages */
             $packages = $feature->getLocalPackages();
 
             foreach($packages as $package) {
-                $this->call(DepLocal::class, [
-                    '--feature' => $feature->getId(),
-                    '--package' => $package->getName(),
-                    '--branch' => $package->getBranch(),
-                    '--repository-url' => $package->getUrl(),
-                ]);
-            }
-        });
-
-        $this->task('Updating site state', function() use ($feature) {
-            /** @var LocalPackage[] $packages */
-            $packages = $feature->getLocalPackages();
-
-            foreach($packages as $package) {
-                $this->call(DepLocal::class, [
-                    '--feature' => $feature->getId(),
-                    '--package' => $package->getName(),
-                    '--branch' => $package->getBranch(),
-                    '--repository-url' => $package->getUrl(),
-                ]);
+                $localPackageHelper->makeLocal($package, $workingDirectory);
             }
         });
 

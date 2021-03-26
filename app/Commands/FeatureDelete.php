@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Core\Contracts\Command;
 use App\Core\Contracts\Feature\FeatureRepository;
+use App\Core\Helpers\IO\IO;
 
 class FeatureDelete extends Command
 {
@@ -13,7 +14,7 @@ class FeatureDelete extends Command
      * @var string
      */
     protected $signature = 'feature:delete
-                            {instance? : The id of the feature}';
+                            {--F|feature= : The id of the feature}';
 
     /**
      * The description of the command.
@@ -36,6 +37,8 @@ class FeatureDelete extends Command
         }
 
         $featureRepository->delete($feature->getId());
+
+        IO::success('Feature deleted');
     }
 
 }

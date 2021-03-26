@@ -5,7 +5,9 @@ namespace App\Commands;
 use App\Core\Contracts\Command;
 use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Helpers\IO\IO;
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Packages\LocalPackage;
+use App\Core\Packages\LocalPackageHelper;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
@@ -32,7 +34,7 @@ class SiteReset extends Command
      *
      * @return mixed
      */
-    public function handle(FeatureResolver $featureResolver)
+    public function handle(FeatureResolver $featureResolver, LocalPackageHelper $localPackageHelper)
     {
         $site = $this->getSite('Which site would you like to reset?', null, true);
         $branch = $this->getOrAskForOption(
@@ -42,19 +44,19 @@ class SiteReset extends Command
         );
 
         $feature = $site->getCurrentFeature();
+        $workingDirectory = WorkingDirectory::fromSite($site);
+
         if($feature !== null) {
             // Site has a feature currently checked out
             $packages = $feature->getLocalPackages();
-
-            IO::progressStart($packages->count());
-            foreach($packages as $package) {
-                $this->call(DepRemote::class, [
-                    '--feature' => $feature->getId(),
-                    '--local-package' => $package->getName()
-                ]);
-                IO::progressStep(1);
+            if(count($packages) > 0) {
+                IO::progressStart($packages->count());
+                foreach($packages as $package) {
+                    $localPackageHelper->makeRemote($package, $workingDirectory);
+                    IO::progressStep(1);
+                }
+                IO::progressFinish();
             }
-            IO::progressFinish();
         }
 
         $git = new GitRepository($site->getWorkingDirectory()->path());
@@ -63,7 +65,6 @@ class SiteReset extends Command
         } catch (GitException $e) {
             $git->createBranch($branch, true);
         }
-
 
         $featureResolver->clearFeature();
 

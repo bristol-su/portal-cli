@@ -14,6 +14,7 @@ use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Packages\LocalPackage;
+use App\Core\Packages\LocalPackageHelper;
 use App\Core\Site\Site;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
@@ -28,7 +29,7 @@ class DepRemote extends Command
      */
     protected $signature = 'dep:remote
                             {--F|feature= : The id of the feature}
-                            {--P|local-package= : The name of the local package}';
+                            {--P|package= : The name of the local package}';
 
     /**
      * The description of the command.
@@ -52,7 +53,7 @@ class DepRemote extends Command
         /** @var LocalPackage $localPackage */
         $localPackage = LocalPackage::where([
             'name' => $this->getOrAskForOption(
-                'local-package',
+                'package',
                 fn() => $this->choice(
                     'Which dependency would you like to make local?',
                     $localPackages->map(fn($package) => $package->getName())->toArray()
@@ -64,49 +65,16 @@ class DepRemote extends Command
 
         $workingDirectory = WorkingDirectory::fromSite($site);
 
-        $relativeInstallPath = sprintf('repos/%s', $localPackage->getName());
-        $installPath = Filesystem::append(
-            $workingDirectory->path(),
-            $relativeInstallPath
-        );
-
         IO::info(sprintf('Converting %s into a remote package.', $localPackage->getName()));
 
-        try {
-            $this->task('Scanning for changes', fn() => $this->confirmChangesSaved(WorkingDirectory::fromPath($installPath)));
-        } catch (\Exception $e) {
-            IO::error($e->getMessage());
-            return;
-        }
-        $this->task('Removing remote symlink', fn() => $this->removeSymlinkInComposer($workingDirectory, $relativeInstallPath));
-        $this->task('Modify composer.json', fn() => $this->composerRequireRemote($workingDirectory, $localPackage));
-        $this->task('Remove the local repository', fn() => $this->removeRepository($installPath));
-        $this->task('Clearing stale dependencies', fn() => $this->clearStaleDependencies($workingDirectory, $localPackage->getName()));
-        $this->task('Updating composer', fn() => $this->updateComposer($workingDirectory));
+
+        (new LocalPackageHelper())->makeRemote($localPackage, $workingDirectory);
         $this->task('Updating project state', fn() => $localPackage->delete());
 
         IO::success(sprintf('Module %s has been made remote.', $localPackage->getName()));
     }
 
-    private function composerRequireRemote(WorkingDirectory $workingDirectory, LocalPackage $localPackage)
-    {
-        if($localPackage->getType() === 'direct') {
-            ComposerModifier::for($workingDirectory)->changeDependencyVersion($localPackage->getName(), $localPackage->getOriginalVersion());
-        } elseif($localPackage->getType() === 'indirect') {
-            ComposerModifier::for($workingDirectory)->remove($localPackage->getName());
-        }
-        return true;
-    }
 
-    private function removeSymlinkInComposer(WorkingDirectory $workingDirectory, string $relativeInstallPath)
-    {
-        ComposerModifier::for($workingDirectory)->removeRepository(
-            'path',
-            sprintf('./%s', $relativeInstallPath),
-            ['symlink' => true]
-        );
-        return true;
-    }
 
     private function clearStaleDependencies(WorkingDirectory $workingDirectory, string $package)
     {
@@ -123,23 +91,6 @@ class DepRemote extends Command
         return true;
     }
 
-    private function confirmChangesSaved(WorkingDirectory $workingDirectory)
-    {
-        if(!$this->confirm(
-            sprintf(
-                'Please make sure you have checked for any changes. You will lose any unpushed work in [%s] by continuing. Do you wish to continue?',
-                $workingDirectory->path()
-            )
-        )) {
-            throw new \Exception('Repository is still installed locally.');
-        }
-        return true;
-    }
 
-    private function removeRepository(string $installPath)
-    {
-        Filesystem::create()->remove($installPath);
-        return true;
-    }
 
 }

@@ -62,6 +62,11 @@ class Proxy
         $this->output->writeln($line);
     }
 
+    public function confirm(string $message, bool $default = false)
+    {
+        return $this->output->confirm($message, $default);
+    }
+
     public function task(string $title, \Closure $task = null, $loadingText = 'loading...')
     {
         $this->output->write("$title: <comment>{$loadingText}</comment>");
