@@ -21,6 +21,7 @@ class CreateSitesTable extends Migration
             $table->string('installer');
             $table->unsignedBigInteger('current_feature_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

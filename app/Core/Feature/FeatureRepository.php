@@ -56,7 +56,8 @@ class FeatureRepository implements FeatureRepositoryContract
 
     public function delete(int $id): void
     {
-        Feature::where('id', $id)->delete();
+        $feature = $this->getById($id);
+        $feature->delete();
     }
 
 }

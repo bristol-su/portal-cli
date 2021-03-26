@@ -5,10 +5,13 @@ namespace App\Core\Site;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Feature\Feature;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Site extends Model
 {
+    use SoftDeletes;
 
     const STATUS_MISSING = 'missing';
 
@@ -17,6 +20,11 @@ class Site extends Model
     const STATUS_DOWN = 'down';
 
     protected $table = 'sites';
+
+    protected static function booted()
+    {
+        static::deleting(fn(Site $site) => $site->getFeatures()->each(fn($feature) => $feature->delete()));
+    }
 
     public function getId(): int
     {
@@ -56,6 +64,11 @@ class Site extends Model
     public function getCurrentFeature(): ?Feature
     {
         return $this->currentFeature;
+    }
+
+    public function getFeatures(): Collection
+    {
+        return $this->features;
     }
 
     public function hasCurrentFeature(): bool

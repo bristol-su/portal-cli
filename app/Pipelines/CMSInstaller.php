@@ -13,7 +13,7 @@ class CMSInstaller extends Pipeline
     protected function getTasks(): array
     {
         return [
-            \App\Core\Pipeline\Tasks\CloneGitRepository::provision(config('app.cms-url'), 'remove-module-installer')
+            \App\Core\Pipeline\Tasks\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')
                 ->withName('Downloading the CMS'),
 
             \App\Core\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
@@ -26,7 +26,7 @@ class CMSInstaller extends Pipeline
                 ['APP_PORT', 'FORWARD_DB_PORT', 'FORWARD_MAILHOG_PORT', 'FORWARD_MAILHOG_DASHBOARD_PORT', 'FORWARD_REDIS_PORT', 'FORWARD_SELENIUM_PORT', 'FORWARD_DB_TESTING_PORT'],
                 ['HTTP', 'database', 'mail', 'mail dashboard', 'redis', 'selenium', 'test database'],
                 false)
-            ->withName('Verifying port assignments'),
+                ->withName('Verifying port assignments'),
 
             \App\Core\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.local', '.env.testing', [
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
@@ -41,12 +41,12 @@ class CMSInstaller extends Pipeline
             WaitForDocker::provision()
                 ->withName('Waiting for Docker'),
 
-            InstallYarnDependencies::provision('/var/www/html/vendor/elbowspaceuk/core-module'),
+//            InstallYarnDependencies::provision('/var/www/html/vendor/elbowspaceuk/core-module'),
 
-//            RunYarnScript::provision('dev', '/var/www/html/vendor/elbowspaceuk/core-module')
-//                ->withName('Compile frontend assets'),
+            RunYarnScript::provision('dev', '/var/www/html/vendor/elbowspaceuk/core-module')
+                ->withName('Compile frontend assets'),
 
-        \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('local')
+            \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('local')
                 ->withName('Create local application key'),
 
             \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('testing')

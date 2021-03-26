@@ -98,7 +98,7 @@ You don't always have to reset your site before using a new feature. Just runnin
 
 This command also sets up a site with the selected feature even when you don't currently have a feature checked out.
 
-### dependencies
+### Dependencies
 
 The CLI make handling composer dependencies a breeze. When developing on a dependency, the workflow is as follows:
 - Create a feature
@@ -116,7 +116,7 @@ if you use a feature which had dependencies these will be downloaded and set up.
 Just run `atlas dep:local` to make a package local. This will ask you for
 - The feature to use (defaults to the feature of the current site)
 - Package - the exact name of the composer package. For example, `elbowspaceuk/blog-dependency`.
-- Repository URL - The URl of the repository. E.g. `git@github.com/ElbowSpaceUK/Blog-dependency`. Casing does matter!
+- Repository URL - The URl of the repository. E.g. `git@github.com:ElbowSpaceUK/Blog-dependency`. Casing does matter!
 - Branch - the branch to check out in the dependency. Defaults to a branch name made from the feature name.
 
 As before, these can all be passed directly to the command.

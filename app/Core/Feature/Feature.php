@@ -9,17 +9,25 @@ use App\Core\Site\Site;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class Feature extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'features';
 
     protected $fillable = [
         'name', 'description', 'type', 'site_id', 'branch'
     ];
+
+    protected static function booted()
+    {
+        static::deleting(fn(Feature $feature) => $feature->getLocalPackages()->each(function($package){
+            $package->delete();
+        }));
+    }
 
     public function site()
     {

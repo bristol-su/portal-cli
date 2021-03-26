@@ -2,6 +2,8 @@
 
 namespace App\Core\Site;
 
+use App\Core\Contracts\Feature\FeatureRepository;
+use App\Core\Feature\Feature;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -54,7 +56,8 @@ class SiteRepository implements \App\Core\Contracts\Site\SiteRepository
 
     public function delete(int $id): void
     {
-        Site::where('id', $id)->delete();
+        $site = $this->getById($id);
+        $site->delete();
     }
 
     public function instanceIdExists(string $instanceId): bool

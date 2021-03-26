@@ -22,6 +22,7 @@ class CreateLocalPackagesTable extends Migration
             $table->string('branch');
             $table->unsignedBigInteger('feature_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

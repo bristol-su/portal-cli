@@ -21,6 +21,7 @@ class CreateFeaturesTable extends Migration
             $table->string('type');
             $table->string('branch');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

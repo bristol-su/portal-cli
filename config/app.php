@@ -58,8 +58,6 @@ return [
         Intonate\TinkerZero\TinkerZeroServiceProvider::class
     ],
 
-    'cms-url' => 'git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template',
-
     'setup' => [
         'steps' => [
             \App\Core\Setup\Steps\CreateDatabaseDirectory::class,
