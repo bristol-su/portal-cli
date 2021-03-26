@@ -56,7 +56,7 @@ class ComposerRunner
         $docker->image('laravelsail/php74-composer:latest');
 
         $docker->run(
-            sprintf('[ -e "~/.ssh/known_hosts" ] || touch ~/.ssh/known_hosts; echo $GITHUB_KEYSCAN >> ~/.ssh/known_hosts && composer %s', $command)
+            sprintf('echo $GITHUB_KEYSCAN >> ~/.ssh/known_hosts && composer %s', $command)
         );
 
         return Executor::cd($this->workingDirectory)
