@@ -19,7 +19,7 @@ class Setup extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Set up all the dependencies for Atlas to run';
 
     /**
      * Execute the console command.
