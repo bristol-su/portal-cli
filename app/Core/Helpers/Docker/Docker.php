@@ -64,7 +64,6 @@ class Docker
 
     public function __toString(): string
     {
-dd($this->getCommand());
         return $this->getCommand();
     }
 
