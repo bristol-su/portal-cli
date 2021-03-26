@@ -4,7 +4,7 @@
 
 Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
 
-Save it in your path. This is one of the folders listed when you run `echo $PATH`.
+Save it in your path. This is one of the folders listed when you run `echo $PATH`. I recommend `/usr/local/bin` or a folder in your home directory.
 
 You can now run commands using `atlas`
 
