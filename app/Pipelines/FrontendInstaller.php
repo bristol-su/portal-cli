@@ -62,8 +62,6 @@ class FrontendInstaller extends Pipeline
             \App\Core\Pipeline\Tasks\MigrateDatabase::provision('testing')
                 ->withName('Migrate the testing database'),
 
-            \App\Core\Pipeline\Tasks\SeedLaravelModule::provision('Core', 'CoreDatabaseSeeder', 'local')
-                ->withName('Seed the local database')
         ];
     }
 }

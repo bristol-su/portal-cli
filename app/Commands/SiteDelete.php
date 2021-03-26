@@ -33,7 +33,7 @@ class SiteDelete extends Command
      */
     public function handle(PipelineManager $installManager, SiteRepository $siteRepository, InstanceRepository $instanceRepository)
     {
-        $site = $this->getSite('Which sites would you like to delete?');
+        $site = $this->getSite('Which sites would you like to delete?', null, true);
 
         if(!$instanceRepository->exists($site->getInstanceId())) {
             IO::warning('The site was not found on the filesystem');

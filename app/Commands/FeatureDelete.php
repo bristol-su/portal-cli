@@ -32,7 +32,7 @@ class FeatureDelete extends Command
     {
         $feature = $this->getFeature('Which feature would you like to delete?', null, true);
 
-        if($feature->getSite()->getCurrentFeature()->is($feature)) {
+        if($feature->getSite()->hasCurrentFeature() && $feature->getSite()->getCurrentFeature()->is($feature)) {
             $this->call(SiteReset::class, ['--site' => $feature->getSite()->getId()]);
         }
 

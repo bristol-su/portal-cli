@@ -41,10 +41,10 @@ class CMSInstaller extends Pipeline
             WaitForDocker::provision()
                 ->withName('Waiting for Docker'),
 
-//            InstallYarnDependencies::provision('/var/www/html/vendor/elbowspaceuk/core-module'),
+            InstallYarnDependencies::provision('/var/www/html/vendor/elbowspaceuk/core-module'),
 
-            RunYarnScript::provision('dev', '/var/www/html/vendor/elbowspaceuk/core-module')
-                ->withName('Compile frontend assets'),
+//            RunYarnScript::provision('dev', '/var/www/html/vendor/elbowspaceuk/core-module')
+//                ->withName('Compile frontend assets'),
 
             \App\Core\Pipeline\Tasks\GenerateApplicationKey::provision('local')
                 ->withName('Create local application key'),
