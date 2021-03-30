@@ -9,6 +9,7 @@ use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Feature\Feature;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\IO\Proxy;
+use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Site\Site;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Support\Str;
@@ -17,6 +18,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class Command extends \LaravelZero\Framework\Commands\Command
 {
+
+    private Site $site;
+
+    private Feature $feature;
+
+    private WorkingDirectory $workingDirectory;
 
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
@@ -45,6 +52,10 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
 
     public function getSite(string $message = 'Which site would you like to perform the action against?', \Closure $siteFilter = null, bool $withoutDefault = false): Site
     {
+        if(isset($this->site)) {
+            return $this->site;
+        }
+
         $siteRepository = app(SiteRepository::class);
         if($siteRepository->count() === 0) {
             throw new \Exception('No sites are available');
@@ -53,7 +64,8 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
         if(!$withoutDefault) {
             $siteResolver = app(SiteResolver::class);
             if($siteResolver->hasSite()) {
-                return $siteResolver->getSite();
+                $this->site = $siteResolver->getSite();
+                return $this->site;
             }
         }
 
@@ -75,11 +87,15 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
             throw new \Exception('The site could not be found');
         }
 
-        return $siteRepository->getById($siteId);
+        $this->site = $siteRepository->getById($siteId);
+        return $this->site;
     }
 
     public function getFeature(string $message = 'Which feature would you like to perform the action against?', \Closure $featureFilter = null, bool $withoutDefault = false): Feature
     {
+        if(isset($this->feature)) {
+            return $this->feature;
+        }
         $featureRepository = app(FeatureRepository::class);
 
         if($featureRepository->count() === 0) {
@@ -89,7 +105,8 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
         if(!$withoutDefault) {
             $featureResolver = app(FeatureResolver::class);
             if($featureResolver->hasFeature()) {
-                return $featureResolver->getFeature();
+                $this->feature = $featureResolver->getFeature();
+                return $this->feature;
             }
         }
 
@@ -111,7 +128,18 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
             throw new \Exception('The feature could not be found');
         }
 
-        return $featureRepository->getById($featureId);
+        $this->feature = $featureRepository->getById($featureId);
+        return $this->feature;
+    }
+
+    public function getWorkingDirectory(string $message = 'Which component would you like to perform the action against?'): WorkingDirectory
+    {
+        if(isset($this->workingDirectory)) {
+            $this->workingDirectory = $this->getSite()->getWorkingDirectory();
+        }
+        // Can either be the base, or the local package
+        // TODO make this nicer
+        return $this->workingDirectory;
     }
 
 }
