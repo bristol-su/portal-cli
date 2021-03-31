@@ -1,0 +1,3 @@
+<?php
+
+Route::get('/', fn() => 'This is a test through the web ui');

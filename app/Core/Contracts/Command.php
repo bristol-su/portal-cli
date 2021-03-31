@@ -132,6 +132,11 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
         return $this->feature;
     }
 
+    /**
+     * @param string $message
+     * @return WorkingDirectory
+     * @throws \Exception
+     */
     public function getWorkingDirectory(string $message = 'Which component would you like to perform the action against?'): WorkingDirectory
     {
         if(isset($this->workingDirectory)) {

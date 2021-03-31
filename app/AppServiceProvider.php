@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App;
 
 use App\Core\Contracts\Feature\FeatureRepository as FeatureRepositoryContract;
 use App\Core\Contracts\Feature\FeatureResolver;
@@ -22,6 +22,7 @@ use App\Core\Helpers\Settings\SettingRepository;
 use App\Core\Site\FeatureSiteResolver;
 use App\Core\Site\SettingsSiteResolver;
 use App\Core\Site\SiteRepository;
+use App\Core\Stubs\StubStore;
 use App\Pipelines\CMSInstaller;
 use App\Pipelines\FrontendInstaller;
 use Illuminate\Contracts\Config\Repository;
@@ -44,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         app(PipelineManager::class)->extend('frontend', function(Container $container) {
             return $container->make(FrontendInstaller::class);
         });
+
     }
 
     /**
@@ -61,6 +63,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Executor::class, ShellExecutor::class);
 
         $this->app->singleton(PipelineManager::class);
+        $this->app->singleton(StubStore::class);
 
         $this->app->bind(OperationManagerContract::class, StandardOperationManager::class);
         $this->app->bind(FeatureRepositoryContract::class, FeatureRepository::class);
