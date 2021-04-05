@@ -7,7 +7,7 @@ use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Stubs\Entities\Stub;
 use App\Core\Stubs\Entities\StubFile;
-use App\Core\Stubs\StubCreator;
+use App\Core\Stubs\StubMigrator;
 use App\Core\Stubs\StubDataCollector;
 use App\Core\Stubs\StubSaver;
 use App\Core\Stubs\StubStore;
@@ -35,7 +35,7 @@ class StubMake extends Command
      *
      * @return mixed
      */
-    public function handle(StubStore $stubStore, StubCreator $stubCreator, StubDataCollector $dataCollector)
+    public function handle(StubStore $stubStore, StubMigrator $stubCreator, StubDataCollector $dataCollector)
     {
         $stubName = $this->getOrAskForOption(
             'stub',
@@ -50,10 +50,7 @@ class StubMake extends Command
 
         $stub = $stubStore->getStub($stubName);
 
-        // TODO Pass in data from flags
-        $data = $dataCollector->collect($stub);
-
-        $compiledStubs = $stubCreator->createFrom($stub, $data);
+        $compiledStubs = $stubCreator->create($stub);
 
         StubSaver::in(WorkingDirectory::fromPath(
             Filesystem::append($workingDirectory->path(), $stub->getDefaultLocation())

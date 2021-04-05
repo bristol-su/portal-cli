@@ -144,6 +144,7 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
         }
         // Can either be the base, or the local package
         // TODO make this nicer
+        // TODO can get WD from module if passed in
         return $this->workingDirectory;
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Core\Stubs\Entities;
 
+use App\Core\Contracts\Stubs\StubReplacement;
+
 class StubFile
 {
 
@@ -17,9 +19,33 @@ class StubFile
      *
      * @var string
      */
-    private string $location = '';
+    private ?string $location = null;
 
     private string $fileName;
+
+    private ?\Closure $showIf = null;
+
+    /**
+     * @return \Closure|null
+     */
+    public function getShowIf(): ?\Closure
+    {
+        return $this->showIf;
+    }
+
+    /**
+     * Set the function to determine whether to show the stub file or not.
+     *
+     * Will be given any data that has so far been resolved
+     *
+     * @param \Closure|null $showIf
+     * @return StubFile
+     */
+    public function setShowIf(?\Closure $showIf): StubFile
+    {
+        $this->showIf = $showIf;
+        return $this;
+    }
 
     /**
      * @var StubReplacement[]
@@ -63,18 +89,18 @@ class StubFile
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
     /**
-     * @param string $location
+     * @param string|null $location
      * @return StubFile
      */
-    public function setLocation(string $location): StubFile
+    public function setLocation(?string $location = null): StubFile
     {
         $this->location = $location;
         return $this;
@@ -88,8 +114,6 @@ class StubFile
         return $this->fileName;
     }
 
-    // TODO Convert setFilename to take a callback that is passed the data?
-
     /**
      * @param string $fileName
      * @return StubFile
@@ -98,6 +122,14 @@ class StubFile
     {
         $this->fileName = $fileName;
         return $this;
+    }
+
+    public function showIf(array $data): bool
+    {
+        if($this->getShowIf() !== null) {
+            return $this->getShowIf()($data);
+        }
+        return true;
     }
 
 }

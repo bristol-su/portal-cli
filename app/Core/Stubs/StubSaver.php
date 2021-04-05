@@ -31,10 +31,8 @@ class StubSaver
 
     public function save(CompiledStub $stubFile)
     {
-        // TODO Check if it already exists
-
         // Get the path to save in
-        if($stubFile->getStubFile()->getLocation()) {
+        if($stubFile->getStubFile()->getLocation() !== null) {
             $path = Filesystem::append($this->workingDirectory->path(), $stubFile->getStubFile()->getLocation(), $stubFile->getStubFile()->getFileName());
         } else {
             $path = Filesystem::append($this->workingDirectory->path(), $stubFile->getStubFile()->getFileName());

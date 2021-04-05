@@ -18,7 +18,7 @@ class Stub
     /**
      * @var StubFile[]
      */
-    private array $stubFiles;
+    private array $stubFiles = [];
 
     /**
      * @var string

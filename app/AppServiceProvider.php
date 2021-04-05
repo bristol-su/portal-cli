@@ -14,17 +14,24 @@ use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Feature\FeatureRepository;
 use App\Core\Feature\SiteFeatureResolver;
 use App\Core\Helpers\Composer\Operations\StandardOperationManager;
+use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Port\FSockOpenPortChecker;
 use App\Core\Helpers\Terminal\ShellExecutor;
 use App\Core\Pipeline\PipelineManager;
 use App\Core\Instance\InstanceRepository;
 use App\Core\Helpers\Settings\SettingRepository;
-use App\Core\Site\FeatureSiteResolver;
 use App\Core\Site\SettingsSiteResolver;
 use App\Core\Site\SiteRepository;
 use App\Core\Stubs\Entities\Stub;
 use App\Core\Stubs\Entities\StubFile;
-use App\Core\Stubs\Entities\StubReplacement;
+use App\Core\Contracts\Stubs\StubReplacement;
+use App\Core\Stubs\Registrar\RegistersStubs;
+use App\Core\Stubs\Registrar\StubFileRegistrar;
+use App\Core\Stubs\ReplacementFactory;
+use App\Core\Stubs\Replacements\ArrayReplacement;
+use App\Core\Stubs\Replacements\SectionReplacement;
+use App\Core\Stubs\Replacements\StringReplacement;
+use App\Core\Stubs\Registrar\StubRegistrar;
 use App\Core\Stubs\StubStore;
 use App\Pipelines\CMSInstaller;
 use App\Pipelines\FrontendInstaller;
@@ -35,6 +42,8 @@ use Illuminate\Validation\ValidationServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use RegistersStubs;
+
     /**
      * Bootstrap any application services.
      *
@@ -49,23 +58,31 @@ class AppServiceProvider extends ServiceProvider
             return $container->make(FrontendInstaller::class);
         });
 
-        app(StubStore::class)->registerStub(
-            (new Stub())->setName('routes')
-                ->setDescription('A routes file for a demo')
-                ->setDefaultLocation('routes')
-                ->setStubFiles([
-                    (new StubFile())->setStubPath(__DIR__ . '/../stubs/test/routes.api.php.stub')->setFileName('api.php')
-                        ->setReplacements([
-                            (new StubReplacement())->setType('bool')->setVariableName('extraRoute')
-                                ->setDefault(true)
-                                ->setQuestion('Would you like to include the extra route?'),
-                            (new StubReplacement())->setType('string')->setVariableName('extraRouteText')
-                                ->setDefault('Some default text')
-                                ->setQuestion('What should the extra route return?')
-                        ]),
-                    (new StubFile())->setStubPath(__DIR__ . '/../stubs/test/routes.web.php.stub')->setFileName('web.php')
-                ])
-        );
+        $this->newStub('routes', 'A routes file for a demo', 'routes')
+            ->addFile(
+                $this->newStubFile(
+                    __DIR__ . '/../stubs/test/routes.api.php.stub', 'api.php'
+                )
+                    ->addReplacement(
+                        $this->newSectionReplacement('extraRoute', 'Would you like an extra route?', true, null, [
+                            $this->newStringReplacement('extraRouteText', 'What should the route return', 'Testing')
+                        ])
+                    )
+            )->addFile(
+                $this->newStubFile(
+                    __DIR__ . '/../stubs/test/routes.web.php.stub', 'web.php'
+                )
+                    ->addReplacement($this->newStringReplacement('path', 'What is the route?', 'default-route'))
+                    ->addReplacement(
+                        $this->newArrayReplacement('models', 'What is the name of the models?', [], null,
+                            $this->newStringReplacement('model', 'What is the model name?'))
+                    )
+            )->addFile(
+                $this->newStubFile(
+                    __DIR__ . '/../stubs/test/web.php.backup.stub', 'web-second.php', 'secondary',
+                    fn($data) => IO::confirm('Would you like to publish the optional routes file?')
+                )->addReplacement($this->newBooleanReplacement('includePost', 'Should we include a post request?', false))
+            );
 
     }
 

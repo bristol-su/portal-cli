@@ -1,0 +1,7 @@
+<?php
+
+echo "This should only be seen sometimes"
+
+[[if($includePost){]]
+Route::post('/post', fn() => 'SOMETHING');
+[[}]]

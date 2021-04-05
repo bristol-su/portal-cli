@@ -8,12 +8,6 @@ use Illuminate\Support\Str;
 
 class EnvRepository
 {
-    // TODO Remove these
-    const ROOT = '.env';
-
-    const TESTING = '.env.testing';
-
-    const DUSK = '.env.dusk.local';
 
     /**
      * @var WorkingDirectory
@@ -28,14 +22,14 @@ class EnvRepository
     public function get(string $type = null)
     {
         $envRetriever = new EnvRetriever($this->workingDirectory->path());
-        $env = $envRetriever->get($type ?? static::ROOT);
+        $env = $envRetriever->get($type ?? '.env');
 
         return EnvFactory::fromDotEnv($env);
     }
 
     public function update(Env $env, $type = null): void
     {
-        $path = Filesystem::append($this->workingDirectory->path(), $type ?? static::ROOT);
+        $path = Filesystem::append($this->workingDirectory->path(), $type ?? '.env');
 
         $envFile = '';
         foreach($env->getVariables() as $name => $value) {
