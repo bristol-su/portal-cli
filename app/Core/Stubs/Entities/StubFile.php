@@ -17,18 +17,31 @@ class StubFile
      *
      * @var string
      */
-    private string $location;
+    private string $location = '';
+
+    private string $fileName;
 
     /**
-     * The replacements to carry out on the stub file.
-     *
      * @var StubReplacement[]
      */
-    private array $stubReplacements;
+    private array $replacements = [];
 
-    public function if()
+    /**
+     * @return StubReplacement[]
+     */
+    public function getReplacements(): array
     {
-        // TODO Something about including this stub file only sometimes
+        return $this->replacements;
+    }
+
+    /**
+     * @param StubReplacement[] $replacements
+     * @return StubFile
+     */
+    public function setReplacements(array $replacements): StubFile
+    {
+        $this->replacements = $replacements;
+        return $this;
     }
 
     /**
@@ -68,22 +81,23 @@ class StubFile
     }
 
     /**
-     * @return StubReplacement[]
+     * @return string
      */
-    public function getStubReplacements(): array
+    public function getFileName(): string
     {
-        return $this->stubReplacements;
+        return $this->fileName;
     }
+
+    // TODO Convert setFilename to take a callback that is passed the data?
 
     /**
-     * @param StubReplacement[] $stubReplacements
+     * @param string $fileName
      * @return StubFile
      */
-    public function setStubReplacements(array $stubReplacements): StubFile
+    public function setFileName(string $fileName): StubFile
     {
-        $this->stubReplacements = $stubReplacements;
+        $this->fileName = $fileName;
         return $this;
     }
-
 
 }

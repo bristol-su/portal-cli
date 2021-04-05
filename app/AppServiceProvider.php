@@ -22,6 +22,9 @@ use App\Core\Helpers\Settings\SettingRepository;
 use App\Core\Site\FeatureSiteResolver;
 use App\Core\Site\SettingsSiteResolver;
 use App\Core\Site\SiteRepository;
+use App\Core\Stubs\Entities\Stub;
+use App\Core\Stubs\Entities\StubFile;
+use App\Core\Stubs\Entities\StubReplacement;
 use App\Core\Stubs\StubStore;
 use App\Pipelines\CMSInstaller;
 use App\Pipelines\FrontendInstaller;
@@ -45,6 +48,24 @@ class AppServiceProvider extends ServiceProvider
         app(PipelineManager::class)->extend('frontend', function(Container $container) {
             return $container->make(FrontendInstaller::class);
         });
+
+        app(StubStore::class)->registerStub(
+            (new Stub())->setName('routes')
+                ->setDescription('A routes file for a demo')
+                ->setDefaultLocation('routes')
+                ->setStubFiles([
+                    (new StubFile())->setStubPath(__DIR__ . '/../stubs/test/routes.api.php.stub')->setFileName('api.php')
+                        ->setReplacements([
+                            (new StubReplacement())->setType('bool')->setVariableName('extraRoute')
+                                ->setDefault(true)
+                                ->setQuestion('Would you like to include the extra route?'),
+                            (new StubReplacement())->setType('string')->setVariableName('extraRouteText')
+                                ->setDefault('Some default text')
+                                ->setQuestion('What should the extra route return?')
+                        ]),
+                    (new StubFile())->setStubPath(__DIR__ . '/../stubs/test/routes.web.php.stub')->setFileName('web.php')
+                ])
+        );
 
     }
 

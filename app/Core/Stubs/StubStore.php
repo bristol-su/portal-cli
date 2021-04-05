@@ -7,7 +7,7 @@ use App\Core\Stubs\Entities\Stub;
 class StubStore
 {
 
-    private array $stubs;
+    private array $stubs = [];
 
     /**
      * Register a stub

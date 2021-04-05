@@ -139,8 +139,8 @@ abstract class Command extends \LaravelZero\Framework\Commands\Command
      */
     public function getWorkingDirectory(string $message = 'Which component would you like to perform the action against?'): WorkingDirectory
     {
-        if(isset($this->workingDirectory)) {
-            $this->workingDirectory = $this->getSite()->getWorkingDirectory();
+        if(!isset($this->workingDirectory)) {
+            $this->workingDirectory = $this->getFeature()->getSite()->getWorkingDirectory();
         }
         // Can either be the base, or the local package
         // TODO make this nicer
