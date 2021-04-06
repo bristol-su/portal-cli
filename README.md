@@ -1,5 +1,7 @@
 # Atlas CLI
 
+See developer documentation [here](./DOCNOTES.md).
+
 ## Installation
 
 Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
@@ -25,9 +27,9 @@ as arguments
 
 By default, the Atlas CMS will be installed. You can instead install the frontend site by passing `--repository=frontend`.
 
-#### Deleting an site
+#### Deleting a site
 
-To remove an site, just run `atlas site:delete` and choose the site to delete.
+To remove a site, just run `atlas site:delete` and choose the site to delete.
 
 #### List the sites
 

@@ -22,16 +22,7 @@ use App\Core\Instance\InstanceRepository;
 use App\Core\Helpers\Settings\SettingRepository;
 use App\Core\Site\SettingsSiteResolver;
 use App\Core\Site\SiteRepository;
-use App\Core\Stubs\Entities\Stub;
-use App\Core\Stubs\Entities\StubFile;
-use App\Core\Contracts\Stubs\StubReplacement;
-use App\Core\Stubs\Registrar\RegistersStubs;
-use App\Core\Stubs\Registrar\StubFileRegistrar;
-use App\Core\Stubs\ReplacementFactory;
-use App\Core\Stubs\Replacements\ArrayReplacement;
-use App\Core\Stubs\Replacements\SectionReplacement;
-use App\Core\Stubs\Replacements\StringReplacement;
-use App\Core\Stubs\Registrar\StubRegistrar;
+use App\Core\Stubs\Stubs;
 use App\Core\Stubs\StubStore;
 use App\Pipelines\CMSInstaller;
 use App\Pipelines\FrontendInstaller;
@@ -42,14 +33,13 @@ use Illuminate\Validation\ValidationServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    use RegistersStubs;
 
     /**
      * Bootstrap any application services.
      *
      * @return void
      */
-    public function boot(Repository $config)
+    public function boot(Repository $config, Stubs $stubs)
     {
         app(PipelineManager::class)->extend('cms', function(Container $container) {
             return $container->make(CMSInstaller::class);
@@ -58,30 +48,30 @@ class AppServiceProvider extends ServiceProvider
             return $container->make(FrontendInstaller::class);
         });
 
-        $this->newStub('routes', 'A routes file for a demo', 'routes')
+        $stubs->newStub('routes', 'A routes file for a demo', 'routes')
             ->addFile(
-                $this->newStubFile(
+                $stubs->newStubFile(
                     __DIR__ . '/../stubs/test/routes.api.php.stub', 'api.php'
                 )
                     ->addReplacement(
-                        $this->newSectionReplacement('extraRoute', 'Would you like an extra route?', true, null, [
-                            $this->newStringReplacement('extraRouteText', 'What should the route return', 'Testing')
+                        $stubs->newSectionReplacement('extraRoute', 'Would you like an extra route?', true, null, [
+                            $stubs->newStringReplacement('extraRouteText', 'What should the route return', 'Testing')
                         ])
                     )
             )->addFile(
-                $this->newStubFile(
+                $stubs->newStubFile(
                     __DIR__ . '/../stubs/test/routes.web.php.stub', 'web.php'
                 )
-                    ->addReplacement($this->newStringReplacement('path', 'What is the route?', 'default-route'))
+                    ->addReplacement($stubs->newStringReplacement('path', 'What is the route?', 'default-route'))
                     ->addReplacement(
-                        $this->newArrayReplacement('models', 'What is the name of the models?', [], null,
-                            $this->newStringReplacement('model', 'What is the model name?'))
+                        $stubs->newArrayReplacement('models', 'What is the name of the models?', [], null,
+                            $stubs->newStringReplacement('model', 'What is the model name?'))
                     )
             )->addFile(
-                $this->newStubFile(
+                $stubs->newStubFile(
                     __DIR__ . '/../stubs/test/web.php.backup.stub', 'web-second.php', 'secondary',
                     fn($data) => IO::confirm('Would you like to publish the optional routes file?')
-                )->addReplacement($this->newBooleanReplacement('includePost', 'Should we include a post request?', false))
+                )->addReplacement($stubs->newBooleanReplacement('includePost', 'Should we include a post request?', false))
             );
 
     }

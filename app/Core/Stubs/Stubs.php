@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Core\Stubs\Registrar;
+namespace App\Core\Stubs;
 
 use App\Core\Contracts\Stubs\StubReplacement;
+use App\Core\Stubs\Registrar\StubFileRegistrar;
+use App\Core\Stubs\Registrar\StubRegistrar;
 use App\Core\Stubs\Replacements\ArrayReplacement;
 use App\Core\Stubs\Replacements\BooleanReplacement;
 use App\Core\Stubs\Replacements\SectionReplacement;
 use App\Core\Stubs\Replacements\StringReplacement;
 
-trait RegistersStubs
+class Stubs
 {
 
     public function newStub(string $name, string $description, string $defaultLocation = null): StubRegistrar
