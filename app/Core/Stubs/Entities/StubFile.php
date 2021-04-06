@@ -3,6 +3,7 @@
 namespace App\Core\Stubs\Entities;
 
 use App\Core\Contracts\Stubs\StubReplacement;
+use Closure;
 
 class StubFile
 {
@@ -17,18 +18,21 @@ class StubFile
     /**
      * The location to publish the stubs
      *
-     * @var string
+     * @var string|null
      */
     private ?string $location = null;
 
-    private string $fileName;
+    /**
+     * @var string|Closure
+     */
+    private $fileName;
 
-    private ?\Closure $showIf = null;
+    private ?Closure $showIf = null;
 
     /**
-     * @return \Closure|null
+     * @return Closure|null
      */
-    public function getShowIf(): ?\Closure
+    public function getShowIf(): ?Closure
     {
         return $this->showIf;
     }
@@ -38,10 +42,10 @@ class StubFile
      *
      * Will be given any data that has so far been resolved
      *
-     * @param \Closure|null $showIf
+     * @param Closure|null $showIf
      * @return StubFile
      */
-    public function setShowIf(?\Closure $showIf): StubFile
+    public function setShowIf(?Closure $showIf): StubFile
     {
         $this->showIf = $showIf;
         return $this;
@@ -107,19 +111,24 @@ class StubFile
     }
 
     /**
-     * @return string
+     * @return string|\Closure
      */
-    public function getFileName(): string
+    public function getFileName()
     {
         return $this->fileName;
     }
 
     /**
-     * @param string $fileName
+     * @param string|\Closure $fileName
      * @return StubFile
      */
-    public function setFileName(string $fileName): StubFile
+    public function setFileName($fileName): StubFile
     {
+        if(!is_callable($fileName) && !is_string($fileName)) {
+            throw new \Exception(
+                sprintf('The filename should be a string, %s given', $fileName)
+            );
+        }
         $this->fileName = $fileName;
         return $this;
     }

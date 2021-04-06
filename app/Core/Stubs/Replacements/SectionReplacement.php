@@ -38,14 +38,12 @@ class SectionReplacement extends StubReplacement
 
     protected function askQuestion(): array
     {
-        $completeArray = [];
+        $sectionData = [];
         if($confirmation = IO::confirm($this->getQuestionText(), $this->getDefault())) {
-            foreach($this->getReplacements() as $replacement) {
-                $completeArray[$replacement->getVariableName()] = $replacement->getValue();
-            }
+
         }
         $completeArray[$this->getVariableName()] = $confirmation;
-        return $completeArray;
+        return $sectionData;
     }
 
     public function validateType($value): bool
@@ -53,9 +51,19 @@ class SectionReplacement extends StubReplacement
         return is_array($value);
     }
 
-    public function appendData(array $data): array
+    private function getReplacementValues(bool $useDefault): array
     {
-        return array_merge($data, $this->askQuestion());
+        $sectionData = [];
+        foreach($this->getReplacements() as $replacement) {
+            $sectionData = $replacement->appendData($sectionData, $useDefault);
+        }
+        return $sectionData;
+    }
+
+    public function appendData(array $data = [], bool $useDefault = false): array
+    {
+        $useSection = $useDefault && $this->hasDefault() ? $this->getDefault() : $this->askQuestion();
+        return array_merge($data, $useSection ? $this->getReplacementValues($useDefault) : [], [$this->getVariableName() => $useSection]);
     }
 
 }

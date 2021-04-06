@@ -134,6 +134,26 @@ This will remove the repository in `repos`, so make sure you save and push your 
 
 You can see all the local dependencies for a site by running `atlas dep:list`.
 
+### Stubs
+
+Stubs allow you to quickly scaffold part of your site.
+
+#### See available stubs
+
+#### Use a stub
+
+To use a stub, run `atlas stub:make`. This will prompt you for the stub to make, then ask you questions 
+to help create the scaffolded code.
+
+You may pass the name of the stub  to `--stub`. You may also pass a location (relative to the site root directory) to save 
+the stub in a different location to its default. Add `--overwrite` to overwrite any files already saved. If
+not included, if the file already exists it will not be modified.  Use `--use-default` to always use the default values for a
+stub, and `--dry-run` to just output the stubs to the terminal instead of saving them.
+
+`atlas stub:make --stub=route-stub --location="Routes" --overwrite --use-default --dry-run`
+or
+`atlas stub:make -S route-stub -L "Routes" -O -U -D`
+
 ## Command Reference
 
 ### Sites

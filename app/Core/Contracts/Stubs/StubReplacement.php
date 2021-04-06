@@ -59,9 +59,9 @@ abstract class StubReplacement
         return $this;
     }
 
-    public function appendData(array $data): array
+    public function appendData(array $data = [], bool $useDefault = false): array
     {
-        $data[$this->getVariableName()] = $this->getValue();
+        $data[$this->getVariableName()] = ($useDefault && $this->hasDefault() ? $this->getDefault() : $this->getValue());
         return $data;
     }
 
@@ -83,7 +83,7 @@ abstract class StubReplacement
      */
     public function hasDefault(): bool
     {
-        return isset($this->default);
+        return isset($this->default) && $this->default !== null;
     }
 
     /**
@@ -153,7 +153,7 @@ abstract class StubReplacement
      * @param $value
      * @return bool
      */
-    public function validate($value): bool
+    protected function validate($value): bool
     {
         if($this->getValidator() === null) {
             return true;
@@ -169,7 +169,7 @@ abstract class StubReplacement
      *
      * @return mixed
      */
-    public function ask()
+    protected function ask()
     {
         $value = $this->askQuestion();
 
@@ -181,7 +181,7 @@ abstract class StubReplacement
         return $value;
     }
 
-    public function getValue()
+    protected function getValue()
     {
         return $this->ask();
     }

@@ -18,7 +18,14 @@ class Stubs
         return StubRegistrar::registerStub($name, $description, $defaultLocation);
     }
 
-    public function newStubFile(string $stubPath, string $fileName, ?string $relativeLocation = null, ?\Closure $showIf = null): StubFileRegistrar
+    /**
+     * @param string $stubPath
+     * @param string|\Closure $fileName
+     * @param string|null $relativeLocation
+     * @param \Closure|null $showIf
+     * @return StubFileRegistrar
+     */
+    public function newStubFile(string $stubPath, $fileName, ?string $relativeLocation = null, ?\Closure $showIf = null): StubFileRegistrar
     {
         return StubFileRegistrar::registerStubFile(
             $stubPath, $fileName, $relativeLocation, $showIf

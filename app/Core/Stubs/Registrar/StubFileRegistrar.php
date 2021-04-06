@@ -20,7 +20,7 @@ class StubFileRegistrar
         $this->stubFile = $stubFile;
     }
 
-    public static function registerStubFile(string $stubPath, string $fileName, ?string $relativeLocation = null, ?\Closure $showIf = null): StubFileRegistrar
+    public static function registerStubFile(string $stubPath, $fileName, ?string $relativeLocation = null, ?\Closure $showIf = null): StubFileRegistrar
     {
         $stubFile = new StubFile();
         $stubFile->setStubPath($stubPath);

@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Core\Contracts\Command;
+use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Stubs\Entities\Stub;
@@ -21,7 +22,11 @@ class StubMake extends Command
      */
     protected $signature = 'stub:make
                             {--S|stub= : The name of the stub to make}
-                            {--F|feature= : The id of the feature}';
+                            {--F|feature= : The id of the feature}
+                            {--L|location= : The directory relative to the project to save the stubs in}
+                            {--O|overwrite : Overwrite any files that already exist}
+                            {--U|use-default : Use the default settings for the stub}
+                            {--D|dry-run : Do not save any stub files, just output them to the terminal}';
 
     /**
      * The description of the command.
@@ -50,11 +55,21 @@ class StubMake extends Command
 
         $stub = $stubStore->getStub($stubName);
 
-        $compiledStubs = $stubCreator->create($stub);
+        $compiledStubs = $stubCreator->create($stub, $this->option('use-default'));
 
-        StubSaver::in(WorkingDirectory::fromPath(
-            Filesystem::append($workingDirectory->path(), $stub->getDefaultLocation())
-        ))->saveAll($compiledStubs);
+        IO::info('Stubs compiled');
+
+        $saver = StubSaver::in(WorkingDirectory::fromPath(
+            Filesystem::append(
+                $workingDirectory->path(),
+                $this->hasOption('location') ? $this->option('location') : $stub->getDefaultLocation())
+        ))->force($this->option('overwrite'));
+
+        foreach($compiledStubs as $stub) {
+            $saver->save($stub, $this->option('dry-run'));
+        }
+
+        IO::success('Stubs saved');
 
     }
 

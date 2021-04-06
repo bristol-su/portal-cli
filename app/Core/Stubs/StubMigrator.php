@@ -20,9 +20,9 @@ class StubMigrator
         $this->stubDataCollector = $stubDataCollector;
     }
 
-    public function create(Entities\Stub $stub): array
+    public function create(Entities\Stub $stub, bool $useDefault = false): array
     {
-        $data = $this->stubDataCollector->collect($stub);
+        $data = $this->stubDataCollector->collect($stub, [], $useDefault);
 
         $compiled = [];
         foreach($data->getStubFiles() as $stubFile) {

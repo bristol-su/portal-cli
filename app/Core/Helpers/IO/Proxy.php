@@ -62,6 +62,11 @@ class Proxy
         $this->output->writeln($line);
     }
 
+    public function writelns(array $lines)
+    {
+        $this->output->writeln($lines);
+    }
+
     public function confirm(string $message, bool $default = false)
     {
         return $this->output->confirm($message, $default);

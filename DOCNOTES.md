@@ -108,6 +108,23 @@ data resolved from the user, and should return a boolean. By default, all files 
   
 This uses the `newStubFile` function to register it.
 
+The file name may be dynamic, letting you ask the user for information before deciding what the file name should be. If you 
+would like to make use of this feature, register a function as the file name. This function accepts an array of data, and 
+should return the filename.
+
+```php
+public function boot(\App\Core\Stubs\Stubs $stubs)
+{
+    $stubs->newStub(...)
+        ->addFile(
+            $stubs->newStubFile(
+                __DIR__ . '/../stubs/ModelController.php.stub', fn($data) => sprintf('%sController.php', $data['modelName']), 'app/Models'
+            )
+                ->addReplacement($stubs->newStringReplacement('modelName', 'What is the name of the model?'))
+        );
+}
+```
+
 #### Replacements
 
 Each variable you use within a file also needs to be registered. All variables take the following:

@@ -65,13 +65,15 @@ class AppServiceProvider extends ServiceProvider
                     ->addReplacement($stubs->newStringReplacement('path', 'What is the route?', 'default-route'))
                     ->addReplacement(
                         $stubs->newArrayReplacement('models', 'What is the name of the models?', [], null,
-                            $stubs->newStringReplacement('model', 'What is the model name?'))
+                            $stubs->newStringReplacement('model', 'What is the model name?', 'Model'))
                     )
             )->addFile(
                 $stubs->newStubFile(
-                    __DIR__ . '/../stubs/test/web.php.backup.stub', 'web-second.php', 'secondary',
+                    __DIR__ . '/../stubs/test/web.php.backup.stub', fn($data) => sprintf('%s.php', $data['routesFileName']), 'secondary',
                     fn($data) => IO::confirm('Would you like to publish the optional routes file?')
-                )->addReplacement($stubs->newBooleanReplacement('includePost', 'Should we include a post request?', false))
+                )
+                    ->addReplacement($stubs->newStringReplacement('routesFileName', 'Name of the routes file?', 'route-file-name'))
+                    ->addReplacement($stubs->newBooleanReplacement('includePost', 'Should we include a post request?', false))
             );
 
     }
