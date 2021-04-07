@@ -2,22 +2,22 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\SiteCommand;
 use App\Core\Contracts\Instance\InstanceRepository;
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Pipeline\PipelineManager;
 
-class SiteDelete extends Command
+class SiteDelete extends SiteCommand
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'site:delete
-                            {--S|site= : The id of the site}';
+    protected $signature = 'site:delete';
 
     /**
      * The description of the command.

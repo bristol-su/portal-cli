@@ -12,7 +12,7 @@ use App\Core\Pipeline\PipelineManager;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 use Illuminate\Support\Str;
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
 
 class FeatureNew extends Command
 {

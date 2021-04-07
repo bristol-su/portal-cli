@@ -2,7 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\SiteCommand;
 use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
@@ -11,7 +12,7 @@ use App\Core\Packages\LocalPackageHelper;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
-class SiteReset extends Command
+class SiteReset extends SiteCommand
 {
     /**
      * The signature of the command.
@@ -19,7 +20,6 @@ class SiteReset extends Command
      * @var string
      */
     protected $signature = 'site:reset
-                            {--S|site= : The id of the site}
                             {--B|branch= : The name of the branch to check out}';
 
     /**

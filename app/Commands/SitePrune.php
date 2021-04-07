@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Helpers\IO\IO;
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
 use App\Core\Site\Site;
 
 class SitePrune extends Command

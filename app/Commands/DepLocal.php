@@ -2,7 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\FeatureCommand;
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Feature\Feature;
 use App\Core\Helpers\Composer\ComposerModifier;
@@ -19,15 +20,16 @@ use App\Core\Site\Site;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
-class DepLocal extends Command
+class DepLocal extends FeatureCommand
 {
+    protected bool $supportsDependencies = false;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
     protected $signature = 'dep:local
-                            {--F|feature= : The id of the feature}
                             {--P|package= : The composer package name}
                             {--B|branch= : A name for the branch to use}
                             {--R|repository-url= : The URL of the repository}';

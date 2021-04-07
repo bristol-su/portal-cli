@@ -2,7 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\FeatureCommand;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Storage\Filesystem;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
@@ -13,7 +14,7 @@ use App\Core\Stubs\StubDataCollector;
 use App\Core\Stubs\StubSaver;
 use App\Core\Stubs\StubStore;
 
-class StubMake extends Command
+class StubMake extends FeatureCommand
 {
     /**
      * The signature of the command.
@@ -22,11 +23,10 @@ class StubMake extends Command
      */
     protected $signature = 'stub:make
                             {--S|stub= : The name of the stub to make}
-                            {--F|feature= : The id of the feature}
                             {--L|location= : The directory relative to the project to save the stubs in}
                             {--O|overwrite : Overwrite any files that already exist}
                             {--U|use-default : Use the default settings for the stub}
-                            {--D|dry-run : Do not save any stub files, just output them to the terminal}';
+                            {--R|dry-run : Do not save any stub files, just output them to the terminal}';
 
     /**
      * The description of the command.
@@ -62,7 +62,8 @@ class StubMake extends Command
         $saver = StubSaver::in(WorkingDirectory::fromPath(
             Filesystem::append(
                 $workingDirectory->path(),
-                $this->hasOption('location') ? $this->option('location') : $stub->getDefaultLocation())
+                $this->option('location') ?? $stub->getDefaultLocation()
+            )
         ))->force($this->option('overwrite'));
 
         foreach($compiledStubs as $stub) {

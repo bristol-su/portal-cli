@@ -2,7 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\FeatureCommand;
 use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Helpers\IO\IO;
@@ -12,15 +13,16 @@ use App\Core\Packages\LocalPackageHelper;
 use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
-class FeatureUse extends Command
+class FeatureUse extends FeatureCommand
 {
+    protected bool $supportsDependencies = false;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'feature:use
-                            {--S|feature= : The id of the feature}';
+    protected $signature = 'feature:use';
 
     /**
      * The description of the command.

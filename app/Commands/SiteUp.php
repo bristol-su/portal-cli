@@ -2,21 +2,21 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\SiteCommand;
 use App\Core\Helpers\IO\IO;
 use App\Core\Helpers\Terminal\Executor;
 use App\Core\Helpers\WorkingDirectory\WorkingDirectory;
 use App\Core\Site\Site;
 
-class SiteUp extends Command
+class SiteUp extends SiteCommand
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'site:up
-                            {--S|site= : The id of the site}';
+    protected $signature = 'site:up';
 
     /**
      * The description of the command.

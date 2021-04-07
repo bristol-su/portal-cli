@@ -2,7 +2,8 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\FeatureCommand;
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Feature\Feature;
 use App\Core\Helpers\Composer\ComposerModifier;
@@ -20,15 +21,16 @@ use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 use Illuminate\Database\Eloquent\Collection;
 
-class DepRemote extends Command
+class DepRemote extends FeatureCommand
 {
+    protected bool $supportsDependencies = false;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
     protected $signature = 'dep:remote
-                            {--F|feature= : The id of the feature}
                             {--P|package= : The name of the local package}';
 
     /**

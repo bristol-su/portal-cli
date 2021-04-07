@@ -152,7 +152,11 @@ stub, and `--dry-run` to just output the stubs to the terminal instead of saving
 
 `atlas stub:make --stub=route-stub --location="Routes" --overwrite --use-default --dry-run`
 or
-`atlas stub:make -S route-stub -L "Routes" -O -U -D`
+`atlas stub:make -S route-stub -L "Routes" -O -U -R`
+
+You'll also be able to pass in a dependency that's already local to use the dependency for the stub.
+
+`atlas stub:make --dep=elbowspaceuk/core-module`
 
 ## Command Reference
 
@@ -180,3 +184,5 @@ or
 - Use a local dependencies: `atlas dep:local`
 - Make a dependency remote again: `atlas dep:remote`
 - List all local dependencies: `atlas dep:list`
+
+### Stubs
