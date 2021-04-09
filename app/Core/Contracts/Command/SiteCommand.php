@@ -4,6 +4,7 @@ namespace App\Core\Contracts\Command;
 
 use App\Core\Contracts\Site\SiteRepository;
 use App\Core\Contracts\Site\SiteResolver;
+use App\Core\Helpers\IO\IO;
 use App\Core\Site\Site;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -112,7 +113,7 @@ class SiteCommand extends Command#
             $this->getAvailableSites($siteFilter)->mapWithKeys(fn(Site $site) => [sprintf('site-%u', $site->getId()) => $site->getName()])->toArray()
         );
 
-        if($prefixedSiteId && $this->getAvailableSites($siteFilter)->map(fn($site) => $site->getId())->contains($this->convertSiteTextIntoId($prefixedSiteId))) {
+        if(!$prefixedSiteId || !$this->getAvailableSites($siteFilter)->map(fn($site) => $site->getId())->contains($this->convertSiteTextIntoId($prefixedSiteId))) {
             IO::error(sprintf('[%s] is not a valid site', $prefixedSiteId));
             return $this->promptUserForSite($message, $siteFilter);
         }
