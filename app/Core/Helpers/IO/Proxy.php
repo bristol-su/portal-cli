@@ -107,6 +107,11 @@ class Proxy
         return $result;
     }
 
+    public function choice(string $question, array $choices = [], $default = null)
+    {
+        return $this->output->choice($question, $choices, $default);
+    }
+
     public function ask(string $question, $default = null, \Closure $validator = null)
     {
         return $this->output->ask($question, $default, $validator);

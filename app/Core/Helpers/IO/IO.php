@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void writeln(string $line) Write a line of output
  * @method static void writelns(array $lines) Write lines of output
  * @method static bool|mixed confirm(string $message, bool $default = false) Ask the user a yes/no question
+ * @method static mixed choice(string $message, array $choices = [], bool $default = false) Ask the user for one of the options
  * @method static void task(string $name, \Closure $task, $loadingText = 'running...') Run the given task
  * @method static mixed ask(string $question, $default = null, \Closure $validator = null) Asks the user a question until the validator returns true given the answer
  * @method static void progressStart(int $count) Starts a progress bar with the given number of steps

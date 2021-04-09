@@ -74,6 +74,8 @@ class AppServiceProvider extends ServiceProvider
                 )
                     ->addReplacement($stubs->newStringReplacement('routesFileName', 'Name of the routes file?', 'route-file-name'))
                     ->addReplacement($stubs->newBooleanReplacement('includePost', 'Should we include a post request?', false))
+                    ->addReplacement($stubs->newArrayReplacement('dbColumns', 'Define the cols', [], null,
+                        $stubs->newTableColumnReplacement('dbColumns', 'What columns do you want for your xyz?', [])))
             );
 
     }

@@ -9,6 +9,7 @@ use App\Core\Stubs\Replacements\ArrayReplacement;
 use App\Core\Stubs\Replacements\BooleanReplacement;
 use App\Core\Stubs\Replacements\SectionReplacement;
 use App\Core\Stubs\Replacements\StringReplacement;
+use App\Core\Stubs\Replacements\TableColumnReplacement;
 
 class Stubs
 {
@@ -44,6 +45,11 @@ class Stubs
         $arrayReplacement = ArrayReplacement::new($variableName, $questionText, $default, $validator);
         $arrayReplacement->setReplacement($replacement);
         return $arrayReplacement;
+    }
+
+    public function newTableColumnReplacement(string $variableName, string $questionText, $default = null, ?\Closure $validator = null): StubReplacement
+    {
+        return TableColumnReplacement::new($variableName, $questionText, $default, $validator);
     }
 
     public function newStringReplacement(string $variableName, string $questionText, $default = null, ?\Closure $validator = null): StubReplacement
