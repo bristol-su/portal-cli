@@ -134,7 +134,10 @@ class FeatureCommand extends Command
 
     private function convertFeatureTextIntoId(string $value): int
     {
-        return (int) Str::substr($value, 8);
+        if(Str::startsWith($value, 'feature-')) {
+            return (int) Str::substr($value, 8);
+        }
+        return (int) $value;
     }
 
     /**

@@ -196,4 +196,14 @@ abstract class StubReplacement
         return $replacement;
     }
 
+    /**
+     * Parse the string input from the command line into the right type
+     * @param string $variable
+     * @return mixed
+     */
+    public function parseCommandInput(string $variable)
+    {
+        return $variable;
+    }
+
 }

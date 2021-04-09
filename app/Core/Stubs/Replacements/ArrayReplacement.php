@@ -39,4 +39,9 @@ class ArrayReplacement extends StubReplacement
     {
         return is_array($value) && count($value) > 0;
     }
+
+    public function parseCommandInput(string $variable): array
+    {
+        return array_map('trim', explode(',', $variable));
+    }
 }

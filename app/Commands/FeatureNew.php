@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Core\Contracts\Command\SiteCommand;
 use App\Core\Contracts\Feature\FeatureRepository;
 use App\Core\Contracts\Feature\FeatureResolver;
 use App\Core\Contracts\Site\SiteRepository;
@@ -14,7 +15,7 @@ use Cz\Git\GitRepository;
 use Illuminate\Support\Str;
 use App\Core\Contracts\Command\Command;
 
-class FeatureNew extends Command
+class FeatureNew extends SiteCommand
 {
     /**
      * The signature of the command.
@@ -25,8 +26,7 @@ class FeatureNew extends Command
                             {--N|name= : The name of the feature}
                             {--D|description= : A description for the feature}
                             {--T|type= : The type of change}
-                            {--B|branch= : The name of the branch to use}
-                            {--S|site= : The ID of the site}';
+                            {--B|branch= : The name of the branch to use}';
 
     /**
      * The description of the command.

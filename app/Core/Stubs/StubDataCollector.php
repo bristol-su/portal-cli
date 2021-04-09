@@ -14,7 +14,6 @@ class StubDataCollector
 
     public function collect(Stub $stub, array $data = [], bool $useDefault = false): CollectedStubData
     {
-        $data = [];
         $stubFiles = [];
         foreach($stub->getStubFiles() as $stubFile) {
             if($useDefault === true || $stubFile->showIf($data)) {

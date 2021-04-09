@@ -103,7 +103,11 @@ class SiteCommand extends Command#
 
     private function convertSiteTextIntoId(string $value): int
     {
-        return (int) Str::substr($value, 5);
+        if(Str::startsWith($value, 'site-')) {
+            return (int) Str::substr($value, 5);
+        }
+        return (int) $value;
+
     }
 
     private function promptUserForSite(string $message, ?\Closure $siteFilter): int

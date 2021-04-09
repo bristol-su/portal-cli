@@ -21,4 +21,16 @@ class BooleanReplacement extends StubReplacement
         return is_bool($value);
     }
 
+    public function parseCommandInput(string $variable): bool
+    {
+        $true = ['1', 'true', 'on', 'yes'];
+        $false = ['0', 'false', 'off', 'no'];
+        if(in_array($variable, $true)) {
+            return true;
+        }
+        if(in_array($variable, $false)) {
+            return false;
+        }
+        return (bool) $variable;
+    }
 }
