@@ -142,10 +142,10 @@ Stubs allow you to quickly scaffold part of your site.
 
 #### Use a stub
 
-To use a stub, run `atlas stub:make`. This will prompt you for the stub to make, then ask you questions 
+To use a stub, run `atlas stub:make`. This will prompt you for the stub to make, then ask you questions
 to help create the scaffolded code.
 
-You may pass the name of the stub  to `--stub`. You may also pass a location (relative to the site root directory) to save 
+You may pass the name of the stub  to `--stub`. You may also pass a location (relative to the site root directory) to save
 the stub in a different location to its default. Add `--overwrite` to overwrite any files already saved. If
 not included, if the file already exists it will not be modified.  Use `--use-default` to always use the default values for a
 stub, and `--dry-run` to just output the stubs to the terminal instead of saving them.
@@ -186,3 +186,6 @@ You'll also be able to pass in a dependency that's already local to use the depe
 - List all local dependencies: `atlas dep:list`
 
 ### Stubs
+
+- Create a new stub: `atlas stub:make`
+- List all available stubs: `atlas stub:list`
