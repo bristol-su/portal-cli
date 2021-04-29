@@ -26,6 +26,7 @@ use App\Core\Stubs\Stubs;
 use App\Core\Stubs\StubStore;
 use App\Pipelines\CMSInstaller;
 use App\Pipelines\FrontendInstaller;
+use App\Pipelines\LicenceInstaller;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
@@ -46,6 +47,9 @@ class AppServiceProvider extends ServiceProvider
         });
         app(PipelineManager::class)->extend('frontend', function(Container $container) {
             return $container->make(FrontendInstaller::class);
+        });
+        app(PipelineManager::class)->extend('licensing', function(Container $container) {
+            return $container->make(LicenceInstaller::class);
         });
 
         $stubs->newStub('routes', 'A routes file for a demo', 'routes')
