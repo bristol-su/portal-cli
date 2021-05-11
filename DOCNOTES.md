@@ -2,7 +2,7 @@
 
 ## Adding Stubs
 
-Stubs allow you to quickly scaffold repeated code in your app. Define the skeleton of the 
+Stubs allow you to quickly scaffold repeated code in your app. Define the skeleton of the
 code once, and the stub framework will help users customise the skeleton to their needs each time.
 
 Stubs may also consist of multiple files or classes, letting you scaffold even quicker.
@@ -83,6 +83,7 @@ In a similar way, you can iterate through arrays using `foreach`.
 
 For your stub to be usable, you need to register it. Registration is normally done with the `\App\Core\Stubs\Stubs` class.
 
+For now, this can be done in the stubs folder in this directory, and registered in the `AppServiceProvider`.
 // TODO Where this should be done
 
 #### The stub
@@ -105,11 +106,11 @@ Each file also needs to be registered. These take
 - Relative location: The location of the outputted file relative to the stub default location.
 - Show if: A callback which determines if the file should be shown or not. It takes an array of
 data resolved from the user, and should return a boolean. By default, all files are used.
-  
+
 This uses the `newStubFile` function to register it.
 
-The file name may be dynamic, letting you ask the user for information before deciding what the file name should be. If you 
-would like to make use of this feature, register a function as the file name. This function accepts an array of data, and 
+The file name may be dynamic, letting you ask the user for information before deciding what the file name should be. If you
+would like to make use of this feature, register a function as the file name. This function accepts an array of data, and
 should return the filename.
 
 ```php
@@ -128,7 +129,8 @@ public function boot(\App\Core\Stubs\Stubs $stubs)
 #### Replacements
 
 Each variable you use within a file also needs to be registered. All variables take the following:
-- Variable Name: The name of the variable, to use in the stubs file
+- Variable Name: The name of the variable, to use in the stubs file. This must be unique between all stub files being registered, and will always
+be passed to all stub files generated in the stub.
 - Question text: The text to show to the user when prompting for the value
 - Default: The default value to use.
 - Validator: A function that takes the value, and can return true or false if the value is valid or not
@@ -150,3 +152,7 @@ Created with the `newSectionReplacement` function, is used for making sections o
 
 It will create a boolean variable which you can use control structures on, and accepts an
 array of replacements to ask only if the user wants the section.
+
+##### Database Schema
+This is a special type, created with the `newTableColumnReplacement` variable. It will ask the user for a name for the
+column, a type for the column, and whether the column can be null. This is then passed as an instance of `\App\Core\Stubs\Replacements\TableColumn` to the stub files.
