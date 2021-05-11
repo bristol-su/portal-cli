@@ -4,7 +4,7 @@ namespace App\Commands;
 
 use App\Core\Contracts\Feature\FeatureRepository;
 use App\Core\Feature\Feature;
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
 
 class FeatureList extends Command
 {
@@ -20,7 +20,7 @@ class FeatureList extends Command
      *
      * @var string
      */
-    protected $description = 'List all instances of Atlas currently installed.';
+    protected $description = 'List all ongoing features.';
 
     /**
      * Execute the console command.

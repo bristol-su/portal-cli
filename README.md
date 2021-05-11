@@ -1,5 +1,7 @@
 # Atlas CLI
 
+See developer documentation [here](./DOCNOTES.md).
+
 ## Installation
 
 Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
@@ -25,9 +27,9 @@ as arguments
 
 By default, the Atlas CMS will be installed. You can instead install the frontend site by passing `--repository=frontend`.
 
-#### Deleting an site
+#### Deleting a site
 
-To remove an site, just run `atlas site:delete` and choose the site to delete.
+To remove a site, just run `atlas site:delete` and choose the site to delete.
 
 #### List the sites
 
@@ -132,6 +134,30 @@ This will remove the repository in `repos`, so make sure you save and push your 
 
 You can see all the local dependencies for a site by running `atlas dep:list`.
 
+### Stubs
+
+Stubs allow you to quickly scaffold part of your site.
+
+#### See available stubs
+
+#### Use a stub
+
+To use a stub, run `atlas stub:make`. This will prompt you for the stub to make, then ask you questions
+to help create the scaffolded code.
+
+You may pass the name of the stub  to `--stub`. You may also pass a location (relative to the site root directory) to save
+the stub in a different location to its default. Add `--overwrite` to overwrite any files already saved. If
+not included, if the file already exists it will not be modified.  Use `--use-default` to always use the default values for a
+stub, and `--dry-run` to just output the stubs to the terminal instead of saving them.
+
+`atlas stub:make --stub=route-stub --location="Routes" --overwrite --use-default --dry-run`
+or
+`atlas stub:make -S route-stub -L "Routes" -O -U -R`
+
+You'll also be able to pass in a dependency that's already local to use the dependency for the stub.
+
+`atlas stub:make --dep=elbowspaceuk/core-module`
+
 ## Command Reference
 
 ### Sites
@@ -158,3 +184,8 @@ You can see all the local dependencies for a site by running `atlas dep:list`.
 - Use a local dependencies: `atlas dep:local`
 - Make a dependency remote again: `atlas dep:remote`
 - List all local dependencies: `atlas dep:list`
+
+### Stubs
+
+- Create a new stub: `atlas stub:make`
+- List all available stubs: `atlas stub:list`

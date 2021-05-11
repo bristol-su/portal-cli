@@ -2,19 +2,19 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\SiteCommand;
 use App\Core\Contracts\Site\SiteResolver;
 use App\Core\Helpers\IO\IO;
 
-class SiteUse extends Command
+class SiteUse extends SiteCommand
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'site:use
-                            {--S|site= : The id of the site}';
+    protected $signature = 'site:use';
 
     /**
      * The description of the command.

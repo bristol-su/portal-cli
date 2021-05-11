@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
 use App\Core\Setup\SetupManager;
 
 class Setup extends Command

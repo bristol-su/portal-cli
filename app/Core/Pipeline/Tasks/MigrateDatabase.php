@@ -27,6 +27,7 @@ class MigrateDatabase extends Task
     public function down(\App\Core\Helpers\WorkingDirectory\WorkingDirectory $workingDirectory): void
     {
         // TODO Enable once migrations fixed
+
         //    Executor::cd($workingDirectory)->execute(
         //        sprintf('./vendor/bin/sail artisan migrate:rollback --env=%s', $this->config->get('environment'))
         //    );

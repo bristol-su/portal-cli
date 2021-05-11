@@ -2,18 +2,21 @@
 
 namespace App\Commands;
 
-use App\Core\Contracts\Command;
+use App\Core\Contracts\Command\Command;
+use App\Core\Contracts\Command\FeatureCommand;
 use App\Core\Packages\LocalPackage;
 
-class DepList extends Command
+class DepList extends FeatureCommand
 {
+
+    protected bool $supportsDependencies = false;
+
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'dep:list
-                            {--F|feature= : The id of the feature}';
+    protected $signature = 'dep:list';
 
     /**
      * The description of the command.
@@ -30,7 +33,7 @@ class DepList extends Command
     public function handle()
     {
         $feature = $this->getFeature('Which feature would you like to see the local packages for?');
-        $packages = $feature->localPackages;
+        $packages = $feature->getLocalPackages();
 
         $this->table(
             ['ID', 'Name', 'URL', 'Type', 'Version'],

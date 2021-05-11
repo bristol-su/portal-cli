@@ -62,6 +62,11 @@ class Proxy
         $this->output->writeln($line);
     }
 
+    public function writelns(array $lines)
+    {
+        $this->output->writeln($lines);
+    }
+
     public function confirm(string $message, bool $default = false)
     {
         return $this->output->confirm($message, $default);
@@ -100,6 +105,11 @@ class Proxy
         }
 
         return $result;
+    }
+
+    public function choice(string $question, array $choices = [], $default = null)
+    {
+        return $this->output->choice($question, $choices, $default);
     }
 
     public function ask(string $question, $default = null, \Closure $validator = null)
