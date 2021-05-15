@@ -158,6 +158,25 @@ You'll also be able to pass in a dependency that's already local to use the depe
 
 `atlas stub:make --dep=elbowspaceuk/core-module`
 
+### Sharing containers over a local network
+
+To share containers between sites, for example having a single mysql database shared between two apps, you can manually edit your `docker-compose.yml` file. For this to work, you must be using Laravel with Laravel Sail, using the `docker-compose.yml` struture which doesn't deviate too far from the default Sail environment, and must be using the default database credential `.env` variables.
+
+Ensure you NEVER commit the `docker-compose.yml` changes, as these are specific to your setup and will break the site for everyone else.
+
+- Create or decide on the FE and CMS instance to use
+- Bring the FE instance down with `./vendor/bin/sail down -v`
+- On the FE `docker-compose.yml`, add the following to the `networks` key. `cms-name` is the name of your CMS site sluggified, which is also the folder the CMS is  in.
+```
+    cms-name_sail:
+    driver: bridge
+    external: true
+```
+- Within the `atlas.su.test` service, in the `networks` key, add `-cms-name_sail`.
+- Update the `.env.local` variables to do with the database to share the same credentials as the `cms`.
+- Bring the FE back up.
+- Run `./vendor/bin/sail artisan migrate --env=local` to migrate the FE changes
+
 ## Command Reference
 
 ### Sites
