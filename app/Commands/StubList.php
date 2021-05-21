@@ -36,7 +36,7 @@ class StubList extends Command
      */
     public function handle(StubStore $stubStore)
     {
-        $stubs = $stubStore->getAllStubs();
+        $stubs = collect($stubStore->getAllStubs());
 
         $this->table(
             ['Name', 'Description'],
