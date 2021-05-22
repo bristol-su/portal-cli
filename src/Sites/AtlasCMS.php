@@ -3,9 +3,8 @@
 namespace Atlas\Sites;
 
 use OriginEngine\Helpers\Env\EnvRepository;
-use OriginEngine\Helpers\WorkingDirectory\WorkingDirectory;
+use OriginEngine\Helpers\LaravelSail\Sail;
 use OriginEngine\Pipeline\Pipeline;
-use OriginEngine\Site\Sail;
 use OriginEngine\Site\Site;
 use OriginEngine\Site\SiteBlueprint;
 

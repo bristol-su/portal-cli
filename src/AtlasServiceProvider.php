@@ -2,12 +2,14 @@
 
 namespace Atlas;
 
+use Atlas\Sites\AtlasCMS;
 use OriginEngine\Contracts\Feature\FeatureRepository as FeatureRepositoryContract;
 use OriginEngine\Contracts\Feature\FeatureResolver;
 use OriginEngine\Contracts\Helpers\Composer\OperationManager as OperationManagerContract;
 use OriginEngine\Contracts\Helpers\Port\PortChecker;
 use OriginEngine\Contracts\Helpers\Terminal\Executor;
 use OriginEngine\Contracts\Instance\InstanceRepository as InstanceManagerContract;
+use OriginEngine\Contracts\Site\SiteBlueprintStore;
 use OriginEngine\Contracts\Site\SiteRepository as SiteRepositoryContract;
 use OriginEngine\Contracts\Helpers\Settings\SettingRepository as SettingRepositoryContract;
 use OriginEngine\Contracts\Site\SiteResolver;
@@ -42,15 +44,17 @@ class AtlasServiceProvider extends ServiceProvider
      */
     public function boot(Repository $config, Stubs $stubs)
     {
-        app(PipelineManager::class)->extend('cms', function(Container $container) {
-            return $container->make(CMSInstaller::class);
-        });
-        app(PipelineManager::class)->extend('frontend', function(Container $container) {
-            return $container->make(FrontendInstaller::class);
-        });
-        app(PipelineManager::class)->extend('licensing', function(Container $container) {
-            return $container->make(LicenceInstaller::class);
-        });
+//        app(PipelineManager::class)->extend('cms', function(Container $container) {
+//            return $container->make(CMSInstaller::class);
+//        });
+//        app(PipelineManager::class)->extend('frontend', function(Container $container) {
+//            return $container->make(FrontendInstaller::class);
+//        });
+//        app(PipelineManager::class)->extend('licensing', function(Container $container) {
+//            return $container->make(LicenceInstaller::class);
+//        });
+
+        app(SiteBlueprintStore::class)->register('cms', new AtlasCMS());
 
         $stubs->newStub('routes', 'A routes file for a demo', 'routes')
             ->addFile(

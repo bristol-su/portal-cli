@@ -270,7 +270,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../origin-engine",
-                "reference": "a531e5bf840cc67fb1bcf8cee41c305f462ca148"
+                "reference": "d0bd74de6ea3a035ad1e5cfc0a93fec403570371"
             },
             "require": {
                 "czproject/git-php": "^3.18",
@@ -287,13 +287,6 @@
                 "phpunit/phpunit": "^11.0"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "OriginEngine\\OriginEngineServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "OriginEngine\\": "src/"
