@@ -54,16 +54,7 @@ return [
     */
 
     'providers' => [
-        App\AppServiceProvider::class,
-        Intonate\TinkerZero\TinkerZeroServiceProvider::class
-    ],
-
-    'setup' => [
-        'steps' => [
-            \App\Core\Setup\Steps\CreateDatabaseDirectory::class,
-            \App\Core\Setup\Steps\CreateDatabase::class,
-            \App\Core\Setup\Steps\MigrateDatabase::class,
-            \App\Core\Setup\Steps\SetProjectDirectory::class
-        ]
-    ],
+        \Atlas\AtlasServiceProvider::class,
+        Intonate\TinkerZero\TinkerZeroServiceProvider::class,
+    ]
 ];
