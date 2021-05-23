@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites;
+namespace Atlas\Sites\AtlasCms;
 
 use OriginEngine\Helpers\Env\EnvRepository;
 use OriginEngine\Helpers\LaravelSail\Sail;
@@ -42,7 +42,7 @@ class AtlasCMS extends SiteBlueprint
 
     public function getInstallationPipeline(): Pipeline
     {
-        return new AtlasInstallPipeline();
+        return new Install();
     }
 
     public function getUninstallationPipeline(): Pipeline
