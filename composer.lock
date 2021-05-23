@@ -270,7 +270,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../origin-engine",
-                "reference": "a78ffccf2972113723c0cea0c7e75065ec0823bb"
+                "reference": "1690d951ff5f17b32e7477b6c316c5ce324d6792"
             },
             "require": {
                 "czproject/git-php": "^3.18",

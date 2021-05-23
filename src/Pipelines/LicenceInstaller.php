@@ -18,7 +18,7 @@ class LicenceInstaller extends Pipeline
 
             \OriginEngine\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
 
-            \OriginEngine\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.example', '.env')
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.example', '.env')
                 ->withName('Set up local environment file'),
 
             \OriginEngine\Pipeline\Tasks\ValidatePortEntries::provision(

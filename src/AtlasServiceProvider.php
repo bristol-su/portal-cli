@@ -3,6 +3,8 @@
 namespace Atlas;
 
 use Atlas\Sites\AtlasCMS;
+use Atlas\Sites\AtlasFrontend;
+use Atlas\Sites\AtlasLicences;
 use OriginEngine\Contracts\Feature\FeatureRepository as FeatureRepositoryContract;
 use OriginEngine\Contracts\Feature\FeatureResolver;
 use OriginEngine\Contracts\Helpers\Composer\OperationManager as OperationManagerContract;
@@ -55,6 +57,8 @@ class AtlasServiceProvider extends ServiceProvider
 //        });
 
         app(SiteBlueprintStore::class)->register('cms', new AtlasCMS());
+        app(SiteBlueprintStore::class)->register('frontend', new AtlasFrontend());
+        app(SiteBlueprintStore::class)->register('licence', new AtlasLicences());
 
         $stubs->newStub('routes', 'A routes file for a demo', 'routes')
             ->addFile(

@@ -8,12 +8,12 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Site\Site;
 use OriginEngine\Site\SiteBlueprint;
 
-class AtlasCMS extends SiteBlueprint
+class AtlasLicences extends SiteBlueprint
 {
 
     public function name(): string
     {
-        return 'Atlas CMS';
+        return 'Composer Licencing';
     }
 
     public function getUrl(Site $site): string

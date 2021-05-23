@@ -18,7 +18,7 @@ class CMSInstaller extends Pipeline
 
             \OriginEngine\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
 
-            \OriginEngine\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.sail.example', '.env.local')
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.sail.example', '.env.local')
                 ->withName('Set up local environment file'),
             \OriginEngine\Pipeline\Tasks\ValidatePortEntries::provision(
                 '.env.local',
@@ -27,11 +27,11 @@ class CMSInstaller extends Pipeline
                 false)
                 ->withName('Verifying port assignments'),
 
-            \OriginEngine\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.local', '.env.testing', [
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.local', '.env.testing', [
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
             ])->withName('Set up testing environment file'),
 
-            \OriginEngine\Pipeline\Tasks\CopyEnvironmentFile::provision('.env.local', '.env.dusk.local', [
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.local', '.env.dusk.local', [
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
             ])->withName('Set up dusk environment file'),
 
