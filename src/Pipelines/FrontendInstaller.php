@@ -21,7 +21,7 @@ class FrontendInstaller extends Pipeline
 
             \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.sail.example', '.env.local')
                 ->withName('Set up local environment file'),
-            \OriginEngine\Pipeline\Tasks\ValidatePortEntries::provision(
+            \OriginEngine\Pipeline\Tasks\CheckPortsAreFree::provision(
                 '.env.local',
                 ['APP_PORT', 'FORWARD_DB_PORT', 'FORWARD_MAILHOG_PORT', 'FORWARD_MAILHOG_DASHBOARD_PORT', 'FORWARD_REDIS_PORT', 'FORWARD_SELENIUM_PORT', 'FORWARD_DB_TESTING_PORT'],
                 ['HTTP', 'database', 'mail', 'mail dashboard', 'redis', 'selenium', 'test database'],

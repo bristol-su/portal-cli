@@ -39,11 +39,11 @@ class AtlasInstallPipeline extends Pipeline
 //                ['HTTP', 'database', 'mail', 'mail dashboard', 'redis', 'selenium', 'test database'],
 //                false)
 //                ->withName('Verifying port assignments'),
-            'check-env-file' => new Closure(fn(Collection $config, WorkingDirectory $workingDirectory) => IO::info(file_get_contents($workingDirectory->path() . '.env'))),
+            'check-env-file' => new Closure(fn(Collection $config, WorkingDirectory $workingDirectory) => IO::info(file_get_contents($workingDirectory->path() . '/.env'))),
             'edit-testing-env-file' => new EditEnvironmentFile([
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
             ], '.env'),
-            'check-env-file-new' => new Closure(fn(Collection $config, WorkingDirectory $workingDirectory) => IO::info(file_get_contents($workingDirectory->path() . '.env'))),
+            'check-env-file-new' => new Closure(fn(Collection $config, WorkingDirectory $workingDirectory) => IO::info(file_get_contents($workingDirectory->path() . '/.env'))),
             'throw-exception' => new Closure(function(Collection $config, WorkingDirectory $workingDirectory) {
                 throw new \Exception('Test');
             }),
