@@ -270,7 +270,7 @@
             "dist": {
                 "type": "path",
                 "url": "./../origin-engine",
-                "reference": "d0bd74de6ea3a035ad1e5cfc0a93fec403570371"
+                "reference": "a78ffccf2972113723c0cea0c7e75065ec0823bb"
             },
             "require": {
                 "czproject/git-php": "^3.18",
@@ -280,11 +280,6 @@
                 "laravel-zero/framework": "^8.4",
                 "php": "^7.4|^8.0",
                 "symfony/filesystem": "^5.2"
-            },
-            "require-dev": {
-                "fakerphp/faker": "^1.9.1",
-                "mockery/mockery": "^1.4.2",
-                "phpunit/phpunit": "^11.0"
             },
             "type": "library",
             "autoload": {
