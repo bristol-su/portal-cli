@@ -29,7 +29,7 @@ class AtlasCMS extends SiteBlueprint
 
     public function getStatus(Site $site): string
     {
-        if(!app(\OriginEngine\Contracts\Instance\InstanceRepository::class)->exists($site->getInstanceId())) {
+        if(!app(\OriginEngine\Contracts\Instance\DirectoryValidator::class)->exists($site->getInstanceId())) {
             return Site::STATUS_MISSING;
         }
 
