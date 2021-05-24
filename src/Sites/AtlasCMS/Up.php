@@ -22,7 +22,7 @@ class Up extends Pipeline
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
 
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
-                '.env',
+                '.env.local',
                 [
                     'APP_PORT' => 'HTTP',
                     'FORWARD_DB_PORT' => 'database',
@@ -34,7 +34,7 @@ class Up extends Pipeline
                 ],
                 false),
 
-            'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
+            'create-testing-env-file' => new CopyFile('.env.local', '.env.testing'),
 
             'override-testing-environment' => new EditEnvironmentFile([
                 'APP_ENV' => 'testing',

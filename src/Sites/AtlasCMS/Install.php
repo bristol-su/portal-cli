@@ -30,9 +30,9 @@ class Install extends Pipeline
         return [
             'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
-            'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
+            'create-local-env-file' => new CopyFile('.env.sail.example', '.env.local'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
-                '.env',
+                '.env.local',
                 [
                     'APP_PORT' => 'HTTP',
                     'FORWARD_DB_PORT' => 'database',
@@ -44,7 +44,7 @@ class Install extends Pipeline
                 ],
                 false),
 
-            'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
+            'create-testing-env-file' => new CopyFile('.env.local', '.env.testing'),
 
             'override-testing-environment' => new EditEnvironmentFile([
                 'APP_ENV' => 'testing',
@@ -59,7 +59,7 @@ class Install extends Pipeline
 
 //            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
 
-            'create-application-key' => new GenerateApplicationKey('local', '.env'),
+            'create-application-key' => new GenerateApplicationKey('local', '.env.local'),
 
             'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
 
