@@ -6,7 +6,7 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\Tasks\DeleteFiles;
 use OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentDown;
 
-class Uninstall extends Pipeline
+class Down extends Pipeline
 {
 
     public function getTasks(): array
@@ -14,7 +14,7 @@ class Uninstall extends Pipeline
         return [
             'bring-environment-down' => new BringSailEnvironmentDown(true),
 
-            'remove-files' => new DeleteFiles(null)
+            'remove-files' => new DeleteFiles('vendor')
         ];
     }
 

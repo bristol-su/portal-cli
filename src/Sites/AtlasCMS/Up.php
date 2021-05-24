@@ -2,35 +2,25 @@
 
 namespace Atlas\Sites\AtlasCMS;
 
-use OriginEngine\Pipeline\Tasks\CloneGitRepository;
+use Illuminate\Support\Collection;
+use OriginEngine\Helpers\Terminal\Executor;
+use OriginEngine\Pipeline\PipelineConfig;
+use OriginEngine\Pipeline\PipelineHistory;
 use OriginEngine\Pipeline\Pipeline;
+use OriginEngine\Pipeline\Tasks\Closure;
 use OriginEngine\Pipeline\Tasks\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
-use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
-use OriginEngine\Pipeline\Tasks\LaravelSail\InstallYarnDependencies;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
-use OriginEngine\Pipeline\Tasks\LaravelSail\RunYarnScript;
 use OriginEngine\Pipeline\Tasks\WaitForDocker;
 
-class Install extends Pipeline
+class Up extends Pipeline
 {
-
-    public function __construct()
-    {
-//        $this->before('closure', function(PipelineConfig $config, PipelineHistory $history) {
-//            $config->add('closure', 'test', 'two');
-//        });
-//        $this->before('edit-testing-env-file', function(PipelineConfig $config, PipelineHistory $history) {
-//            $config->add('closure', 'test', 'two');
-//        });
-    }
 
     public function getTasks(): array
     {
         return [
-            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
-            'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
+
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
                 '.env',
                 [
@@ -53,21 +43,13 @@ class Install extends Pipeline
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
-            'wait-for-docker' => new WaitForDocker(),
-
-            'install-yarn-dependencies' => new InstallYarnDependencies('/var/www/html/vendor/elbowspaceuk/core-module'),
+            'wait-for-docker' => (new WaitForDocker())->setUpName('Waiting for Docker. This may take a minute.'),
 
 //            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
-
-            'create-application-key' => new GenerateApplicationKey('local', '.env'),
-
-            'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
 
             'migrate-main-db' => new MigrateDatabase('local'),
 
             'migrate-testing-db' => new MigrateDatabase('testing'),
-
-            'seed-core-module' => new \OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravelModule('Core', 'CoreDatabaseSeeder', 'local')
         ];
     }
 

@@ -42,7 +42,7 @@ class AtlasFrontend extends SiteBlueprint
 
     public function getInstallationPipeline(): Pipeline
     {
-        return new AtlasInstallPipeline();
+        return new Install();
     }
 
     public function getUninstallationPipeline(): Pipeline

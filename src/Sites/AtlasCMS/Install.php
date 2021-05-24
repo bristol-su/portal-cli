@@ -1,13 +1,9 @@
 <?php
 
-namespace Atlas\Sites;
+namespace Atlas\Sites\AtlasCMS;
 
-use Illuminate\Support\Collection;
-use OriginEngine\Helpers\IO\IO;
-use OriginEngine\Helpers\WorkingDirectory\WorkingDirectory;
 use OriginEngine\Pipeline\Tasks\CloneGitRepository;
 use OriginEngine\Pipeline\Pipeline;
-use OriginEngine\Pipeline\Tasks\Closure;
 use OriginEngine\Pipeline\Tasks\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
@@ -61,9 +57,11 @@ class Install extends Pipeline
 
             'install-yarn-dependencies' => new InstallYarnDependencies('/var/www/html/vendor/elbowspaceuk/core-module'),
 
-            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
+//            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
 
             'create-application-key' => new GenerateApplicationKey('local', '.env'),
+
+            'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
 
             'migrate-main-db' => new MigrateDatabase('local'),
 

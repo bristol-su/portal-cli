@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasCms;
+namespace Atlas\Sites\AtlasCMS;
 
 use OriginEngine\Helpers\Env\EnvRepository;
 use OriginEngine\Helpers\LaravelSail\Sail;
@@ -19,7 +19,7 @@ class AtlasCMS extends SiteBlueprint
     public function getUrl(Site $site): string
     {
         $envRepository = new EnvRepository($site->getWorkingDirectory());
-        $env = $envRepository->get('.env.local');
+        $env = $envRepository->get('.env');
 
         $url = $env->getVariable('APP_URL');
         $port = $env->getVariable('APP_PORT');
@@ -47,16 +47,16 @@ class AtlasCMS extends SiteBlueprint
 
     public function getUninstallationPipeline(): Pipeline
     {
-        // TODO: Implement getUninstallationPipeline() method.
+        return new Uninstall();
     }
 
     public function getSiteUpPipeline(): Pipeline
     {
-        // TODO: Implement getSiteUpPipeline() method.
+        return new Up();
     }
 
     public function getSiteDownPipeline(): Pipeline
     {
-        // TODO: Implement getSiteDownPipeline() method.
+        return new Down();
     }
 }
