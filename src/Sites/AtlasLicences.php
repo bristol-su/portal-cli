@@ -29,7 +29,7 @@ class AtlasLicences extends SiteBlueprint
 
     public function getStatus(Site $site): string
     {
-        if(!app(\OriginEngine\Contracts\Instance\DirectoryValidator::class)->exists($site->getInstanceId())) {
+        if(!app(\OriginEngine\Contracts\Helpers\Directory\DirectoryValidator::class)->isValid($site->getDirectory())) {
             return Site::STATUS_MISSING;
         }
 
