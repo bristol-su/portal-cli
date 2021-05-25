@@ -8,7 +8,7 @@ use Atlas\Sites\AtlasLicences;
 use OriginEngine\Contracts\Site\SiteBlueprintStore;
 use OriginEngine\Helpers\IO\IO;
 use OriginEngine\OriginEngineServiceProvider;
-use OriginEngine\Stubs\Stubs;
+use OriginEngine\Plugins\Stubs\Stubs;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 
