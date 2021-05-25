@@ -20,7 +20,7 @@ class AtlasCMS extends SiteBlueprint
     public function getUrls(Site $site): array
     {
         $envRepository = new EnvRepository($site->getDirectory());
-        $env = $envRepository->get('.env.local');
+        $env = $envRepository->get('.env');
 
         return [
             'Site' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('APP_PORT')),

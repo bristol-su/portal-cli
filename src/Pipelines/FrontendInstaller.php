@@ -19,20 +19,20 @@ class FrontendInstaller extends Pipeline
 
             \OriginEngine\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
 
-            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.sail.example', '.env.local')
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.sail.example', '.env')
                 ->withName('Set up local environment file'),
             \OriginEngine\Pipeline\Tasks\CheckPortsAreFree::provision(
-                '.env.local',
+                '.env',
                 ['APP_PORT', 'FORWARD_DB_PORT', 'FORWARD_MAILHOG_PORT', 'FORWARD_MAILHOG_DASHBOARD_PORT', 'FORWARD_REDIS_PORT', 'FORWARD_SELENIUM_PORT', 'FORWARD_DB_TESTING_PORT'],
                 ['HTTP', 'database', 'mail', 'mail dashboard', 'redis', 'selenium', 'test database'],
                 false)
                 ->withName('Verifying port assignments'),
 
-            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.local', '.env.testing', [
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env', '.env.testing', [
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
             ])->withName('Set up testing environment file'),
 
-            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env.local', '.env.dusk.local', [
+            \OriginEngine\Pipeline\Tasks\EditEnvironmentFile::provision('.env', '.env.dusk.local', [
                 'APP_ENV' => 'testing', 'DB_CONNECTION' => 'mysql_testing'
             ])->withName('Set up dusk environment file'),
 
