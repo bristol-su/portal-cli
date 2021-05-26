@@ -14,7 +14,7 @@ class FrontendInstaller extends Pipeline
     protected function getTasks(): array
     {
         return [
-            \OriginEngine\Pipeline\Tasks\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/Atlas-FrontEnd-api', 'develop')
+            \OriginEngine\Pipeline\Tasks\Git\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/Atlas-FrontEnd-api', 'develop')
                 ->withName('Downloading the frontend'),
 
             \OriginEngine\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),

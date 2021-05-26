@@ -2,9 +2,9 @@
 
 namespace Atlas\Sites\AtlasCMS;
 
-use OriginEngine\Pipeline\Tasks\CloneGitRepository;
+use OriginEngine\Pipeline\Tasks\Git\CloneGitRepository;
 use OriginEngine\Pipeline\Pipeline;
-use OriginEngine\Pipeline\Tasks\CopyFile;
+use OriginEngine\Pipeline\Tasks\Files\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
 use OriginEngine\Pipeline\Tasks\LaravelSail\InstallYarnDependencies;

@@ -8,7 +8,7 @@ use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
 use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\Tasks\Closure;
-use OriginEngine\Pipeline\Tasks\CopyFile;
+use OriginEngine\Pipeline\Tasks\Files\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
 use OriginEngine\Pipeline\Tasks\WaitForDocker;

@@ -13,7 +13,7 @@ class LicenceInstaller extends Pipeline
     protected function getTasks(): array
     {
         return [
-            \OriginEngine\Pipeline\Tasks\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/licensing', 'develop')
+            \OriginEngine\Pipeline\Tasks\Git\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/licensing', 'develop')
                 ->withName('Downloading'),
 
             \OriginEngine\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),

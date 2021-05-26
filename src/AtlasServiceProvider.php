@@ -6,13 +6,16 @@ use Atlas\Sites\AtlasCMS\AtlasCMS;
 use Atlas\Sites\AtlasFrontend;
 use Atlas\Sites\AtlasLicences;
 use OriginEngine\Contracts\Site\SiteBlueprintStore;
+use OriginEngine\Foundation\CliServiceProvider;
 use OriginEngine\Helpers\IO\IO;
 use OriginEngine\OriginEngineServiceProvider;
+use OriginEngine\Plugins\Dependencies\DependencyPlugin;
+use OriginEngine\Plugins\Stubs\StubPlugin;
 use OriginEngine\Plugins\Stubs\Stubs;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Support\ServiceProvider;
 
-class AtlasServiceProvider extends ServiceProvider
+class AtlasServiceProvider extends CliServiceProvider
 {
 
     /**
@@ -22,15 +25,9 @@ class AtlasServiceProvider extends ServiceProvider
      */
     public function boot(Repository $config, Stubs $stubs)
     {
-//        app(PipelineManager::class)->extend('cms', function(Container $container) {
-//            return $container->make(CMSInstaller::class);
-//        });
-//        app(PipelineManager::class)->extend('frontend', function(Container $container) {
-//            return $container->make(FrontendInstaller::class);
-//        });
-//        app(PipelineManager::class)->extend('licensing', function(Container $container) {
-//            return $container->make(LicenceInstaller::class);
-//        });
+
+        $this->registerPlugin(StubPlugin::class);
+        $this->registerPlugin(DependencyPlugin::class);
 
         app(SiteBlueprintStore::class)->register('cms', new AtlasCMS());
         app(SiteBlueprintStore::class)->register('frontend', new AtlasFrontend());
