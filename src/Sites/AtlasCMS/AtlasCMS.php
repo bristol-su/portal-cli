@@ -12,6 +12,8 @@ use OriginEngine\Site\SiteBlueprint;
 class AtlasCMS extends SiteBlueprint
 {
 
+    protected string $branch = 'remove-module-installer';
+
     public function name(): string
     {
         return 'Atlas CMS';
