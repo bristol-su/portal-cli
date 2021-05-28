@@ -10,7 +10,7 @@ use OriginEngine\Pipeline\Tasks\WaitForDocker;
 class LicenceInstaller extends Pipeline
 {
 
-    protected function getTasks(): array
+    protected function tasks(): array
     {
         return [
             \OriginEngine\Pipeline\Tasks\Git\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/licensing', 'develop')

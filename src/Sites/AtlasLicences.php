@@ -12,7 +12,7 @@ use OriginEngine\Site\SiteBlueprint;
 class AtlasLicences extends SiteBlueprint
 {
 
-    protected string $branch = 'develop';
+    protected string $defaultBranch = 'develop';
 
     public function name(): string
     {

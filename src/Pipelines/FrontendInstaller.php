@@ -11,7 +11,7 @@ use OriginEngine\Pipeline\Tasks\WaitForDocker;
 class FrontendInstaller extends Pipeline
 {
 
-    protected function getTasks(): array
+    protected function tasks(): array
     {
         return [
             \OriginEngine\Pipeline\Tasks\Git\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/Atlas-FrontEnd-api', 'develop')

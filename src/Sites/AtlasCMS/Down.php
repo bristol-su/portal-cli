@@ -9,7 +9,7 @@ use OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentDown;
 class Down extends Pipeline
 {
 
-    public function getTasks(): array
+    public function tasks(): array
     {
         return [
             'bring-environment-down' => new BringSailEnvironmentDown(true),

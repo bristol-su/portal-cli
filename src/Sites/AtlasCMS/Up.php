@@ -7,7 +7,7 @@ use OriginEngine\Helpers\Terminal\Executor;
 use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
 use OriginEngine\Pipeline\Pipeline;
-use OriginEngine\Pipeline\Tasks\Closure;
+use OriginEngine\Pipeline\Tasks\Utils\Closure;
 use OriginEngine\Pipeline\Tasks\Files\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
@@ -16,7 +16,7 @@ use OriginEngine\Pipeline\Tasks\WaitForDocker;
 class Up extends Pipeline
 {
 
-    public function getTasks(): array
+    public function tasks(): array
     {
         return [
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),

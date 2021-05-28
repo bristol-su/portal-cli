@@ -25,7 +25,7 @@ class Install extends Pipeline
 //        });
     }
 
-    public function getTasks(): array
+    public function tasks(): array
     {
         return [
             'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')),
