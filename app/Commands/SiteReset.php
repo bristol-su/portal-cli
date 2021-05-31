@@ -39,7 +39,7 @@ class SiteReset extends SiteCommand
         $site = $this->getSite('Which site would you like to reset?', null, true);
         $branch = $this->getOrAskForOption(
             'branch',
-            fn() => 'remove-module-installer',//$this->ask('What branch would you like to reset to?', 'develop'),
+            fn() => 'develop',//$this->ask('What branch would you like to reset to?', 'develop'),
             fn($value) => $value && strlen($value) > 0
         );
 

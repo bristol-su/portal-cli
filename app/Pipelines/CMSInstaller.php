@@ -13,7 +13,7 @@ class CMSInstaller extends Pipeline
     protected function getTasks(): array
     {
         return [
-            \App\Core\Pipeline\Tasks\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')
+            \App\Core\Pipeline\Tasks\CloneGitRepository::provision('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')
                 ->withName('Downloading the CMS'),
 
             \App\Core\Pipeline\Tasks\InstallComposerDependencies::provision()->withName('Installing composer dependencies'),
