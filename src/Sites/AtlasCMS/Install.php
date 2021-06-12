@@ -2,6 +2,14 @@
 
 namespace Atlas\Sites\AtlasCMS;
 
+use Illuminate\Support\Collection;
+use OriginEngine\Helpers\Directory\Directory;
+use OriginEngine\Helpers\Env\EnvRepository;
+use OriginEngine\Helpers\IO\IO;
+use OriginEngine\Helpers\Terminal\Executor;
+use OriginEngine\Pipeline\PipelineConfig;
+use OriginEngine\Pipeline\PipelineHistory;
+use OriginEngine\Pipeline\Tasks\Files\CreateEmptyFile;
 use OriginEngine\Pipeline\Tasks\Git\CloneGitRepository;
 use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\Tasks\Files\CopyFile;
@@ -9,7 +17,9 @@ use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
 use OriginEngine\Pipeline\Tasks\LaravelSail\InstallYarnDependencies;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
+use OriginEngine\Pipeline\Tasks\LaravelSail\NewLaravelInstance;
 use OriginEngine\Pipeline\Tasks\LaravelSail\RunYarnScript;
+use OriginEngine\Pipeline\Tasks\Utils\Closure;
 use OriginEngine\Pipeline\Tasks\WaitForDocker;
 
 class Install extends Pipeline
@@ -17,18 +27,22 @@ class Install extends Pipeline
 
     public function __construct()
     {
-//        $this->before('closure', function(PipelineConfig $config, PipelineHistory $history) {
-//            $config->add('closure', 'test', 'two');
-//        });
-//        $this->before('edit-testing-env-file', function(PipelineConfig $config, PipelineHistory $history) {
-//            $config->add('closure', 'test', 'two');
-//        });
+        $this->before('proxy-github-through-ssh', function(PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
+            $envRepo = new EnvRepository($directory);
+            $env = $envRepo->get('.env');
+
+            $config->add('proxy-github-through-ssh', 'app-service', $env->getVariable('APP_SERVICE', 'atlas.su.test'));
+        });
     }
 
     public function tasks(): array
     {
+        $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
+        $npmrc = $home . DIRECTORY_SEPARATOR . '.npmrc';
+
         return [
-            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'remove-module-installer')),
+//            'new-instance' => new NewLaravelInstance(),
+            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
@@ -55,9 +69,21 @@ class Install extends Pipeline
 
             'wait-for-docker' => new WaitForDocker(),
 
+            'copy-npmrc' => new CopyFile($npmrc, '.npmrc', false, true),
+
+            'proxy-github-through-ssh' => new Closure(function(Directory $directory, Collection $config) {
+                return Executor::cd($directory)->execute(
+                    sprintf('./vendor/bin/sail exec -u sail %s bash -c \'git config --global url."git@github.com:".insteadOf "https://github.com/"\'', $config->get('app-service', 'atlas.su.test.local'))
+                );
+            }, function(Collection $config, Collection $output, Directory $directory) {
+                Executor::cd($directory)->execute(
+                    sprintf('./vendor/bin/sail exec -u sail %s bash -c \'git config --global --unset url."git@github.com:".insteadOf\'', $config->get('app-service', 'atlas.su.test.local'))
+                );
+            }),
+
             'install-yarn-dependencies' => new InstallYarnDependencies('/var/www/html/vendor/elbowspaceuk/core-module'),
 
-//            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
+            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
 
             'create-application-key' => new GenerateApplicationKey('local', '.env'),
 

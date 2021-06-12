@@ -5,10 +5,20 @@ namespace Atlas;
 use Atlas\Sites\AtlasCMS\AtlasCMS;
 use Atlas\Sites\AtlasFrontend;
 use Atlas\Sites\AtlasLicences;
+use Atlas\Update\LogIntoNpm;
+use Illuminate\Support\Str;
 use OriginEngine\Contracts\Site\SiteBlueprintStore;
 use OriginEngine\Foundation\CliServiceProvider;
+use OriginEngine\Helpers\Directory\Directory;
 use OriginEngine\Helpers\IO\IO;
+use OriginEngine\Helpers\Storage\Filesystem;
+use OriginEngine\Helpers\Terminal\Executor;
 use OriginEngine\OriginEngineServiceProvider;
+use OriginEngine\Pipeline\Pipeline;
+use OriginEngine\Pipeline\PipelineConfig;
+use OriginEngine\Pipeline\PipelineHistory;
+use OriginEngine\Pipeline\PipelineModifier;
+use OriginEngine\Pipeline\Tasks\Utils\CreateAndRunTask;
 use OriginEngine\Plugins\Dependencies\DependencyPlugin;
 use OriginEngine\Plugins\Stubs\StubPlugin;
 use OriginEngine\Plugins\Stubs\Stubs;
@@ -62,6 +72,27 @@ class AtlasServiceProvider extends CliServiceProvider
                     ->addReplacement($stubs->newArrayReplacement('dbColumns', 'Define the cols', [], null,
                         $stubs->newTableColumnReplacement('dbColumns', 'What columns do you want for your xyz?', [])))
             );
+
+        $pipelineModifier = app(PipelineModifier::class);
+
+        $pipelineModifier->extend('post-update', function(Pipeline $pipeline) {
+            $pipeline->runTaskAfter('set-project-directory', 'log-into-npm', new LogIntoNpm('npm.pkg.github.com', 'no-auto-token', 'elbowspaceuk'));
+            $pipeline->before('log-into-npm', function(PipelineConfig $config, PipelineHistory $history) {
+                if(
+                    !Filesystem::create()->exists('.npmrc') ||
+                    !Str::contains(Filesystem::read('.npmrc'), 'npm.pkg.github.com')
+                ) {
+                    $authToken = IO::ask(
+                        'Provide a github personal access token',
+                        null,
+                        fn($token) => $token && is_string($token) && strlen($token) > 5
+                    );
+                    $config->add('log-into-npm', 'auth-token', $authToken);
+                } else {
+                    return false;
+                }
+            });
+        });
 
         // Aim for the API
 
