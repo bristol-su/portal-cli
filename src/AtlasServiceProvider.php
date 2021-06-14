@@ -78,9 +78,12 @@ class AtlasServiceProvider extends CliServiceProvider
         $pipelineModifier->extend('post-update', function(Pipeline $pipeline) {
             $pipeline->runTaskAfter('set-project-directory', 'log-into-npm', new LogIntoNpm('npm.pkg.github.com', 'no-auto-token', 'elbowspaceuk'));
             $pipeline->before('log-into-npm', function(PipelineConfig $config, PipelineHistory $history) {
+                $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
+                $npmrcPath = $home . DIRECTORY_SEPARATOR . '.npmrc';
+
                 if(
-                    !Filesystem::create()->exists('.npmrc') ||
-                    !Str::contains(Filesystem::read('.npmrc'), 'npm.pkg.github.com')
+                    !Filesystem::create()->exists($npmrcPath) ||
+                    !Str::contains(Filesystem::create()->read($npmrcPath), 'npm.pkg.github.com')
                 ) {
                     $authToken = IO::ask(
                         'Provide a github personal access token',

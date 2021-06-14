@@ -31,7 +31,10 @@ class LogIntoNpm extends Task
 
     protected function execute(Directory $workingDirectory, Collection $config): TaskResponse
     {
-        $npmrc = Filesystem::create()->exists('.npmrc') ? Filesystem::read('.npmrc') : '';
+        $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
+        $npmrcPath = $home . DIRECTORY_SEPARATOR . '.npmrc';
+
+        $npmrc = Filesystem::create()->exists($npmrcPath) ? Filesystem::create()->read($npmrcPath) : '';
         if (!Str::contains($npmrc, $config->get('registry'))) {
             $npmrc .= PHP_EOL . sprintf('//%s/:_authToken=%s', $config->get('registry'), $config->get('auth-token'));
             if($config->get('scope')) {
@@ -41,13 +44,16 @@ class LogIntoNpm extends Task
         }
 
         $this->export('npmrc', $npmrc);
-        Filesystem::create()->dumpFile('.npmrc', $npmrc);
+        Filesystem::create()->dumpFile($npmrcPath, $npmrc);
         return $this->succeeded();
     }
 
     protected function undo(Directory $workingDirectory, bool $status, Collection $config, Collection $output): void
     {
-        $npmrc = Filesystem::create()->exists('.npmrc') ? Filesystem::read('.npmrc') : '';
+        $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
+        $npmrcPath = $home . DIRECTORY_SEPARATOR . '.npmrc';
+
+        $npmrc = Filesystem::create()->exists($npmrcPath) ? Filesystem::create()->read($npmrcPath) : '';
         if (!Str::contains($npmrc, $config->get('registry'))) {
             $npmrc = Str::remove(
                 PHP_EOL . sprintf('//%s/:_authToken=%s', $config->get('registry'), $config->get('auth-token')),
@@ -64,7 +70,7 @@ class LogIntoNpm extends Task
             $this->writeDebug('Removed auth to npmrc');
         }
 
-        Filesystem::create()->dumpFile('.npmrc', $npmrc);
+        Filesystem::create()->dumpFile($npmrcPath, $npmrc);
     }
 
     protected function upName(Collection $config): string
