@@ -1,7 +1,5 @@
 # Atlas CLI
 
-See developer documentation [here](./DOCNOTES.md).
-
 ## Installation
 
 Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
@@ -13,7 +11,9 @@ You can now run commands using `atlas`
 
 ## Usage
 
-You should always run `atlas setup` after any updates to the atlas command. The first time you run this, you need to give a project directory where all the code will be saved.
+Most of this guide should be covered in the origin-engine user guide
+
+You should always run `atlas post-update` after any updates to the atlas command. The first time you run this, you need to give a project directory where all the code will be saved.
 
 ### Sites
 
