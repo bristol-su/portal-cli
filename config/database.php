@@ -20,8 +20,6 @@ return [
     |
     */
 
-    'connections' => [
-
-    ],
+    'name' => 'atlas',
 
 ];

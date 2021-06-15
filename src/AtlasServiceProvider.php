@@ -3,14 +3,14 @@
 namespace Atlas;
 
 use Atlas\Sites\AtlasCMS\AtlasCMS;
-use Atlas\Sites\AtlasFrontend;
-use Atlas\Sites\AtlasLicences;
-use Atlas\Update\LogIntoNpm;
+use Atlas\Sites\AtlasFrontend\AtlasFrontend;
+use Atlas\Sites\Licensing\Licensing;
 use Illuminate\Support\Str;
 use OriginEngine\Contracts\Site\SiteBlueprintStore;
 use OriginEngine\Foundation\CliServiceProvider;
 use OriginEngine\Helpers\Directory\Directory;
 use OriginEngine\Helpers\IO\IO;
+use OriginEngine\Helpers\Settings\SettingRepository;
 use OriginEngine\Helpers\Storage\Filesystem;
 use OriginEngine\Helpers\Terminal\Executor;
 use OriginEngine\OriginEngineServiceProvider;
@@ -18,8 +18,10 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
 use OriginEngine\Pipeline\PipelineModifier;
+use OriginEngine\Pipeline\Tasks\Origin\SetSetting;
 use OriginEngine\Pipeline\Tasks\Utils\CreateAndRunTask;
 use OriginEngine\Plugins\Dependencies\DependencyPlugin;
+use OriginEngine\Plugins\HealthCheck\HealthCheckPlugin;
 use OriginEngine\Plugins\Stubs\StubPlugin;
 use OriginEngine\Plugins\Stubs\Stubs;
 use Illuminate\Contracts\Config\Repository;
@@ -38,10 +40,11 @@ class AtlasServiceProvider extends CliServiceProvider
 
         $this->registerPlugin(StubPlugin::class);
         $this->registerPlugin(DependencyPlugin::class);
+        $this->registerPlugin(HealthCheckPlugin::class);
 
         app(SiteBlueprintStore::class)->register('cms', new AtlasCMS());
         app(SiteBlueprintStore::class)->register('frontend', new AtlasFrontend());
-        app(SiteBlueprintStore::class)->register('licence', new AtlasLicences());
+        app(SiteBlueprintStore::class)->register('licence', new Licensing());
 
         $stubs->newStub('routes', 'A routes file for a demo', 'routes')
             ->addFile(
@@ -76,21 +79,16 @@ class AtlasServiceProvider extends CliServiceProvider
         $pipelineModifier = app(PipelineModifier::class);
 
         $pipelineModifier->extend('post-update', function(Pipeline $pipeline) {
-            $pipeline->runTaskAfter('set-project-directory', 'log-into-npm', new LogIntoNpm('npm.pkg.github.com', 'no-auto-token', 'elbowspaceuk'));
-            $pipeline->before('log-into-npm', function(PipelineConfig $config, PipelineHistory $history) {
-                $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
-                $npmrcPath = $home . DIRECTORY_SEPARATOR . '.npmrc';
-
-                if(
-                    !Filesystem::create()->exists($npmrcPath) ||
-                    !Str::contains(Filesystem::create()->read($npmrcPath), 'npm.pkg.github.com')
-                ) {
+            $pipeline->runTaskAfter('set-project-directory', 'save-npm-token', new SetSetting('github-npm-token', ''));
+//            $pipeline->runTaskAfter('set-project-directory', 'log-into-npm', new LogIntoNpm('npm.pkg.github.com', 'no-auto-token', 'elbowspaceuk'));
+            $pipeline->before('save-npm-token', function(PipelineConfig $config, PipelineHistory $history) {
+                if(!app(SettingRepository::class)->has('github-npm-token')) {
                     $authToken = IO::ask(
-                        'Provide a github personal access token',
+                        'Provide a github personal access token with the read:packages scope',
                         null,
                         fn($token) => $token && is_string($token) && strlen($token) > 5
                     );
-                    $config->add('log-into-npm', 'auth-token', $authToken);
+                    $config->add('save-npm-token', 'value', $authToken);
                 } else {
                     return false;
                 }

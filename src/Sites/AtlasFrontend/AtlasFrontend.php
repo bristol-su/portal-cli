@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites;
+namespace Atlas\Sites\AtlasFrontend;
 
 use OriginEngine\Helpers\Env\EnvRepository;
 use OriginEngine\Helpers\LaravelSail\Sail;
@@ -9,14 +9,14 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Site\Site;
 use OriginEngine\Site\SiteBlueprint;
 
-class AtlasLicences extends SiteBlueprint
+class AtlasFrontend extends SiteBlueprint
 {
 
     protected string $defaultBranch = 'develop';
 
     public function name(): string
     {
-        return 'Composer Licencing';
+        return 'Atlas Frontend';
     }
 
     public function getUrls(Site $site): array
@@ -25,7 +25,8 @@ class AtlasLicences extends SiteBlueprint
         $env = $envRepository->get('.env');
 
         return [
-            'Site' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('APP_PORT'))
+            'Site' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('APP_PORT')),
+            'Emails' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('FORWARD_MAILHOG_DASHBOARD_PORT'))
         ];
     }
 
@@ -49,16 +50,16 @@ class AtlasLicences extends SiteBlueprint
 
     public function getUninstallationPipeline(): Pipeline
     {
-        // TODO: Implement getUninstallationPipeline() method.
+        return new Uninstall();
     }
 
     public function getSiteUpPipeline(): Pipeline
     {
-        // TODO: Implement getSiteUpPipeline() method.
+        return new Up();
     }
 
     public function getSiteDownPipeline(): Pipeline
     {
-        // TODO: Implement getSiteDownPipeline() method.
+        return new Down();
     }
 }

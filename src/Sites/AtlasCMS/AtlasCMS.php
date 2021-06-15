@@ -12,7 +12,7 @@ use OriginEngine\Site\SiteBlueprint;
 class AtlasCMS extends SiteBlueprint
 {
 
-    protected string $defaultBranch = 'remove-module-installer';
+    protected string $defaultBranch = 'develop';
 
     public function name(): string
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasCMS;
+namespace Atlas\Sites\Licensing;
 
 use Illuminate\Support\Collection;
 use OriginEngine\Contracts\Helpers\Settings\SettingRepository;
@@ -44,9 +44,9 @@ class Install extends Pipeline
 
         return [
 //            'new-instance' => new NewLaravelInstance(),
-            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
+            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/licensing', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
-            'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
+            'create-local-env-file' => new CopyFile('.env.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
                 '.env',
                 [
@@ -55,17 +55,10 @@ class Install extends Pipeline
                     'FORWARD_MAILHOG_PORT' => 'mail',
                     'FORWARD_MAILHOG_DASHBOARD_PORT' => 'mail dashboard',
                     'FORWARD_REDIS_PORT' => 'redis',
-                    'FORWARD_SELENIUM_PORT' => 'selenium',
-                    'FORWARD_DB_TESTING_PORT' => 'test database'
+                    'FORWARD_MEILISEARCH_PORT' => 'meilisearch',
+                    'FORWARD_SELENIUM_PORT' => 'selenium'
                 ],
                 false),
-
-            'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
-
-            'override-testing-environment' => new EditEnvironmentFile([
-                'APP_ENV' => 'testing',
-                'DB_CONNECTION' => 'mysql_testing'
-            ], '.env.testing'),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
@@ -87,19 +80,10 @@ class Install extends Pipeline
                 );
             }),
 
-            'install-yarn-dependencies' => new InstallYarnDependencies('/var/www/html/vendor/elbowspaceuk/core-module'),
-
-            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
-
             'create-application-key' => new GenerateApplicationKey('local', '.env'),
 
-            'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
+            'migrate-db' => new MigrateDatabase('local')
 
-            'migrate-main-db' => new MigrateDatabase('local'),
-
-            'migrate-testing-db' => new MigrateDatabase('testing'),
-
-            'seed-core-module' => new \OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravelModule('Core', 'CoreDatabaseSeeder', 'local')
         ];
     }
 

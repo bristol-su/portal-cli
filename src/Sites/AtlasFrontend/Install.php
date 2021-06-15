@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasCMS;
+namespace Atlas\Sites\AtlasFrontend;
 
 use Illuminate\Support\Collection;
 use OriginEngine\Contracts\Helpers\Settings\SettingRepository;
@@ -44,7 +44,7 @@ class Install extends Pipeline
 
         return [
 //            'new-instance' => new NewLaravelInstance(),
-            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
+            'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/Atlas-FrontEnd-api', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
@@ -97,9 +97,8 @@ class Install extends Pipeline
 
             'migrate-main-db' => new MigrateDatabase('local'),
 
-            'migrate-testing-db' => new MigrateDatabase('testing'),
+            'migrate-testing-db' => new MigrateDatabase('testing')
 
-            'seed-core-module' => new \OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravelModule('Core', 'CoreDatabaseSeeder', 'local')
         ];
     }
 
