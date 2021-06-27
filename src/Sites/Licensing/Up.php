@@ -29,17 +29,10 @@ class Up extends Pipeline
                     'FORWARD_MAILHOG_PORT' => 'mail',
                     'FORWARD_MAILHOG_DASHBOARD_PORT' => 'mail dashboard',
                     'FORWARD_REDIS_PORT' => 'redis',
-                    'FORWARD_SELENIUM_PORT' => 'selenium',
-                    'FORWARD_DB_TESTING_PORT' => 'test database'
+                    'FORWARD_MEILISEARCH_PORT' => 'meilisearch',
+                    'FORWARD_SELENIUM_PORT' => 'selenium'
                 ],
                 false),
-
-            'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
-
-            'override-testing-environment' => new EditEnvironmentFile([
-                'APP_ENV' => 'testing',
-                'DB_CONNECTION' => 'mysql_testing'
-            ], '.env.testing'),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
@@ -49,7 +42,6 @@ class Up extends Pipeline
 
             'migrate-main-db' => new MigrateDatabase('local'),
 
-            'migrate-testing-db' => new MigrateDatabase('testing'),
         ];
     }
 

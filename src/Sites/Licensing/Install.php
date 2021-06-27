@@ -21,6 +21,7 @@ use OriginEngine\Pipeline\Tasks\LaravelSail\InstallYarnDependencies;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
 use OriginEngine\Pipeline\Tasks\LaravelSail\NewLaravelInstance;
 use OriginEngine\Pipeline\Tasks\LaravelSail\RunYarnScript;
+use OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravel;
 use OriginEngine\Pipeline\Tasks\Utils\Closure;
 use OriginEngine\Pipeline\Tasks\WaitForDocker;
 
@@ -35,6 +36,19 @@ class Install extends Pipeline
 
             $config->add('proxy-github-through-ssh', 'app-service', $env->getVariable('APP_SERVICE', 'atlas.su.test'));
         });
+
+        $this->before('add-github-token', function (PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
+            $authToken = IO::ask(
+                'Provide a github personal access token with at least the repo:status and public_repo scopes.',
+                null,
+                fn($token) => $token && is_string($token) && strlen($token) > 5
+            );
+
+            $config->add('add-github-token', 'replace', [
+                'GITHUB_TOKEN' => $authToken
+            ]);
+        });
+
     }
 
     public function tasks(): array
@@ -82,7 +96,11 @@ class Install extends Pipeline
 
             'create-application-key' => new GenerateApplicationKey('local', '.env'),
 
-            'migrate-db' => new MigrateDatabase('local')
+            'migrate-db' => new MigrateDatabase('local'),
+
+            'seed-db' => new SeedLaravel('ElbowSpaceInitialSeeder', 'local'),
+
+            'add-github-token' => new EditEnvironmentFile([])
 
         ];
     }
