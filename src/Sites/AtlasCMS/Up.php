@@ -19,7 +19,7 @@ class Up extends Pipeline
     public function tasks(): array
     {
         return [
-            'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
+            'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('74'),
 
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
                 '.env',

@@ -45,7 +45,7 @@ class Install extends Pipeline
         return [
 //            'new-instance' => new NewLaravelInstance(),
             'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
-            'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies(),
+            'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('74'),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
                 '.env',
