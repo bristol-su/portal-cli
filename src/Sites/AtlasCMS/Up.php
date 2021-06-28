@@ -36,18 +36,18 @@ class Up extends Pipeline
 
             'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
 
-            'override-testing-environment' => new EditEnvironmentFile([
+            'override-testing-environment' => new EditEnvironmentFile('.env.testing', [
                 'APP_ENV' => 'testing',
                 'DB_CONNECTION' => 'mysql_testing'
-            ], '.env.testing'),
+            ]),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
             'wait-for-docker' => (new WaitForDocker())->setUpName('Waiting for Docker. This may take a minute.'),
 
-//            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
+            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
 
-            'migrate-main-db' => new MigrateDatabase('local'),
+            'migrate-local-db' => new MigrateDatabase('local'),
 
             'migrate-testing-db' => new MigrateDatabase('testing'),
         ];

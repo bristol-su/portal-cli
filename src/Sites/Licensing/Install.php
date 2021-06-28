@@ -100,7 +100,7 @@ class Install extends Pipeline
 
             'seed-db' => new SeedLaravel('ElbowSpaceInitialSeeder', 'local'),
 
-            'add-github-token' => new EditEnvironmentFile([])
+            'add-github-token' => new EditEnvironmentFile('.env', [])
 
         ];
     }

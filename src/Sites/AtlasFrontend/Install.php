@@ -62,10 +62,10 @@ class Install extends Pipeline
 
             'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
 
-            'override-testing-environment' => new EditEnvironmentFile([
+            'override-testing-environment' => new EditEnvironmentFile('.env.testing', [
                 'APP_ENV' => 'testing',
                 'DB_CONNECTION' => 'mysql_testing'
-            ], '.env.testing'),
+            ]),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
@@ -95,7 +95,7 @@ class Install extends Pipeline
 
             'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
 
-            'migrate-main-db' => new MigrateDatabase('local'),
+            'migrate-local-db' => new MigrateDatabase('local'),
 
             'migrate-testing-db' => new MigrateDatabase('testing')
 

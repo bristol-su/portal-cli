@@ -14,7 +14,7 @@ class Uninstall extends Pipeline
         return [
             'bring-environment-down' => new BringSailEnvironmentDown(true),
 
-            'remove-files' => new DeleteFiles(null)
+            'remove-files' => new DeleteFiles()
         ];
     }
 

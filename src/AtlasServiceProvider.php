@@ -80,7 +80,7 @@ class AtlasServiceProvider extends CliServiceProvider
 
         $pipelineModifier->extend('post-update', function(Pipeline $pipeline) {
             $pipeline->runTaskAfter('set-project-directory', 'save-npm-token', new SetSetting('github-npm-token', ''));
-//            $pipeline->runTaskAfter('set-project-directory', 'log-into-npm', new LogIntoNpm('npm.pkg.github.com', 'no-auto-token', 'elbowspaceuk'));
+
             $pipeline->before('save-npm-token', function(PipelineConfig $config, PipelineHistory $history) {
                 if(!app(SettingRepository::class)->has('github-npm-token')) {
                     $authToken = IO::ask(

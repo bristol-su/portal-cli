@@ -38,9 +38,7 @@ class Up extends Pipeline
 
             'wait-for-docker' => (new WaitForDocker())->setUpName('Waiting for Docker. This may take a minute.'),
 
-//            'run-yarn-script' => new RunYarnScript('dev', '/var/www/html/vendor/elbowspaceuk/core-module'),
-
-            'migrate-main-db' => new MigrateDatabase('local'),
+            'migrate-local-db' => new MigrateDatabase('local'),
 
         ];
     }

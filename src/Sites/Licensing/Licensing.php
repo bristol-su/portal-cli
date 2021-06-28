@@ -48,11 +48,6 @@ class Licensing extends SiteBlueprint
         return new Install();
     }
 
-    public function getUninstallationPipeline(): Pipeline
-    {
-        return new Uninstall();
-    }
-
     public function getSiteUpPipeline(): Pipeline
     {
         return new Up();
@@ -61,5 +56,10 @@ class Licensing extends SiteBlueprint
     public function getSiteDownPipeline(): Pipeline
     {
         return new Down();
+    }
+
+    public function getUninstallationPipeline(): Pipeline
+    {
+        return new Uninstall();
     }
 }

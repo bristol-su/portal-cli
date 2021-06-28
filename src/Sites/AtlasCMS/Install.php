@@ -30,8 +30,7 @@ class Install extends Pipeline
     public function __construct()
     {
         $this->before('proxy-github-through-ssh', function (PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
-            $envRepo = new EnvRepository($directory);
-            $env = $envRepo->get('.env');
+            $env = (new EnvRepository($directory))->get('.env');
 
             $config->add('proxy-github-through-ssh', 'app-service', $env->getVariable('APP_SERVICE', 'atlas.su.test'));
         });
@@ -43,7 +42,6 @@ class Install extends Pipeline
         $npmrc = $home . DIRECTORY_SEPARATOR . '.npmrc';
 
         return [
-//            'new-instance' => new NewLaravelInstance(),
             'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('74'),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
@@ -62,10 +60,10 @@ class Install extends Pipeline
 
             'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
 
-            'override-testing-environment' => new EditEnvironmentFile([
+            'override-testing-environment' => new EditEnvironmentFile('.env.testing', [
                 'APP_ENV' => 'testing',
                 'DB_CONNECTION' => 'mysql_testing'
-            ], '.env.testing'),
+            ]),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
@@ -95,7 +93,7 @@ class Install extends Pipeline
 
             'create-testing-application-key' => new GenerateApplicationKey('testing', '.env.testing'),
 
-            'migrate-main-db' => new MigrateDatabase('local'),
+            'migrate-local-db' => new MigrateDatabase('local'),
 
             'migrate-testing-db' => new MigrateDatabase('testing'),
 
@@ -105,6 +103,8 @@ class Install extends Pipeline
 
     public function aliasedConfig(): array
     {
-        return [];
+        return [
+            'repository' => 'clone.repository',
+        ];
     }
 }
