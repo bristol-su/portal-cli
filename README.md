@@ -33,3 +33,9 @@ Ensure you NEVER commit the `docker-compose.yml` changes, as these are specific 
 - Update the `.env.local` variables to do with the database to share the same credentials as the `cms`.
 - Bring the FE back up.
 - Run `./vendor/bin/sail artisan migrate --env=local` to migrate the FE changes
+
+## Release Process
+
+Before releasing a new version of this repository, you should run `php ./atlas app:build atlas` in a local checkout of the main branch. This will produce a build/atlas binary. Do not commit this to version control.
+
+You can then create a github release as normal. Upload the binary produced to the release.
