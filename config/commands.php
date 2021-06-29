@@ -4,19 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Command
-    |--------------------------------------------------------------------------
-    |
-    | Laravel Zero will always run the command specified below when no command name is
-    | provided. Consider update the default command for single command applications.
-    | You cannot pass arguments to the default command because they are ignored.
-    |
-    */
-
-    'default' => NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
-
-    /*
-    |--------------------------------------------------------------------------
     | Commands Paths
     |--------------------------------------------------------------------------
     |
@@ -55,11 +42,6 @@ return [
     */
 
     'hidden' => [
-        NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
-        Symfony\Component\Console\Command\HelpCommand::class,
-        Illuminate\Console\Scheduling\ScheduleRunCommand::class,
-        Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
-        Illuminate\Foundation\Console\VendorPublishCommand::class,
     ],
 
     /*
@@ -73,26 +55,6 @@ return [
     |
     */
 
-    'remove' => Phar::running() ? [
-//        Illuminate\Database\Console\Migrations\FreshCommand::class,
-//        Illuminate\Database\Console\Migrations\InstallCommand::class,
-//        Illuminate\Database\Console\Migrations\MigrateCommand::class,
-//        Illuminate\Database\Console\Migrations\RefreshCommand::class,
-//        Illuminate\Database\Console\Migrations\ResetCommand::class,
-//        Illuminate\Database\Console\Migrations\RollbackCommand::class,
-//        Illuminate\Database\Console\Migrations\StatusCommand::class,
-        Illuminate\Database\Console\Migrations\MigrateMakeCommand::class,
-//        Illuminate\Database\Console\Seeds\SeedCommand::class,
-//        Illuminate\Database\Console\WipeCommand::class,
-        Illuminate\Database\Console\Factories\FactoryMakeCommand::class,
-        Illuminate\Foundation\Console\ModelMakeCommand::class,
-        Illuminate\Database\Console\Seeds\SeederMakeCommand::class,
-        LaravelZero\Framework\Commands\MakeCommand::class,
-        LaravelZero\Framework\Commands\RenameCommand::class,
-        LaravelZero\Framework\Commands\StubPublishCommand::class,
-//        LaravelZero\Framework\Commands\BuildCommand::class,
-//        LaravelZero\Framework\Commands\InstallCommand::class,
-//        \Laravel\Tinker\Console\TinkerCommand::class
-    ] : [],
+    'remove' => Phar::running() ? [] : [],
 
 ];

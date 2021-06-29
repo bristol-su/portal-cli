@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use App\Core\Contracts\Command\Command;
+use OriginEngine\Contracts\Command\Command;
 
 class DummyClass extends Command
 {
