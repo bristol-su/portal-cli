@@ -36,6 +36,6 @@ Ensure you NEVER commit the `docker-compose.yml` changes, as these are specific 
 
 ## Release Process
 
-Before releasing a new version of this repository, you should run `php ./atlas app:build atlas` in a local checkout of the main branch. This will produce a build/atlas binary. Do not commit this to version control.
+Before releasing a new version of this repository, you should run `php ./atlas app:build atlas` in a local checkout of the main branch. The build version should be the version you are about to tag the repository with, beginning with a v (e.g. `v0.1.0`, `v1.2.23` etc). This will produce a build/atlas binary. Do not commit this to version control.
 
 You can then create a github release as normal. Upload the binary produced to the release.
