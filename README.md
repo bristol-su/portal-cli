@@ -2,7 +2,7 @@
 
 ## Installation
 
-Download the following file: https://github.com/ElbowSpaceUK/atlas-cli/raw/develop/builds/atlas
+Download the atlas binary from the Releases section on GitHub
 
 Save it in your path. This is one of the folders listed when you run `echo $PATH`. I recommend `/usr/local/bin` or a folder in your home directory.
 You may also have to make it executable with `sudo chmod +x /usr/local/bin/atlas`
