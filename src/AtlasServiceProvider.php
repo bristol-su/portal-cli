@@ -3,6 +3,7 @@
 namespace Atlas;
 
 use Atlas\Sites\AtlasCMS\AtlasCMS;
+use Atlas\Sites\AtlasCMSValet\AtlasCMSValet;
 use Atlas\Sites\AtlasFrontend\AtlasFrontend;
 use Atlas\Sites\Licensing\Licensing;
 use Illuminate\Support\Str;
@@ -42,6 +43,7 @@ class AtlasServiceProvider extends CliServiceProvider
         $this->registerPlugin(DependencyPlugin::class);
         $this->registerPlugin(HealthCheckPlugin::class);
 
+        app(SiteBlueprintStore::class)->register('cms:valet', new AtlasCMSValet());
         app(SiteBlueprintStore::class)->register('cms', new AtlasCMS());
         app(SiteBlueprintStore::class)->register('frontend', new AtlasFrontend());
         app(SiteBlueprintStore::class)->register('licence', new Licensing());
