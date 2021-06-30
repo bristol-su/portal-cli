@@ -27,7 +27,7 @@ class Install extends Pipeline
     public function __construct()
     {
         $this->before('override-environment-variables', function (PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
-            $this->siteDir = $directory->getPath();
+            $this->siteDir = $directory->getSiteFolderName();
         });
     }
 
