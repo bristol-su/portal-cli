@@ -5,12 +5,9 @@ namespace Atlas\Sites\AtlasCMSValet;
 use Illuminate\Support\Collection;
 use OriginEngine\Contracts\Helpers\Settings\SettingRepository;
 use OriginEngine\Helpers\Directory\Directory;
-use OriginEngine\Helpers\Env\EnvRepository;
-use OriginEngine\Helpers\IO\IO;
 use OriginEngine\Helpers\Terminal\Executor;
 use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
-use OriginEngine\Pipeline\Tasks\Files\CreateEmptyFile;
 use OriginEngine\Pipeline\Tasks\Files\OverwriteFile;
 use OriginEngine\Pipeline\Tasks\Git\CloneGitRepository;
 use OriginEngine\Pipeline\Pipeline;
@@ -19,43 +16,42 @@ use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
 use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
 use OriginEngine\Pipeline\Tasks\LaravelSail\InstallYarnDependencies;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
-use OriginEngine\Pipeline\Tasks\LaravelSail\NewLaravelInstance;
 use OriginEngine\Pipeline\Tasks\LaravelSail\RunYarnScript;
 use OriginEngine\Pipeline\Tasks\Utils\Closure;
-use OriginEngine\Pipeline\Tasks\WaitForDocker;
+use OriginEngine\Pipeline\Tasks\Utils\CreateAndRunTask;
 
 class Install extends Pipeline
 {
+    protected $siteDir;
 
     public function __construct()
     {
-//        $this->before('proxy-github-through-ssh', function (PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
-//            $env = (new EnvRepository($directory))->get('.env');
-//
-//            $config->add('proxy-github-through-ssh', 'app-service', $env->getVariable('APP_SERVICE', 'atlas.test'));
-//        });
+        $this->before('override-environment-variables', function (PipelineConfig $config, PipelineHistory $history, string $key, Directory $directory) {
+            $this->siteDir = $directory->getPath();
+        });
     }
 
     public function tasks(): array
     {
-//        $home = Executor::cd(Directory::fromFullPath('~'))->execute('pwd');
-//        $npmrc = $home . DIRECTORY_SEPARATOR . '.npmrc';
-
         return [
             'clone' => (new CloneGitRepository('git@github.com:ElbowSpaceUK/AtlasCMS-Laravel-Template', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('74'),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
 
-            'override-environment-variables' => new EditEnvironmentFile('.env', [
-                'APP_URL' => 'http://atlas.test',
-                'DB_HOST' => '127.0.0.1',
-                'DB_USERNAME' => 'root',
-                'DB_PASSWORD' => '',
-                'DB_TESTING_HOST' => '127.0.0.1',
-                'DB_TESTING_USERNAME' => 'root',
-                'DB_TESTING_PASSWORD' => '',
-                'FORWARD_DB_PORT' => '3306'
-            ]),
+               'override-environment-variables' => new CreateAndRunTask(
+                   fn() => new EditEnvironmentFile('.env', [
+                        'APP_URL' => sprintf('https://%s.test', $this->siteDir),
+                        'DB_HOST' => '127.0.0.1',
+                        'DB_USERNAME' => 'root',
+                        'DB_PASSWORD' => '',
+                        'DB_TESTING_HOST' => '127.0.0.1',
+                        'DB_TESTING_USERNAME' => 'root',
+                        'DB_TESTING_PASSWORD' => '',
+                        'FORWARD_DB_PORT' => '3306'
+                    ])
+                   , []
+                   , 'Update the .ENV File'
+                   , 'Undo Update of .ENV file'),
 
             'create-testing-env-file' => new CopyFile('.env', '.env.testing'),
 
