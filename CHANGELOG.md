@@ -6,10 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2021-07-01
+
 ### Added
 - Support for Laravel Valet within the Atlas CMS
 
-## [0.0.1] - 2021-07-01
+## [0.0.1] - 2021-06-30
 
 ### Added
 - The Atlas CMS site, Frontend site and the licence project site
