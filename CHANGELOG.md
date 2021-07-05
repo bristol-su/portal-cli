@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- self-update command for updating the binary
+
+### Changed
+- Use a different database when running the compiled and uncompiled cli. Uncompiled will have `_dev` appended to the database name.
+
 ## [0.1.0] - 2021-07-01
 
 ### Added
