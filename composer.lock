@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cd282db616772386310754043268971",
+    "content-hash": "6d1381fe25e21351bfd9c80a6f40886d",
     "packages": [
         {
             "name": "brick/math",
@@ -332,11 +332,11 @@
         },
         {
             "name": "elbowspaceuk/origin-engine",
-            "version": "dev-CLI-119",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ElbowSpaceUK/origin-engine",
-                "reference": "34cbb1f6f911348ed59ca3f6b4609593a09a0116"
+                "reference": "79e549d2bd9aee9558ce29cf0d3583e15d22dd1b"
             },
             "require": {
                 "czproject/git-php": "^3.18",
@@ -352,6 +352,7 @@
                 "php": "^7.4|^8.0",
                 "symfony/filesystem": "^5.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -381,7 +382,7 @@
                 "issues": "https://github.com/ElbowSpaceUK/origin-engine/issues",
                 "source": "https://github.com/ElbowSpaceUK/origin-engine"
             },
-            "time": "2021-07-05T22:17:19+00:00"
+            "time": "2021-07-05T23:26:15+00:00"
         },
         {
             "name": "facade/ignition-contracts",

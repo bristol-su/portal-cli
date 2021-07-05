@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "elbowspaceuk/origin-engine": "dev-CLI-119",
+        "elbowspaceuk/origin-engine": "dev-develop",
         "ext-json": "*",
         "illuminate/database": "8.37.*"
     },
