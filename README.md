@@ -1,7 +1,6 @@
 # Atlas CLI
 
 ## Installation
-To download it, go to https://github.com/ElbowSpaceUK/atlas-cli/releases, click the 'Assets' dropdown on the latest version and download atlas . Place this anywhere in your systems PATH, for example /usr/local/bin or ~/.local/bin and give it permissions to run with sudo chmod a+x /usr/local/bin/atlas. Any time you want to update it, just run atlas self-update and it'll update itself! Note that if using /usr/local/bin, which is a protected directory, you will have to manually download any new versions. It's much better to create the ~/.local/bin directory, install atlas there and add it to your PATH (by adding export PATH="$HOME/.local/bin:$PATH" to your .bashrc or .bash_profile file.
 
 Download the atlas binary from the Releases section on GitHub.
 
