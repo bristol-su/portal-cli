@@ -336,7 +336,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ElbowSpaceUK/origin-engine",
-                "reference": "89f2e30995bc0cbc065163f4144a79cc9a51adef"
+                "reference": "48e7c24785984d4f21e5f57cef26bbe83ddd55b2"
             },
             "require": {
                 "czproject/git-php": "^3.18",
@@ -382,7 +382,7 @@
                 "issues": "https://github.com/ElbowSpaceUK/origin-engine/issues",
                 "source": "https://github.com/ElbowSpaceUK/origin-engine"
             },
-            "time": "2021-07-09T12:51:52+00:00"
+            "time": "2021-07-09T14:53:49+00:00"
         },
         {
             "name": "facade/ignition-contracts",

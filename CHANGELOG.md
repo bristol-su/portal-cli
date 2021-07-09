@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2]
+
+### Fixed
+- CLI-83: Use composer in docker container
+
+## [0.2.1]
+
+### Fixed
+- Default parameter before required parameter fails in php 8
+
 ## [0.2.0]
 
 ### Added
