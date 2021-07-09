@@ -64,8 +64,7 @@ class AtlasServiceProvider extends CliServiceProvider
                 )
                     ->addReplacement($stubs->newStringReplacement('path', 'What is the route?', 'default-route'))
                     ->addReplacement(
-                        $stubs->newArrayReplacement('models', 'What is the name of the models?', [], null,
-                            $stubs->newStringReplacement('model', 'What is the model name?', 'Model'))
+                        $stubs->newArrayReplacement('models', 'What is the name of the models?', $stubs->newStringReplacement('model', 'What is the model name?', 'Model'), [], null)
                     )
             )->addFile(
                 $stubs->newStubFile(
@@ -74,8 +73,8 @@ class AtlasServiceProvider extends CliServiceProvider
                 )
                     ->addReplacement($stubs->newStringReplacement('routesFileName', 'Name of the routes file?', 'route-file-name'))
                     ->addReplacement($stubs->newBooleanReplacement('includePost', 'Should we include a post request?', false))
-                    ->addReplacement($stubs->newArrayReplacement('dbColumns', 'Define the cols', [], null,
-                        $stubs->newTableColumnReplacement('dbColumns', 'What columns do you want for your xyz?', [])))
+                    ->addReplacement($stubs->newArrayReplacement('dbColumns', 'Define the cols', $stubs->newTableColumnReplacement('dbColumns', 'What columns do you want for your xyz?', []),
+                        [], null))
             );
 
         $pipelineModifier = app(PipelineModifier::class);

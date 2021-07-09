@@ -97,7 +97,7 @@ class Install extends Pipeline
 
             'migrate-testing-db' => new MigrateDatabase('testing'),
 
-            'seed-core-module' => new \OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravelModule('Core', 'CoreDatabaseSeeder', 'local')
+            // 'seed-core-module' => new \OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravelModule('Core', 'CoreDatabaseSeeder', 'local')
         ];
     }
 

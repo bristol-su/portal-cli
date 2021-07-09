@@ -336,7 +336,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ElbowSpaceUK/origin-engine",
-                "reference": "79e549d2bd9aee9558ce29cf0d3583e15d22dd1b"
+                "reference": "89f2e30995bc0cbc065163f4144a79cc9a51adef"
             },
             "require": {
                 "czproject/git-php": "^3.18",
@@ -382,7 +382,7 @@
                 "issues": "https://github.com/ElbowSpaceUK/origin-engine/issues",
                 "source": "https://github.com/ElbowSpaceUK/origin-engine"
             },
-            "time": "2021-07-05T23:26:15+00:00"
+            "time": "2021-07-09T12:51:52+00:00"
         },
         {
             "name": "facade/ignition-contracts",
@@ -863,7 +863,7 @@
         },
         {
             "name": "illuminate/bus",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/bus.git",
@@ -916,7 +916,7 @@
         },
         {
             "name": "illuminate/cache",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/cache.git",
@@ -973,7 +973,7 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
@@ -1027,7 +1027,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -1075,7 +1075,7 @@
         },
         {
             "name": "illuminate/console",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/console.git",
@@ -1135,7 +1135,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -1186,7 +1186,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -1302,7 +1302,7 @@
         },
         {
             "name": "illuminate/events",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -1357,7 +1357,7 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
@@ -1419,7 +1419,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -1465,7 +1465,7 @@
         },
         {
             "name": "illuminate/pipeline",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pipeline.git",
@@ -1513,7 +1513,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
@@ -1581,16 +1581,16 @@
         },
         {
             "name": "illuminate/testing",
-            "version": "v8.49.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/testing.git",
-                "reference": "6dba36587dc60eedc8eec5ae9c82a90d4711f0ae"
+                "reference": "12271f68f49bb1063754f7d9d168af1e719b251a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/testing/zipball/6dba36587dc60eedc8eec5ae9c82a90d4711f0ae",
-                "reference": "6dba36587dc60eedc8eec5ae9c82a90d4711f0ae",
+                "url": "https://api.github.com/repos/illuminate/testing/zipball/12271f68f49bb1063754f7d9d168af1e719b251a",
+                "reference": "12271f68f49bb1063754f7d9d168af1e719b251a",
                 "shasum": ""
             },
             "require": {
@@ -1635,7 +1635,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-06-09T13:58:54+00:00"
+            "time": "2021-07-04T10:19:03+00:00"
         },
         {
             "name": "intonate/tinker-zero",
@@ -1855,16 +1855,16 @@
         },
         {
             "name": "laravel-zero/foundation",
-            "version": "v8.48.1",
+            "version": "v8.49.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-zero/foundation.git",
-                "reference": "f8a142aaa0e2d721b613e6cb876c2e12b43d9f9b"
+                "reference": "c2b68f71867899cf6acf0a4215f30be939d11481"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/f8a142aaa0e2d721b613e6cb876c2e12b43d9f9b",
-                "reference": "f8a142aaa0e2d721b613e6cb876c2e12b43d9f9b",
+                "url": "https://api.github.com/repos/laravel-zero/foundation/zipball/c2b68f71867899cf6acf0a4215f30be939d11481",
+                "reference": "c2b68f71867899cf6acf0a4215f30be939d11481",
                 "shasum": ""
             },
             "require": {
@@ -1894,9 +1894,9 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/laravel-zero/foundation/tree/v8.48.1"
+                "source": "https://github.com/laravel-zero/foundation/tree/v8.49.2"
             },
-            "time": "2021-06-23T14:22:11+00:00"
+            "time": "2021-07-07T09:37:38+00:00"
         },
         {
             "name": "laravel-zero/framework",
