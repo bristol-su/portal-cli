@@ -22,6 +22,8 @@ If you want to develop for the CLI, you will instead need to clone the `atlas-cl
 
 You can now run `atlas-development post-update` to set up the development CLI for the first time (we'd recommend using a different project directory), and any changes made in the atlas cli will be instantly reflected in the `atlas-development` command.
 
+If you'd also like to edit origin-engine, you may clone that repository to your local pc and reference it in the atlas-cli `composer.json` file as a local composer repository to symlink the two.
+
 ## Usage
 
 Most of this guide should be covered in the origin-engine [user guide](https://github.com/ElbowSpaceUK/origin-engine/blob/develop/docs/user-notes.md) or the [developer guide](https://github.com/ElbowSpaceUK/origin-engine/blob/develop/docs/developer-notes.md)
