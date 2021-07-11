@@ -2,12 +2,25 @@
 
 ## Installation
 
-Download the atlas binary from the Releases section on GitHub.
+### Standard Installation
 
-Place this anywhere in your systems PATH, for example `/usr/local/bin` or `~/.local/bin` and give it permissions to run with `sudo chmod a+x /path/to/atlas`.
-Any time you want to update it, just run `atlas self-update` and it'll update itself! Note that if using `/usr/local/bin`, which is a protected directory, you will have to manually download any new versions. It's much better to create the `~/.local/bin` directory, install atlas there and add it to your PATH (by adding `export PATH="$HOME/.local/bin:$PATH"` to your .bashrc or .bash_profile file.
+This will install the Atlas CLI as normal, as a single file that cannot be edited. If you're not sure which option to choose,
+this is the one for you!
+
+Download the `atlas` binary from the Releases section on GitHub - https://github.com/ElbowSpaceUK/atlas-cli/releases. We always
+recommend using the latest version.
+
+Place this file anywhere in your systems PATH, for example `/usr/local/bin` or `~/.local/bin`. We recommend `~/.local/bin` since this will allow you to use self-update. Give `atlas` permissions to run by running `sudo chmod a+x /path/to/atlas`.
+
+If `~/.local/bin` isn't in your path, you can add it by adding `export PATH="$HOME/.local/bin:$PATH"` to your .bashrc or .bash_profile file in your home directory.
 
 You can now run commands using `atlas`
+
+### Developing for the CLI
+
+If you want to develop for the CLI, you will instead need to clone the `atlas-cli` repository with `git clone git@github.com:ElbowSpaceUK/atlas-cli`. Add an alias in your `.bash_aliases` file (or equivalent), for example `alias atlas-development="/path/to/cloned/atlas-cli/atlas"`. This references the atlas file in the root of the `atlas-cli` repository.
+
+You can now run `atlas-development post-update` to set up the development CLI for the first time (we'd recommend using a different project directory), and any changes made in the atlas cli will be instantly reflected in the `atlas-development` command.
 
 ## Usage
 
