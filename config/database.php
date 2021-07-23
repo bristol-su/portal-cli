@@ -20,6 +20,6 @@ return [
     |
     */
 
-    'name' => 'atlas',
+    'name' => 'portal',
 
 ];

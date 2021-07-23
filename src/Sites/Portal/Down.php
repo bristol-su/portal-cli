@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasCMS;
+namespace Portal\Sites\Portal;
 
 use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\Tasks\DeleteFiles;

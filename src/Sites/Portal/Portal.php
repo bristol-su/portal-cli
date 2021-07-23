@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasFrontend;
+namespace Portal\Sites\Portal;
 
 use OriginEngine\Helpers\Env\EnvRepository;
 use OriginEngine\Helpers\LaravelSail\Sail;
@@ -9,14 +9,14 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Site\Site;
 use OriginEngine\Site\SiteBlueprint;
 
-class AtlasFrontend extends SiteBlueprint
+class Portal extends SiteBlueprint
 {
 
-    protected string $defaultBranch = 'develop';
+    protected string $defaultBranch = 'v4';
 
     public function name(): string
     {
-        return 'Atlas Frontend';
+        return 'Portal';
     }
 
     public function getUrls(Site $site): array

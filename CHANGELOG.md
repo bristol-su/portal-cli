@@ -6,42 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.2]
-
-### Fixed
-- CLI-83: Use composer in docker container
-
-## [0.2.1]
-
-### Fixed
-- Default parameter before required parameter fails in php 8
-
-## [0.2.0]
+## [v0.0.1]
 
 ### Added
-- self-update command for updating the binary
-
-### Changed
-- Use a different database when running the compiled and uncompiled cli. Uncompiled will have `_dev` appended to the database name.
-
-## [0.1.0] - 2021-07-01
-
-### Added
-- Support for Laravel Valet within the Atlas CMS
-
-## [0.0.1] - 2021-06-30
-
-### Added
-- The Atlas CMS site, Frontend site and the licence project site
-
-
-
-
-
-
-
-
-
-
-
-
+- Support for the portal site

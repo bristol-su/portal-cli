@@ -1,6 +1,6 @@
 <?php
 
-namespace Atlas\Sites\AtlasCMS;
+namespace Portal\Sites\Portal;
 
 use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Pipeline\Tasks\DeleteFiles;
@@ -14,7 +14,7 @@ class Uninstall extends Pipeline
         return [
             'bring-environment-down' => new BringSailEnvironmentDown(true),
 
-            'remove-files' => new DeleteFiles()
+            'remove-files' => new DeleteFiles(null)
         ];
     }
 

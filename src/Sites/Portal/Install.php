@@ -1,26 +1,37 @@
 <?php
 
-namespace Atlas\Sites\Licensing;
+namespace Portal\Sites\Portal;
 
 use Illuminate\Support\Collection;
+use OriginEngine\Contracts\Helpers\Settings\SettingRepository;
+use OriginEngine\Helpers\Directory\Directory;
+use OriginEngine\Helpers\Env\EnvRepository;
+use OriginEngine\Helpers\IO\IO;
 use OriginEngine\Helpers\Terminal\Executor;
 use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
+use OriginEngine\Pipeline\Tasks\Files\OverwriteFile;
+use OriginEngine\Pipeline\Tasks\Git\CloneGitRepository;
 use OriginEngine\Pipeline\Pipeline;
-use OriginEngine\Pipeline\Tasks\Utils\Closure;
 use OriginEngine\Pipeline\Tasks\Files\CopyFile;
 use OriginEngine\Pipeline\Tasks\EditEnvironmentFile;
+use OriginEngine\Pipeline\Tasks\LaravelSail\GenerateApplicationKey;
+use OriginEngine\Pipeline\Tasks\LaravelSail\InstallNpmDependencies;
 use OriginEngine\Pipeline\Tasks\LaravelSail\MigrateDatabase;
+use OriginEngine\Pipeline\Tasks\LaravelSail\RunNpmScript;
+use OriginEngine\Pipeline\Tasks\LaravelSail\SeedLaravel;
+use OriginEngine\Pipeline\Tasks\Utils\Closure;
 use OriginEngine\Pipeline\Tasks\WaitForDocker;
 
-class Up extends Pipeline
+class Install extends Pipeline
 {
 
     public function tasks(): array
     {
         return [
+            'clone' => (new CloneGitRepository('git@github.com:bristol-su/portal', 'portal-v4-ported')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('80'),
-
+            'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
                 '.env',
                 [
@@ -29,16 +40,20 @@ class Up extends Pipeline
                     'FORWARD_MAILHOG_PORT' => 'mail',
                     'FORWARD_MAILHOG_DASHBOARD_PORT' => 'mail dashboard',
                     'FORWARD_REDIS_PORT' => 'redis',
-                    'FORWARD_MEILISEARCH_PORT' => 'meilisearch',
-                    'FORWARD_SELENIUM_PORT' => 'selenium'
                 ],
                 false),
 
             'bring-sail-up' => new \OriginEngine\Pipeline\Tasks\LaravelSail\BringSailEnvironmentUp(),
 
-            'wait-for-docker' => (new WaitForDocker())->setUpName('Waiting for Docker. This may take a minute.'),
+            'wait-for-docker' => new WaitForDocker(),
 
-            'migrate-local-db' => new MigrateDatabase('local'),
+            'create-application-key' => new GenerateApplicationKey('local', '.env'),
+
+            'migrate-db' => new MigrateDatabase('local'),
+
+            'install-npm-dependencies' => new InstallNpmDependencies(),
+
+            'compile-assets' => new RunNpmScript('dev')
 
         ];
     }

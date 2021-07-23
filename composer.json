@@ -1,18 +1,18 @@
 {
-    "name": "laravel-zero/laravel-zero",
-    "description": "The Laravel Zero Framework.",
-    "keywords": ["framework", "laravel", "laravel zero", "console", "cli"],
-    "homepage": "https://laravel-zero.com",
+    "name": "bristol-su/portal-cli",
+    "description": "Run local instances of the Bristol SU Portal.",
+    "keywords": ["bristol su", "union", "portal", "sdk", "cli", "sail", "docker"],
+    "homepage": "https://github.com/bristol-su/portal",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel-zero/laravel-zero/issues",
-        "source": "https://github.com/laravel-zero/laravel-zero"
+        "issues": "https://github.com/bristol-su/portal-cli/issues",
+        "source": "https://github.com/bristol-su/portal-cli"
     },
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "Toby Twigger",
+            "email": "tobytwigger1@gmail.com"
         }
     ],
     "require": {
@@ -24,12 +24,12 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "Atlas\\": "src/"
+            "Portal\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Atlas\\Tests\\": "tests/"
+            "Portal\\Tests\\": "tests/"
         }
     },
     "config": {
@@ -39,11 +39,5 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "bin": ["atlas"],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/ElbowSpaceUK/origin-engine"
-        }
-    ]
+    "bin": ["portal"]
 }

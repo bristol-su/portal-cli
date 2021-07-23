@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'Atlas',
+    'name' => 'Portal',
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
     */
 
     'providers' => [
-        \Atlas\AtlasServiceProvider::class,
+        \Portal\PortalServiceProvider::class,
         Intonate\TinkerZero\TinkerZeroServiceProvider::class,
     ]
 ];
