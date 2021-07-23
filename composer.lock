@@ -336,12 +336,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ElbowSpaceUK/origin-engine.git",
-                "reference": "316014b3ddde65bdc34a99f3b6d72cbd1d5074a4"
+                "reference": "a6386cb733d020d0d41005fc7b00d3cbcf63aac8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ElbowSpaceUK/origin-engine/zipball/316014b3ddde65bdc34a99f3b6d72cbd1d5074a4",
-                "reference": "316014b3ddde65bdc34a99f3b6d72cbd1d5074a4",
+                "url": "https://api.github.com/repos/ElbowSpaceUK/origin-engine/zipball/a6386cb733d020d0d41005fc7b00d3cbcf63aac8",
+                "reference": "a6386cb733d020d0d41005fc7b00d3cbcf63aac8",
                 "shasum": ""
             },
             "require": {
@@ -384,7 +384,7 @@
                 "issues": "https://github.com/ElbowSpaceUK/origin-engine/issues",
                 "source": "https://github.com/ElbowSpaceUK/origin-engine"
             },
-            "time": "2021-07-23T09:48:04+00:00"
+            "time": "2021-07-23T10:23:52+00:00"
         },
         {
             "name": "facade/ignition-contracts",
