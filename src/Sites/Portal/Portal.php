@@ -14,6 +14,8 @@ class Portal extends SiteBlueprint
 
     protected string $defaultBranch = 'v4';
 
+    protected string $phpVersion = '80';
+
     public function name(): string
     {
         return 'Portal';
