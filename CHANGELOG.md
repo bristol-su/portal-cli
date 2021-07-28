@@ -6,17 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [v0.0.3]
+## [v0.0.4] - 2021-07-28
+
+### Added
+- Fixed APP_URL with port
+- Generate API keys automatically
+
+### Changed
+- Remove node_modules when site brought down
+
+## [v0.0.3] - 2021-07-23
 
 ### Changed
 - Support php 8
 
-## [v0.0.2]
+## [v0.0.2] - 2021-07-23
 
 ### Fixed
 - Updated composer
 
-## [v0.0.1]
+## [v0.0.1] - 2021-07-23
 
 ### Added
 - Support for the portal site
