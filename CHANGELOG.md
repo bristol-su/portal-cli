@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Fixed APP_URL with port
+- Generate API keys automatically
+
+### Changed
+- Remove node_modules when site brought down
+
 ## [v0.0.3]
 
 ### Changed

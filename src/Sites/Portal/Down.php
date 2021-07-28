@@ -14,7 +14,9 @@ class Down extends Pipeline
         return [
             'bring-environment-down' => new BringSailEnvironmentDown(true),
 
-            'remove-vendor-files' => new DeleteFiles('vendor')
+            'remove-vendor-files' => new DeleteFiles('vendor'),
+
+            'remove-node-files' => new DeleteFiles('node_modules')
         ];
     }
 

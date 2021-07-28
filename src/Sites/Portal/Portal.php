@@ -27,7 +27,7 @@ class Portal extends SiteBlueprint
         $env = $envRepository->get('.env');
 
         return [
-            'Site' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('APP_PORT')),
+            'Site' => $env->getVariable('APP_URL'),
             'Emails' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('FORWARD_MAILHOG_DASHBOARD_PORT'))
         ];
     }
