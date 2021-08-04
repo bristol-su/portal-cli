@@ -28,7 +28,7 @@ class Portal extends SiteBlueprint
 
         return [
             'Site' => $env->getVariable('APP_URL'),
-            'Emails' => sprintf('%s:%s', $env->getVariable('APP_URL'), $env->getVariable('FORWARD_MAILHOG_DASHBOARD_PORT'))
+            'Emails' => sprintf('http://%s:%s', $env->getVariable('APP_SERVICE'), $env->getVariable('FORWARD_MAILHOG_DASHBOARD_PORT'))
         ];
     }
 
