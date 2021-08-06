@@ -9,6 +9,7 @@ use OriginEngine\Pipeline\PipelineConfig;
 use OriginEngine\Pipeline\PipelineHistory;
 use OriginEngine\Pipeline\PipelineModifier;
 use OriginEngine\Pipeline\Tasks\Origin\SetSetting;
+use Portal\Sites\Playground\Playground;
 use Portal\Sites\Portal\Portal;
 use OriginEngine\Contracts\Site\SiteBlueprintStore;
 use OriginEngine\Foundation\CliServiceProvider;
@@ -33,6 +34,7 @@ class PortalServiceProvider extends CliServiceProvider
         $this->registerPlugin(HealthCheckPlugin::class);
 
         app(SiteBlueprintStore::class)->register('portal', new Portal());
+        app(SiteBlueprintStore::class)->register('playground', new Playground());
 
         app(PipelineModifier::class)->extend('post-update', function(Pipeline $pipeline) {
             $pipeline->runTaskAfter('set-project-directory', 'save-npm-token', new SetSetting('github-npm-token', ''));
