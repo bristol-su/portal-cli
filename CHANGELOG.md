@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Use the correct URL for the emails site
+
+### Added
+- Support for the Bristol SU Playground
+
 ## [v0.0.4] - 2021-07-28
 
 ### Added

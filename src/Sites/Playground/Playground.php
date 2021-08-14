@@ -1,6 +1,6 @@
 <?php
 
-namespace Portal\Sites\Portal;
+namespace Portal\Sites\Playground;
 
 use OriginEngine\Helpers\Env\EnvRepository;
 use OriginEngine\Helpers\LaravelSail\Sail;
@@ -9,7 +9,7 @@ use OriginEngine\Pipeline\Pipeline;
 use OriginEngine\Site\Site;
 use OriginEngine\Site\SiteBlueprint;
 
-class Portal extends SiteBlueprint
+class Playground extends SiteBlueprint
 {
 
     protected string $defaultBranch = 'develop';
@@ -18,7 +18,7 @@ class Portal extends SiteBlueprint
 
     public function name(): string
     {
-        return 'Portal';
+        return 'Playground';
     }
 
     public function getUrls(Site $site): array
