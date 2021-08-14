@@ -12,7 +12,7 @@ use OriginEngine\Site\SiteBlueprint;
 class Portal extends SiteBlueprint
 {
 
-    protected string $defaultBranch = 'v4';
+    protected string $defaultBranch = 'develop';
 
     protected string $phpVersion = '80';
 

@@ -12,7 +12,7 @@ use OriginEngine\Site\SiteBlueprint;
 class Playground extends SiteBlueprint
 {
 
-    protected string $defaultBranch = 'v4';
+    protected string $defaultBranch = 'develop';
 
     protected string $phpVersion = '80';
 

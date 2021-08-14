@@ -52,7 +52,7 @@ class Install extends Pipeline
     public function tasks(): array
     {
         return [
-            'clone' => (new CloneGitRepository('git@github.com:bristol-su/playground', 'portal-v4')),
+            'clone' => (new CloneGitRepository('git@github.com:bristol-su/playground', 'develop')),
             'composer-install' => new \OriginEngine\Pipeline\Tasks\LaravelSail\InstallComposerDependencies('80'),
             'create-local-env-file' => new CopyFile('.env.sail.example', '.env'),
             'check-ports-free' => new \OriginEngine\Pipeline\Tasks\CheckPortsAreFree(
